@@ -6,6 +6,7 @@ import br.com.apihubinovacao.domain.dtos.UserResponseDTO;
 import br.com.apihubinovacao.domain.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,12 +22,12 @@ public class UserController {
         return ResponseEntity.ok(createdUser);
     }
 
-        /*
-
-         @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> getUser(@PathVariable Long id) {
-        // Lógica para buscar o usuário
-        return ResponseEntity.ok(/* Retorne o DTO aqui */;
+    @GetMapping("/by-email")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<UserResponseDTO> getUserByEmail(@RequestParam String email) {
+        UserResponseDTO user = userService.getUserByEmail(email);
+        return ResponseEntity.ok(user);
+    }
 
 
 

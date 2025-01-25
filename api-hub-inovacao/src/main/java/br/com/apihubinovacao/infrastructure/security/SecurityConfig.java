@@ -36,6 +36,7 @@ public class SecurityConfig {
                         .requestMatchers(RouteDefinitions.ADMIN_ROUTES).hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
+
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

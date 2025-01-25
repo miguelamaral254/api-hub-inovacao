@@ -15,23 +15,33 @@ public class JwtService {
 
     private static final long EXPIRATION_TIME = 86400000;
 
-    public String generateToken(String email) {
+    public String generateToken(String email, String role) {
         return Jwts.builder()
                 .setSubject(email)
+                .claim("role", "ROLE_" + role)
+
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
     }
 
+
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-            return true;
+            var claims = Jwts.parser()
+                    .setSigningKey(secretKey)
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            String role = claims.get("role", String.class);
+            // Validar papel, caso necessário
+            return role != null && (role.equals("ROLE_USER") || role.equals("ROLE_ADMIN"));
         } catch (Exception e) {
             return false;
         }
     }
+
 
     public String extractEmail(String token) {
         return Jwts.parser()

@@ -1,6 +1,5 @@
 package br.com.apihubinovacao.api.controllers;
 
-
 import br.com.apihubinovacao.domain.dtos.LoginRequestDTO;
 import br.com.apihubinovacao.domain.dtos.LoginResponseDTO;
 import br.com.apihubinovacao.domain.models.User;
@@ -31,16 +30,16 @@ public class AuthController {
         Optional<User> optionalUser = userRepository.findByEmail(loginRequest.email());
 
         if (optionalUser.isEmpty()) {
-            return ResponseEntity.status(401).body(new LoginResponseDTO("Invalid credentials"));
+            return ResponseEntity.status(401).body(new LoginResponseDTO(null, null, null, "Invalid credentials"));
         }
 
         User user = optionalUser.get();
 
         if (!passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
-            return ResponseEntity.status(401).body(new LoginResponseDTO("Invalid credentials"));
+            return ResponseEntity.status(401).body(new LoginResponseDTO(null, null, null, "Invalid credentials"));
         }
 
-        String token = jwtService.generateToken(user.getEmail());
-        return ResponseEntity.ok(new LoginResponseDTO(token));
+        String token = jwtService.generateToken(user.getEmail(), user.getRole().name());
+        return ResponseEntity.ok(new LoginResponseDTO(token, user.getEmail(), user.getRole().name(), "Login successful"));
     }
 }

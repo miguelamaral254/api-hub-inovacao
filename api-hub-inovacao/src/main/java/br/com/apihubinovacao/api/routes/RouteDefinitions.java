@@ -12,7 +12,7 @@ public class RouteDefinitions {
     };
 
     public static final String[] USER_ROUTES = {
-            "/users/**"
+            "/users/by-email"
     };
 
     public static final String[] ADMIN_ROUTES = {
