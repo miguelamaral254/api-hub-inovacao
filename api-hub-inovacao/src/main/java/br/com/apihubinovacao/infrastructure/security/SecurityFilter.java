@@ -28,8 +28,8 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = recoverToken(request);
-        if (token != null) {
-            String email = tokenService.validateToken(token);
+        if (token != null && tokenService.isTokenValid(token)) {
+            String email = tokenService.extractEmail(token);
             User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User Not Found"));
             var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
             var authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
@@ -37,6 +37,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
     }
+
 
     private String recoverToken(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");

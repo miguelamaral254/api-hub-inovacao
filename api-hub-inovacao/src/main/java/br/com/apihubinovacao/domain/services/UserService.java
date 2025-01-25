@@ -6,6 +6,7 @@ import br.com.apihubinovacao.domain.dtos.UserResponseDTO;
 import br.com.apihubinovacao.domain.models.User;
 import br.com.apihubinovacao.domain.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,11 +21,14 @@ public class UserService {
     @Autowired
     private PhoneService phoneService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public UserResponseDTO createUser(UserCreateDTO dto) {
         User user = new User();
         user.setName(dto.name());
         user.setEmail(dto.email());
-        user.setPassword(dto.password());
+        user.setPassword(passwordEncoder.encode(dto.password())); // Criptografar senha
         user.setRegistration(dto.registration());
         user.setRole(dto.role());
         user.setInstitutionOrganization(dto.institutionOrganization());
