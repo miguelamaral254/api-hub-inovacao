@@ -20,7 +20,7 @@ public class TokenService {
 
     public String generateToken(User user) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(secret.getBytes()); // Certifique-se de que a chave seja válida
+            Algorithm algorithm = Algorithm.HMAC512(secret.getBytes());
             return JWT.create()
                     .withIssuer("login-auth-api")
                     .withSubject(user.getEmail())
@@ -33,7 +33,7 @@ public class TokenService {
 
     public boolean isTokenValid(String token) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
+            Algorithm algorithm = Algorithm.HMAC512(secret.getBytes());
             JWT.require(algorithm)
                     .withIssuer("login-auth-api")
                     .build()
@@ -46,7 +46,7 @@ public class TokenService {
 
     public String extractEmail(String token) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
+            Algorithm algorithm = Algorithm.HMAC512(secret.getBytes());
             return JWT.require(algorithm)
                     .withIssuer("login-auth-api")
                     .build()
