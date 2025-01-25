@@ -5,7 +5,7 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DotenvInitializer {
+public class DotenvConfig {
 
     @PostConstruct
     public void loadEnv() {

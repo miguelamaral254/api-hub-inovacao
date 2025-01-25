@@ -1,4 +1,4 @@
-package br.com.apihubinovacao.infrastructure.security;
+package br.com.apihubinovacao.domain.services;
 
 import br.com.apihubinovacao.domain.models.User;
 import com.auth0.jwt.JWT;

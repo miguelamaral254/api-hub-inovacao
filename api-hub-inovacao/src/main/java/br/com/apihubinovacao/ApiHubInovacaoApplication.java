@@ -1,6 +1,6 @@
 package br.com.apihubinovacao;
 
-import br.com.apihubinovacao.infrastructure.conf.DotenvInitializer;
+import br.com.apihubinovacao.infrastructure.conf.DotenvConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ApiHubInovacaoApplication {
 
     public static void main(String[] args) {
-        new DotenvInitializer().loadEnv();
+        new DotenvConfig().loadEnv();
 
         SpringApplication.run(ApiHubInovacaoApplication.class, args);
     }
