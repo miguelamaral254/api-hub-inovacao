@@ -3,14 +3,14 @@ package br.com.apihubinovacao.domain.services;
 import br.com.apihubinovacao.domain.dtos.PhoneResponseDTO;
 import br.com.apihubinovacao.domain.dtos.UserCreateDTO;
 import br.com.apihubinovacao.domain.dtos.UserResponseDTO;
+import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
+import br.com.apihubinovacao.domain.exceptions.BusinessException;
 import br.com.apihubinovacao.domain.models.User;
 import br.com.apihubinovacao.domain.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,10 +26,18 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     public UserResponseDTO createUser(UserCreateDTO dto) {
+        if (userRepository.findByEmail(dto.email()).isPresent()) {
+            throw new BusinessException(ErrorCodeEnum.EMAIL_ALREADY_EXISTS);
+        }
+
         User user = new User();
         user.setName(dto.name());
         user.setEmail(dto.email());
-        user.setPassword(passwordEncoder.encode(dto.password()));
+        try {
+            user.setPassword(passwordEncoder.encode(dto.password()));
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCodeEnum.PASSWORD_ENCRYPTION_FAILED);
+        }
         user.setRegistration(dto.registration());
         user.setRole(dto.role());
         user.setInstitutionOrganization(dto.institutionOrganization());
@@ -38,7 +46,13 @@ public class UserService {
         User savedUser = userRepository.save(user);
 
         List<PhoneResponseDTO> phones = dto.phones().stream()
-                .map(phoneDto -> phoneService.createPhone(phoneDto, savedUser))
+                .map(phoneDto -> {
+                    try {
+                        return phoneService.createPhone(phoneDto, savedUser);
+                    } catch (Exception e) {
+                        throw new BusinessException(ErrorCodeEnum.PHONE_CREATION_FAILED);
+                    }
+                })
                 .collect(Collectors.toList());
 
         return new UserResponseDTO(
@@ -52,9 +66,21 @@ public class UserService {
                 phones
         );
     }
+    public User validateUserCredentials(String email, String password) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new BusinessException(ErrorCodeEnum.LOGIN_FAILED));
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new BusinessException(ErrorCodeEnum.LOGIN_FAILED);
+        }
+
+        return user;
+    }
+
+
     public UserResponseDTO getUserByEmail(String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new BusinessException(ErrorCodeEnum.USER_NOT_FOUND));
         return new UserResponseDTO(
                 user.getId(),
                 user.getName(),

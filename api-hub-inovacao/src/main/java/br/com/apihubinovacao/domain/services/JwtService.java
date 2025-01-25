@@ -1,5 +1,7 @@
 package br.com.apihubinovacao.domain.services;
 
+import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
+import br.com.apihubinovacao.domain.exceptions.BusinessException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,16 +18,18 @@ public class JwtService {
     private static final long EXPIRATION_TIME = 86400000;
 
     public String generateToken(String email, String role) {
-        return Jwts.builder()
-                .setSubject(email)
-                .claim("role", "ROLE_" + role)
-
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS512, secretKey)
-                .compact();
+        try {
+            return Jwts.builder()
+                    .setSubject(email)
+                    .claim("role", "ROLE_" + role)
+                    .setIssuedAt(new Date())
+                    .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                    .signWith(SignatureAlgorithm.HS512, secretKey)
+                    .compact();
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCodeEnum.SERVER_ERROR);
+        }
     }
-
 
     public boolean validateToken(String token) {
         try {
@@ -35,19 +39,21 @@ public class JwtService {
                     .getBody();
 
             String role = claims.get("role", String.class);
-            // Validar papel, caso necessário
             return role != null && (role.equals("ROLE_USER") || role.equals("ROLE_ADMIN"));
         } catch (Exception e) {
-            return false;
+            throw new BusinessException(ErrorCodeEnum.INVALID_TOKEN);
         }
     }
 
-
     public String extractEmail(String token) {
-        return Jwts.parser()
-                .setSigningKey(secretKey)
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+        try {
+            return Jwts.parser()
+                    .setSigningKey(secretKey)
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getSubject();
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCodeEnum.INVALID_TOKEN);
+        }
     }
 }

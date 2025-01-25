@@ -1,14 +1,14 @@
 package br.com.apihubinovacao.api.controllers;
 
-
 import br.com.apihubinovacao.domain.dtos.UserCreateDTO;
 import br.com.apihubinovacao.domain.dtos.UserResponseDTO;
+import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
+import br.com.apihubinovacao.domain.exceptions.BusinessException;
 import br.com.apihubinovacao.domain.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -28,7 +28,4 @@ public class UserController {
         UserResponseDTO user = userService.getUserByEmail(email);
         return ResponseEntity.ok(user);
     }
-
-
-
 }
