@@ -6,8 +6,6 @@ public class RouteDefinitions {
 
     public static final String[] PUBLIC_ROUTES = {
             "/auth/**",
-            "/swagger-ui/**",
-            "/v3/api-docs/**",
             "/users/post"
     };
 

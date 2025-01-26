@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(RouteDefinitions.PUBLIC_ROUTES).permitAll()
-                        .requestMatchers(RouteDefinitions.USER_ROUTES).hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(RouteDefinitions.USER_ROUTES).hasAnyRole("USER", "ADMIN", "MANNAGERS")
                         .requestMatchers(RouteDefinitions.ADMIN_ROUTES).hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

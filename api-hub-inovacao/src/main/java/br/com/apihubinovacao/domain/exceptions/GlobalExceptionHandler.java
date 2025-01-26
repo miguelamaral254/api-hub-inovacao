@@ -15,13 +15,6 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(ex.getCode(), ex.getMessage()));
     }
 
-    @ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
-    public ResponseEntity<Object> handleDataIntegrityViolationException(org.springframework.dao.DataIntegrityViolationException ex) {
-        ErrorCodeEnum error = ErrorCodeEnum.DUPLICATE_EMAIL;
-        return ResponseEntity.status(HttpStatus.valueOf(error.getHttpStatus()))
-                .body(new ErrorResponse(error.getCode(), error.getMessage()));
-    }
-
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleGenericException(Exception ex) {
         ErrorCodeEnum error = ErrorCodeEnum.SERVER_ERROR;
@@ -29,9 +22,6 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(error.getCode(), error.getMessage()));
     }
 
-    /**
-     * Classe interna para formatar as respostas de erro.
-     */
     static class ErrorResponse {
         private final String code;
         private final String message;
