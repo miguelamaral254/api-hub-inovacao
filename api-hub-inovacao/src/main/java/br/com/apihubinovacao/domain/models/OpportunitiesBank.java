@@ -8,8 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "OPPORTUNITIES_BANK")
-public class OpportunitiesBank extends Abstractproject {
-
+public class OpportunitiesBank extends AbstractProject {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @Column(name = "validation_date")
@@ -24,4 +23,35 @@ public class OpportunitiesBank extends Abstractproject {
     @OneToMany(mappedBy = "opportunitiesBank")
     private List<Solicitation> submissions;
 
+    public LocalDate getValidationDate() {
+        return validationDate;
+    }
+
+    public void setValidationDate(LocalDate validationDate) {
+        this.validationDate = validationDate;
+    }
+
+    public String getAward() {
+        return award;
+    }
+
+    public void setAward(String award) {
+        this.award = award;
+    }
+
+    public String getSolvedBy() {
+        return solvedBy;
+    }
+
+    public void setSolvedBy(String solvedBy) {
+        this.solvedBy = solvedBy;
+    }
+
+    public List<Solicitation> getSubmissions() {
+        return submissions;
+    }
+
+    public void setSubmissions(List<Solicitation> submissions) {
+        this.submissions = submissions;
+    }
 }
