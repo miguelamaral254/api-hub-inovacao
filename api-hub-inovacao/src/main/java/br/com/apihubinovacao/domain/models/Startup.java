@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "STARTUP")
-public class Startup extends Abstractproject {
+public class Startup extends AbstractProject {
 
 
     @Column(name = "CNPJ", length = 14)

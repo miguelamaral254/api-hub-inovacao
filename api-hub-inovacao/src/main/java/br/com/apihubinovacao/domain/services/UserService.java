@@ -66,6 +66,7 @@ public class UserService {
                 phones
         );
     }
+
     public User validateUserCredentials(String email, String password) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new BusinessException(ErrorCodeEnum.LOGIN_FAILED));
@@ -76,7 +77,6 @@ public class UserService {
 
         return user;
     }
-
 
     public UserResponseDTO getUserByEmail(String email) {
         User user = userRepository.findByEmail(email)
@@ -93,5 +93,40 @@ public class UserService {
                         .map(phone -> new PhoneResponseDTO(phone.getId(), phone.getNumber()))
                         .collect(Collectors.toList())
         );
+    }
+
+    public List<UserResponseDTO> getAllUsers() {
+        return userRepository.findAll().stream()
+                .filter(user -> "USER".equals(user.getRole()))
+                .map(user -> new UserResponseDTO(
+                        user.getId(),
+                        user.getName(),
+                        user.getEmail(),
+                        user.getRegistration(),
+                        user.getRole(),
+                        user.getInstitutionOrganization(),
+                        user.isUserStatus(),
+                        user.getPhones().stream()
+                                .map(phone -> new PhoneResponseDTO(phone.getId(), phone.getNumber()))
+                                .collect(Collectors.toList())
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public List<UserResponseDTO> getAllPlatformUsers() {
+        return userRepository.findAll().stream()
+                .map(user -> new UserResponseDTO(
+                        user.getId(),
+                        user.getName(),
+                        user.getEmail(),
+                        user.getRegistration(),
+                        user.getRole(),
+                        user.getInstitutionOrganization(),
+                        user.isUserStatus(),
+                        user.getPhones().stream()
+                                .map(phone -> new PhoneResponseDTO(phone.getId(), phone.getNumber()))
+                                .collect(Collectors.toList())
+                ))
+                .collect(Collectors.toList());
     }
 }
