@@ -6,15 +6,18 @@ public class RouteDefinitions {
 
     public static final String[] PUBLIC_ROUTES = {
             "/auth/**",
-            "/users/post"
+            "/users/create-user"
     };
 
     public static final String[] USER_ROUTES = {
-            "/users/by-email"
+            "/users/by-email",
+            "/users/all-users"
     };
 
     public static final String[] ADMIN_ROUTES = {
-            "/admin/**"
+            "/admin/**",
+            "/users/all-platform-users",
+            "/users/all-users"
     };
 
     public static final HttpMethod[] PUBLIC_HTTP_METHODS = {
