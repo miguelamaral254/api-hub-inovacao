@@ -4,6 +4,7 @@ import br.com.apihubinovacao.domain.dtos.PhoneResponseDTO;
 import br.com.apihubinovacao.domain.dtos.UserCreateDTO;
 import br.com.apihubinovacao.domain.dtos.UserResponseDTO;
 import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
+import br.com.apihubinovacao.domain.enums.Role;
 import br.com.apihubinovacao.domain.exceptions.BusinessException;
 import br.com.apihubinovacao.domain.models.User;
 import br.com.apihubinovacao.domain.repositories.UserRepository;
@@ -96,8 +97,8 @@ public class UserService {
     }
 
     public List<UserResponseDTO> getAllUsers() {
-        return userRepository.findAll().stream()
-                .filter(user -> "USER".equals(user.getRole()))
+        return userRepository.findByRole(Role.USER).stream()
+                .filter(User::isUserStatus)
                 .map(user -> new UserResponseDTO(
                         user.getId(),
                         user.getName(),
