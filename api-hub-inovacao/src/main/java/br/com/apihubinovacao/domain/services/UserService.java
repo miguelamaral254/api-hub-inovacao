@@ -9,8 +9,12 @@ import br.com.apihubinovacao.domain.exceptions.BusinessException;
 import br.com.apihubinovacao.domain.models.User;
 import br.com.apihubinovacao.domain.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -114,20 +118,20 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public List<UserResponseDTO> getAllPlatformUsers() {
-        return userRepository.findAll().stream()
-                .map(user -> new UserResponseDTO(
-                        user.getId(),
-                        user.getName(),
-                        user.getEmail(),
-                        user.getRegistration(),
-                        user.getRole(),
-                        user.getInstitutionOrganization(),
-                        user.isUserStatus(),
-                        user.getPhones().stream()
-                                .map(phone -> new PhoneResponseDTO(phone.getId(), phone.getNumber()))
-                                .collect(Collectors.toList())
-                ))
-                .collect(Collectors.toList());
+    public Page<UserResponseDTO> getAllPlatformUsers(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        return userRepository.findAll(pageable).map(user -> new UserResponseDTO(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getRegistration(),
+                user.getRole(),
+                user.getInstitutionOrganization(),
+                user.isUserStatus(),
+                user.getPhones().stream()
+                        .map(phone -> new PhoneResponseDTO(phone.getId(), phone.getNumber()))
+                        .collect(Collectors.toList())
+        ));
     }
 }

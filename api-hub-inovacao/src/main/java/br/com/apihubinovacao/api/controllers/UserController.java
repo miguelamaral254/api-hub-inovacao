@@ -6,6 +6,7 @@ import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
 import br.com.apihubinovacao.domain.exceptions.BusinessException;
 import br.com.apihubinovacao.domain.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -41,8 +42,10 @@ public class UserController {
 
     @GetMapping("/all-platform-users")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<UserResponseDTO>> getAllPlatformUsers() {
-        List<UserResponseDTO> platformUsers = userService.getAllPlatformUsers();
+    public ResponseEntity<Page<UserResponseDTO>> getAllPlatformUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<UserResponseDTO> platformUsers = userService.getAllPlatformUsers(page, size);
         return ResponseEntity.ok(platformUsers);
     }
 }
