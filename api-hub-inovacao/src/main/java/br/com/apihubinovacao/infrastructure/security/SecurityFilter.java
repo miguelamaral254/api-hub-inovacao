@@ -1,7 +1,7 @@
 package br.com.apihubinovacao.infrastructure.security;
 
-import br.com.apihubinovacao.domain.models.User;
-import br.com.apihubinovacao.domain.repositories.UserRepository;
+import br.com.apihubinovacao.domain.models.*;
+import br.com.apihubinovacao.domain.repositories.*;
 import br.com.apihubinovacao.domain.services.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -16,6 +16,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
@@ -24,15 +26,38 @@ public class SecurityFilter extends OncePerRequestFilter {
     private JwtService jwtService;
 
     @Autowired
-    private UserRepository userRepository;
+    private AdminRepository adminRepository;
+
+    @Autowired
+    private ManagerRepository managerRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private ProfessorRepository professorRepository;
+
+    @Autowired
+    private PartnerCompanyRepository partnerCompanyRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         String token = extractToken(request);
+
         if (token != null && jwtService.validateToken(token)) {
             String email = jwtService.extractEmail(token);
-            User user = userRepository.findByEmail(email)
+
+            // Busca o usuário nos repositórios específicos
+            UserBase user = Stream.of(
+                            adminRepository.findByEmail(email),
+                            managerRepository.findByEmail(email),
+                            studentRepository.findByEmail(email),
+                            professorRepository.findByEmail(email),
+                            partnerCompanyRepository.findByEmail(email)
+                    )
+                    .flatMap(Optional::stream)
+                    .findFirst()
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
             var authorities = Collections.singletonList(

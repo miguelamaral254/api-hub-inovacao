@@ -3,8 +3,8 @@ package br.com.apihubinovacao.api.controllers;
 import br.com.apihubinovacao.domain.dtos.LoginRequestDTO;
 import br.com.apihubinovacao.domain.dtos.LoginResponseDTO;
 import br.com.apihubinovacao.domain.services.JwtService;
-import br.com.apihubinovacao.domain.models.User;
-import br.com.apihubinovacao.domain.services.UserService;
+import br.com.apihubinovacao.domain.models.UserBase;
+import br.com.apihubinovacao.domain.usecases.user.validate.ValidateUserCredentialsUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,15 +13,18 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired
-    private JwtService jwtService;
+    private final JwtService jwtService;
+    private final ValidateUserCredentialsUseCase validateUserCredentialsUseCase;
 
     @Autowired
-    private UserService userService;
+    public AuthController(JwtService jwtService, ValidateUserCredentialsUseCase validateUserCredentialsUseCase) {
+        this.jwtService = jwtService;
+        this.validateUserCredentialsUseCase = validateUserCredentialsUseCase;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequest) {
-        User user = userService.validateUserCredentials(loginRequest.email(), loginRequest.password());
+        UserBase user = validateUserCredentialsUseCase.execute(loginRequest.email(), loginRequest.password());
         String token = jwtService.generateToken(user.getEmail(), user.getRole().name());
 
         return ResponseEntity.ok(
