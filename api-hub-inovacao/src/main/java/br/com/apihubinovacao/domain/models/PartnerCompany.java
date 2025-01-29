@@ -11,6 +11,9 @@ public class PartnerCompany extends User implements UserBase {
     @Column(name = "cnpj", length = 20, nullable = false, unique = true)
     private String cnpj;
 
+    @OneToMany(mappedBy = "partnerCompany", fetch = FetchType.LAZY)
+    private List<Phone> phones;
+
     public String getCnpj() {
         return cnpj;
     }
@@ -21,8 +24,6 @@ public class PartnerCompany extends User implements UserBase {
 
     @Override
     public List<Phone> getPhones() {
-        return List.of();
+        return phones != null ? phones : List.of();
     }
-
-
 }

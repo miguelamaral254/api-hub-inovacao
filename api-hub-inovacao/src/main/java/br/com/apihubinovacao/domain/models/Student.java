@@ -11,6 +11,9 @@ public class Student extends User implements UserBase {
     @Column(name = "cpf", length = 14, nullable = false, unique = true)
     private String cpf;
 
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
+    private List<Phone> phones; // Relacionamento com a tabela Phone
+
     public String getCpf() {
         return cpf;
     }
@@ -21,6 +24,7 @@ public class Student extends User implements UserBase {
 
     @Override
     public List<Phone> getPhones() {
-        return List.of();
+        return phones != null ? phones : List.of();  // Agora retorna os telefones associados ao estudante
     }
+
 }
