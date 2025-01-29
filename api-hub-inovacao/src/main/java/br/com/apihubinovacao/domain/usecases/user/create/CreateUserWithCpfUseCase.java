@@ -6,11 +6,9 @@ import br.com.apihubinovacao.domain.dtos.UserResponseCpfDTO;
 import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
 import br.com.apihubinovacao.domain.enums.Role;
 import br.com.apihubinovacao.domain.exceptions.BusinessException;
-import br.com.apihubinovacao.domain.models.Manager;
 import br.com.apihubinovacao.domain.models.Professor;
 import br.com.apihubinovacao.domain.models.Student;
 import br.com.apihubinovacao.domain.models.User;
-import br.com.apihubinovacao.domain.repositories.ManagerRepository;
 import br.com.apihubinovacao.domain.repositories.ProfessorRepository;
 import br.com.apihubinovacao.domain.repositories.StudentRepository;
 import br.com.apihubinovacao.domain.services.PhoneService;
@@ -23,20 +21,17 @@ import java.util.stream.Collectors;
 @Service
 public class CreateUserWithCpfUseCase {
 
-    private final ManagerRepository managerRepository;
     private final StudentRepository studentRepository;
     private final ProfessorRepository professorRepository;
     private final PhoneService phoneService;
     private final PasswordEncoder passwordEncoder;
 
     public CreateUserWithCpfUseCase(
-            ManagerRepository managerRepository,
             StudentRepository studentRepository,
             ProfessorRepository professorRepository,
             PhoneService phoneService,
             PasswordEncoder passwordEncoder
     ) {
-        this.managerRepository = managerRepository;
         this.studentRepository = studentRepository;
         this.professorRepository = professorRepository;
         this.phoneService = phoneService;
@@ -58,19 +53,14 @@ public class CreateUserWithCpfUseCase {
         if (password == null || password.isEmpty()) throw new BusinessException(ErrorCodeEnum.INVALID_PASSWORD);
         if (cpf == null || cpf.isEmpty()) throw new BusinessException(ErrorCodeEnum.INVALID_CPF);
 
-        if (managerRepository.findByEmail(email).isPresent() ||
-                studentRepository.findByEmail(email).isPresent() ||
+        if (studentRepository.findByEmail(email).isPresent() ||
                 professorRepository.findByEmail(email).isPresent()) {
             throw new BusinessException(ErrorCodeEnum.EMAIL_ALREADY_EXISTS);
         }
     }
 
     private User createUserInstance(UserCreateCpfDTO dto) {
-        if (dto.role() == Role.MANAGER) {
-            Manager manager = new Manager();
-            manager.setCpf(dto.cpf());
-            return manager;
-        } else if (dto.role() == Role.STUDENT) {
+        if (dto.role() == Role.STUDENT) {
             Student student = new Student();
             student.setCpf(dto.cpf());
             return student;
@@ -99,8 +89,7 @@ public class CreateUserWithCpfUseCase {
     }
 
     private User saveUser(User user) {
-        if (user instanceof Manager) return managerRepository.save((Manager) user);
-        else if (user instanceof Student) return studentRepository.save((Student) user);
+        if (user instanceof Student) return studentRepository.save((Student) user);
         else return professorRepository.save((Professor) user);
     }
 
@@ -113,9 +102,8 @@ public class CreateUserWithCpfUseCase {
                 savedUser.getId(), savedUser.getName(), savedUser.getEmail(),
                 savedUser.getRegistration(), savedUser.getRole(),
                 savedUser.getInstitutionOrganization(), savedUser.isUserStatus(),
-                savedUser instanceof Manager ? ((Manager) savedUser).getCpf() :
-                        savedUser instanceof Student ? ((Student) savedUser).getCpf() :
-                                ((Professor) savedUser).getCpf(), phones
+                savedUser instanceof Student ? ((Student) savedUser).getCpf() :
+                        ((Professor) savedUser).getCpf(), phones
         );
     }
 }

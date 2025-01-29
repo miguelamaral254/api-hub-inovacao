@@ -21,7 +21,8 @@ public class RouteDefinitions {
     // Rotas acessíveis apenas para administradores
     public static final String[] ADMIN_ROUTES = {
             "/admin/**",
-            "/users/all-platform-users", // Buscar todos os usuários paginados
+            "/users/all-platform-users",
+            "/admin/create-manager"
     };
 
     // Métodos HTTP permitidos para rotas públicas
