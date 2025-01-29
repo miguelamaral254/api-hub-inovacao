@@ -41,7 +41,6 @@ public class UserController {
 
 
     @PostMapping("/create-user-cnpj")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponseDTO> createUserWithCnpj(@RequestBody UserCreateCnpjDTO dto) {
         UserResponseDTO createdUser = createUserWithCnpjUseCase.execute(dto);
         return ResponseEntity.ok(createdUser);

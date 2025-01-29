@@ -24,8 +24,5 @@ public class PartnerCompany extends User implements UserBase {
         return List.of();
     }
 
-    @Override
-    public String getPassword() {
-        return "";
-    }
+
 }
