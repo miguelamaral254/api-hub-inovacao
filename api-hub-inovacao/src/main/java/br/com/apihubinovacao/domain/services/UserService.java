@@ -101,7 +101,7 @@ public class UserService {
     }
 
     public List<UserResponseDTO> getAllUsers() {
-        return userRepository.findByRole(Role.USER).stream()
+        return userRepository.findByRole(Role.STUDENT).stream()
                 .filter(User::isUserStatus)
                 .map(user -> new UserResponseDTO(
                         user.getId(),
