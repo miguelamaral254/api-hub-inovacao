@@ -7,12 +7,7 @@ public class BusinessException extends RuntimeException {
     private final String message;
     private final int httpStatus;
 
-    public BusinessException(String code, String message, int httpStatus) {
-        super(message);
-        this.code = code;
-        this.message = message;
-        this.httpStatus = httpStatus;
-    }
+
 
     public BusinessException(ErrorCodeEnum error) {
         super(error.getMessage());

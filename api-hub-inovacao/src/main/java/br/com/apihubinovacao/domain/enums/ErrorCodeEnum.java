@@ -6,10 +6,10 @@ public enum ErrorCodeEnum {
     USER_NOT_FOUND("User not found", "ERR-001", 404),
     DUPLICATE_USER("Duplicate user found", "ERR-002", 409),
     DUPLICATE_EMAIL("Duplicate email", "ERR-008", 409),
+    INVALID_EMAIL("Invalid email format or missing", "ERR-013", 400),
 
     // Login
     LOGIN_FAILED("Incorrect Email or Password", "ERR-010", 401),
-
 
     // Token
     INVALID_TOKEN("Invalid token", "ERR-003", 401),
@@ -21,9 +21,16 @@ public enum ErrorCodeEnum {
 
     // Senha
     PASSWORD_ENCRYPTION_FAILED("Password encryption failed", "ERR-007", 500),
-
+    INVALID_PASSWORD("Invalid password format or missing", "ERR-014", 400),
     // Telefone
     PHONE_CREATION_FAILED("Failed to create phone record", "ERR-008", 500),
+
+    // CNPJ e CPF
+    INVALID_CNPJ("Invalid CNPJ format or missing", "ERR-009", 400),
+    INVALID_CPF("Invalid CPF format or missing", "ERR-011", 400),
+
+    // Role inválida
+    INVALID_ROLE("Invalid user role", "ERR-012", 400),
 
     // Serviço genérico
     SERVER_ERROR("Internal server error", "ERR-500", 500);

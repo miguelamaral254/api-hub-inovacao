@@ -8,7 +8,6 @@ public class SubmissionDocument {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idDOCUMENT")
     private Long idDocument;
 
     @Lob
@@ -16,7 +15,7 @@ public class SubmissionDocument {
     private byte[] documentFile;
 
     @ManyToOne
-    @JoinColumn(name = "SUBMISSION_idSUBMISSION")
+    @JoinColumn(name = "SUBMISSION_idSUBMISSION", nullable = false)
     private Submission submission;
 
     public Long getIdDocument() {
@@ -43,4 +42,3 @@ public class SubmissionDocument {
         this.submission = submission;
     }
 }
-
