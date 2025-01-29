@@ -1,6 +1,5 @@
 package br.com.apihubinovacao.domain.models;
 
-
 import jakarta.persistence.*;
 
 @Entity
@@ -16,10 +15,26 @@ public class Phone {
     private String number;
 
     @ManyToOne
-    @JoinColumn(name = "USER_idUSER", nullable = false)
-    private User user;
+    @JoinColumn(name = "ADMIN_idUSER")
+    private Admin admin;
 
-    // Getters and Setters
+    @ManyToOne
+    @JoinColumn(name = "MANAGER_idUSER")
+    private Manager manager;
+
+    @ManyToOne
+    @JoinColumn(name = "STUDENT_idUSER")
+    private Student student;
+
+    @ManyToOne
+    @JoinColumn(name = "PROFESSOR_idUSER")
+    private Professor professor;
+
+    @ManyToOne
+    @JoinColumn(name = "PARTNER_COMPANY_idUSER")
+    private PartnerCompany partnerCompany;
+
+    // Getters e Setters
     public Long getId() {
         return id;
     }
@@ -36,11 +51,43 @@ public class Phone {
         this.number = number;
     }
 
-    public User getUser() {
-        return user;
+    public Admin getAdmin() {
+        return admin;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAdmin(Admin admin) {
+        this.admin = admin;
+    }
+
+    public Manager getManager() {
+        return manager;
+    }
+
+    public void setManager(Manager manager) {
+        this.manager = manager;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public Professor getProfessor() {
+        return professor;
+    }
+
+    public void setProfessor(Professor professor) {
+        this.professor = professor;
+    }
+
+    public PartnerCompany getPartnerCompany() {
+        return partnerCompany;
+    }
+
+    public void setPartnerCompany(PartnerCompany partnerCompany) {
+        this.partnerCompany = partnerCompany;
     }
 }
