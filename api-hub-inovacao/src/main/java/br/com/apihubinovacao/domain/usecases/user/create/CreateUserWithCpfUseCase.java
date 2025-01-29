@@ -2,7 +2,7 @@ package br.com.apihubinovacao.domain.usecases.user.create;
 
 import br.com.apihubinovacao.domain.dtos.PhoneResponseDTO;
 import br.com.apihubinovacao.domain.dtos.UserCreateCpfDTO;
-import br.com.apihubinovacao.domain.dtos.UserResponseDTO;
+import br.com.apihubinovacao.domain.dtos.UserResponseCpfDTO;
 import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
 import br.com.apihubinovacao.domain.enums.Role;
 import br.com.apihubinovacao.domain.exceptions.BusinessException;
@@ -43,7 +43,7 @@ public class CreateUserWithCpfUseCase {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public UserResponseDTO execute(UserCreateCpfDTO dto) {
+    public UserResponseCpfDTO execute(UserCreateCpfDTO dto) {
         validateUserInput(dto.email(), dto.password(), dto.cpf());
 
         User user = createUserInstance(dto);
@@ -97,24 +97,25 @@ public class CreateUserWithCpfUseCase {
         user.setInstitutionOrganization(dto.institutionOrganization());
         user.setUserStatus(dto.userStatus());
     }
+
     private User saveUser(User user) {
         if (user instanceof Manager) return managerRepository.save((Manager) user);
         else if (user instanceof Student) return studentRepository.save((Student) user);
         else return professorRepository.save((Professor) user);
     }
 
-    private UserResponseDTO saveAndReturn(User savedUser, UserCreateCpfDTO dto) {
+    private UserResponseCpfDTO saveAndReturn(User savedUser, UserCreateCpfDTO dto) {
         List<PhoneResponseDTO> phones = dto.phones().stream()
                 .map(phoneDto -> phoneService.createPhone(phoneDto, savedUser))
                 .collect(Collectors.toList());
 
-        return new UserResponseDTO(
+        return new UserResponseCpfDTO(
                 savedUser.getId(), savedUser.getName(), savedUser.getEmail(),
                 savedUser.getRegistration(), savedUser.getRole(),
                 savedUser.getInstitutionOrganization(), savedUser.isUserStatus(),
-                null, savedUser instanceof Manager ? ((Manager) savedUser).getCpf() :
-                savedUser instanceof Student ? ((Student) savedUser).getCpf() :
-                        ((Professor) savedUser).getCpf(), phones
+                savedUser instanceof Manager ? ((Manager) savedUser).getCpf() :
+                        savedUser instanceof Student ? ((Student) savedUser).getCpf() :
+                                ((Professor) savedUser).getCpf(), phones
         );
     }
 }

@@ -3,13 +3,14 @@ package br.com.apihubinovacao.domain.dtos;
 import br.com.apihubinovacao.domain.enums.Role;
 import java.util.List;
 
-public record UserCreateDTO(
+public record UserResponseCpfDTO(
+        Long id,
         String name,
         String email,
-        String password,
         String registration,
         Role role,
         String institutionOrganization,
         boolean userStatus,
-        List<PhoneCreateDTO> phones
-) {}
+        String cpf,
+        List<PhoneResponseDTO> phones
+) { }

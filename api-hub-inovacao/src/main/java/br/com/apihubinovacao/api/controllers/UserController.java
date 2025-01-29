@@ -41,8 +41,8 @@ public class UserController {
 
 
     @PostMapping("/create-user-cnpj")
-    public ResponseEntity<UserResponseDTO> createUserWithCnpj(@RequestBody UserCreateCnpjDTO dto) {
-        UserResponseDTO createdUser = createUserWithCnpjUseCase.execute(dto);
+    public ResponseEntity<UserResponseCnpjDTO> createUserWithCnpj(@RequestBody UserCreateCnpjDTO dto) {
+        UserResponseCnpjDTO createdUser = createUserWithCnpjUseCase.execute(dto);
         return ResponseEntity.ok(createdUser);
     }
 
@@ -50,8 +50,8 @@ public class UserController {
      * Criar usuário com CPF (Manager, Student ou Professor)
      */
     @PostMapping("/create-user-cpf")
-    public ResponseEntity<UserResponseDTO> createUserWithCpf(@RequestBody UserCreateCpfDTO dto) {
-        UserResponseDTO createdUser = createUserWithCpfUseCase.execute(dto);
+    public ResponseEntity<UserResponseCpfDTO> createUserWithCpf(@RequestBody UserCreateCpfDTO dto) {
+        UserResponseCpfDTO createdUser = createUserWithCpfUseCase.execute(dto);
         return ResponseEntity.ok(createdUser);
     }
 
@@ -60,8 +60,8 @@ public class UserController {
      */
     @GetMapping("/by-email")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public ResponseEntity<UserResponseDTO> getUserByEmail(@RequestParam String email) {
-        UserResponseDTO user = getUserByEmailUseCase.execute(email);
+    public ResponseEntity<Object> getUserByEmail(@RequestParam String email) {
+        Object user = getUserByEmailUseCase.execute(email);
         return ResponseEntity.ok(user);
     }
 
@@ -69,20 +69,19 @@ public class UserController {
      * Buscar todos os usuários ativos filtrando por Role
      */
     @GetMapping("/all-users")
-    public ResponseEntity<List<UserResponseDTO>> getAllUsers(@RequestParam Role role) {
-        List<UserResponseDTO> users = getAllUsersUseCase.execute(role);
+    public ResponseEntity<List<Object>> getAllUsers(@RequestParam Role role) {
+        List<Object> users = getAllUsersUseCase.execute(role);
         return ResponseEntity.ok(users);
     }
-
     /**
      * Buscar todos os usuários da plataforma de forma paginada
      */
     @GetMapping("/all-platform-users")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Page<UserResponseDTO>> getAllPlatformUsers(
+    public ResponseEntity<Page<Object>> getAllPlatformUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        Page<UserResponseDTO> platformUsers = getAllPlatformUsersUseCase.execute(page, size);
+        Page<Object> platformUsers = getAllPlatformUsersUseCase.execute(page, size);
         return ResponseEntity.ok(platformUsers);
     }
 }

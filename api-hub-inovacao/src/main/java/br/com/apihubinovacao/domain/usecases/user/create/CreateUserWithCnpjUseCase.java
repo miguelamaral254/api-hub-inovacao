@@ -2,7 +2,7 @@ package br.com.apihubinovacao.domain.usecases.user.create;
 
 import br.com.apihubinovacao.domain.dtos.PhoneResponseDTO;
 import br.com.apihubinovacao.domain.dtos.UserCreateCnpjDTO;
-import br.com.apihubinovacao.domain.dtos.UserResponseDTO;
+import br.com.apihubinovacao.domain.dtos.UserResponseCnpjDTO;
 import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
 import br.com.apihubinovacao.domain.enums.Role;
 import br.com.apihubinovacao.domain.exceptions.BusinessException;
@@ -38,7 +38,7 @@ public class CreateUserWithCnpjUseCase {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public UserResponseDTO execute(UserCreateCnpjDTO dto) {
+    public UserResponseCnpjDTO execute(UserCreateCnpjDTO dto) {
         validateUserInput(dto.email(), dto.password(), dto.cnpj());
 
         User user = createUserInstance(dto);
@@ -87,17 +87,23 @@ public class CreateUserWithCnpjUseCase {
         return user instanceof Admin ? adminRepository.save((Admin) user) : partnerCompanyRepository.save((PartnerCompany) user);
     }
 
-    private UserResponseDTO saveAndReturn(User savedUser, UserCreateCnpjDTO dto) {
+    private UserResponseCnpjDTO saveAndReturn(User savedUser, UserCreateCnpjDTO dto) {
         List<PhoneResponseDTO> phones = dto.phones().stream()
                 .map(phoneDto -> phoneService.createPhone(phoneDto, savedUser))
                 .collect(Collectors.toList());
 
-        return new UserResponseDTO(
+        String cnpj = null;
+        if (savedUser instanceof Admin) {
+            cnpj = ((Admin) savedUser).getCnpj();
+        } else if (savedUser instanceof PartnerCompany) {
+            cnpj = ((PartnerCompany) savedUser).getCnpj();
+        }
+
+        return new UserResponseCnpjDTO(
                 savedUser.getId(), savedUser.getName(), savedUser.getEmail(),
                 savedUser.getRegistration(), savedUser.getRole(),
                 savedUser.getInstitutionOrganization(), savedUser.isUserStatus(),
-                savedUser instanceof Admin ? ((Admin) savedUser).getCnpj() : null,
-                null, phones
+                cnpj, phones
         );
     }
 }

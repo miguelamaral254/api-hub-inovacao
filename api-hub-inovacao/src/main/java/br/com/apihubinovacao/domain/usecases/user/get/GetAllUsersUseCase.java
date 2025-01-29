@@ -1,7 +1,8 @@
 package br.com.apihubinovacao.domain.usecases.user.get;
 
 import br.com.apihubinovacao.domain.dtos.PhoneResponseDTO;
-import br.com.apihubinovacao.domain.dtos.UserResponseDTO;
+import br.com.apihubinovacao.domain.dtos.UserResponseCnpjDTO;
+import br.com.apihubinovacao.domain.dtos.UserResponseCpfDTO;
 import br.com.apihubinovacao.domain.enums.Role;
 import br.com.apihubinovacao.domain.models.*;
 import br.com.apihubinovacao.domain.repositories.*;
@@ -33,7 +34,7 @@ public class GetAllUsersUseCase {
         this.partnerCompanyRepository = partnerCompanyRepository;
     }
 
-    public List<UserResponseDTO> execute(Role role) {
+    public List<Object> execute(Role role) {
         List<? extends User> users;
 
         switch (role) {
@@ -47,12 +48,14 @@ public class GetAllUsersUseCase {
 
         return users.stream()
                 .filter(User::isUserStatus)
-                .map(this::convertToUserResponseDTO)
+                .map(user -> user instanceof Admin || user instanceof PartnerCompany
+                        ? convertToUserResponseCnpjDTO(user)
+                        : convertToUserResponseCpfDTO(user))
                 .collect(Collectors.toList());
     }
 
-    private UserResponseDTO convertToUserResponseDTO(User user) {
-        return new UserResponseDTO(
+    private UserResponseCnpjDTO convertToUserResponseCnpjDTO(User user) {
+        return new UserResponseCnpjDTO(
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
@@ -62,6 +65,22 @@ public class GetAllUsersUseCase {
                 user.isUserStatus(),
                 user instanceof Admin ? ((Admin) user).getCnpj() :
                         user instanceof PartnerCompany ? ((PartnerCompany) user).getCnpj() : null,
+                // O campo CPF não é utilizado para Admin e PartnerCompany
+                user.getPhones().stream()
+                        .map(phone -> new PhoneResponseDTO(phone.getId(), phone.getNumber()))
+                        .collect(Collectors.toList())
+        );
+    }
+
+    private UserResponseCpfDTO convertToUserResponseCpfDTO(User user) {
+        return new UserResponseCpfDTO(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getRegistration(),
+                user.getRole(),
+                user.getInstitutionOrganization(),
+                user.isUserStatus(),
                 user instanceof Manager ? ((Manager) user).getCpf() :
                         user instanceof Student ? ((Student) user).getCpf() :
                                 user instanceof Professor ? ((Professor) user).getCpf() : null,

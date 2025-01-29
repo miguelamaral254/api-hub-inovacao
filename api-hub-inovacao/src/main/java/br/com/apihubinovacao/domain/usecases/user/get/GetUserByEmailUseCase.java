@@ -1,14 +1,14 @@
 package br.com.apihubinovacao.domain.usecases.user.get;
 
 import br.com.apihubinovacao.domain.dtos.PhoneResponseDTO;
-import br.com.apihubinovacao.domain.dtos.UserResponseDTO;
+import br.com.apihubinovacao.domain.dtos.UserResponseCnpjDTO;
+import br.com.apihubinovacao.domain.dtos.UserResponseCpfDTO;
 import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
 import br.com.apihubinovacao.domain.exceptions.BusinessException;
 import br.com.apihubinovacao.domain.models.*;
 import br.com.apihubinovacao.domain.repositories.*;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -36,7 +36,7 @@ public class GetUserByEmailUseCase {
         this.partnerCompanyRepository = partnerCompanyRepository;
     }
 
-    public UserResponseDTO execute(String email) {
+    public Object execute(String email) {
         User user = Stream.of(
                         adminRepository.findByEmail(email),
                         managerRepository.findByEmail(email),
@@ -48,11 +48,13 @@ public class GetUserByEmailUseCase {
                 .findFirst()
                 .orElseThrow(() -> new BusinessException(ErrorCodeEnum.USER_NOT_FOUND));
 
-        return convertToUserResponseDTO(user);
+        return user instanceof Admin || user instanceof PartnerCompany
+                ? convertToUserResponseCnpjDTO(user)
+                : convertToUserResponseCpfDTO(user);
     }
 
-    private UserResponseDTO convertToUserResponseDTO(User user) {
-        return new UserResponseDTO(
+    private UserResponseCnpjDTO convertToUserResponseCnpjDTO(User user) {
+        return new UserResponseCnpjDTO(
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
@@ -62,6 +64,22 @@ public class GetUserByEmailUseCase {
                 user.isUserStatus(),
                 user instanceof Admin ? ((Admin) user).getCnpj() :
                         user instanceof PartnerCompany ? ((PartnerCompany) user).getCnpj() : null,
+                // O campo CPF não é utilizado para Admin e PartnerCompany
+                user.getPhones().stream()
+                        .map(phone -> new PhoneResponseDTO(phone.getId(), phone.getNumber()))
+                        .collect(Collectors.toList())
+        );
+    }
+
+    private UserResponseCpfDTO convertToUserResponseCpfDTO(User user) {
+        return new UserResponseCpfDTO(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getRegistration(),
+                user.getRole(),
+                user.getInstitutionOrganization(),
+                user.isUserStatus(),
                 user instanceof Manager ? ((Manager) user).getCpf() :
                         user instanceof Student ? ((Student) user).getCpf() :
                                 user instanceof Professor ? ((Professor) user).getCpf() : null,

@@ -1,7 +1,8 @@
 package br.com.apihubinovacao.domain.usecases.user.get;
 
 import br.com.apihubinovacao.domain.dtos.PhoneResponseDTO;
-import br.com.apihubinovacao.domain.dtos.UserResponseDTO;
+import br.com.apihubinovacao.domain.dtos.UserResponseCnpjDTO;
+import br.com.apihubinovacao.domain.dtos.UserResponseCpfDTO;
 import br.com.apihubinovacao.domain.models.*;
 import br.com.apihubinovacao.domain.repositories.*;
 import org.springframework.data.domain.Page;
@@ -37,10 +38,9 @@ public class GetAllPlatformUsersUseCase {
         this.partnerCompanyRepository = partnerCompanyRepository;
     }
 
-    public Page<UserResponseDTO> execute(int page, int size) {
+    public Page<Object> execute(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
 
-        // Busca cada tipo de usuário separadamente e unifica a lista
         List<User> users = Stream.of(
                         adminRepository.findAll(),
                         managerRepository.findAll(),
@@ -51,34 +51,47 @@ public class GetAllPlatformUsersUseCase {
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
 
-        // Aplicando paginação manual
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), users.size());
 
-        List<UserResponseDTO> pagedUsers = users.subList(start, end).stream()
+        List<Object> pagedUsers = users.subList(start, end).stream()
                 .map(this::convertToUserResponseDTO)
                 .collect(Collectors.toList());
 
         return new PageImpl<>(pagedUsers, pageable, users.size());
     }
 
-    private UserResponseDTO convertToUserResponseDTO(User user) {
-        return new UserResponseDTO(
-                user.getId(),
-                user.getName(),
-                user.getEmail(),
-                user.getRegistration(),
-                user.getRole(),
-                user.getInstitutionOrganization(),
-                user.isUserStatus(),
-                user instanceof Admin ? ((Admin) user).getCnpj() :
-                        user instanceof PartnerCompany ? ((PartnerCompany) user).getCnpj() : null,
-                user instanceof Manager ? ((Manager) user).getCpf() :
-                        user instanceof Student ? ((Student) user).getCpf() :
-                                user instanceof Professor ? ((Professor) user).getCpf() : null,
-                user.getPhones().stream()
-                        .map(phone -> new PhoneResponseDTO(phone.getId(), phone.getNumber()))
-                        .collect(Collectors.toList())
-        );
+    private Object convertToUserResponseDTO(User user) {
+        if (user instanceof Admin || user instanceof PartnerCompany) {
+            return new UserResponseCnpjDTO(
+                    user.getId(),
+                    user.getName(),
+                    user.getEmail(),
+                    user.getRegistration(),
+                    user.getRole(),
+                    user.getInstitutionOrganization(),
+                    user.isUserStatus(),
+                    user instanceof Admin ? ((Admin) user).getCnpj() : ((PartnerCompany) user).getCnpj(),
+                    user.getPhones().stream()
+                            .map(phone -> new PhoneResponseDTO(phone.getId(), phone.getNumber()))
+                            .collect(Collectors.toList())
+            );
+        } else {
+            return new UserResponseCpfDTO(
+                    user.getId(),
+                    user.getName(),
+                    user.getEmail(),
+                    user.getRegistration(),
+                    user.getRole(),
+                    user.getInstitutionOrganization(),
+                    user.isUserStatus(),
+                    user instanceof Manager ? ((Manager) user).getCpf() :
+                            user instanceof Student ? ((Student) user).getCpf() :
+                                    ((Professor) user).getCpf(),
+                    user.getPhones().stream()
+                            .map(phone -> new PhoneResponseDTO(phone.getId(), phone.getNumber()))
+                            .collect(Collectors.toList())
+            );
+        }
     }
 }
