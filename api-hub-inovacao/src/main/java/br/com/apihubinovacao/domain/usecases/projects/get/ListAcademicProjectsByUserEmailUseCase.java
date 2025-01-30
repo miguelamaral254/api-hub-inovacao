@@ -1,5 +1,6 @@
 package br.com.apihubinovacao.domain.usecases.projects.get;
 
+import br.com.apihubinovacao.domain.dtos.coauthor.CoauthorDTO;
 import br.com.apihubinovacao.domain.dtos.projects.AcademicProjectResponseProfessorDTO;
 import br.com.apihubinovacao.domain.dtos.projects.AcademicProjectResponseStudentDTO;
 import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
@@ -58,7 +59,14 @@ public class ListAcademicProjectsByUserEmailUseCase {
                     professor.get().getName(),
                     project.getFeedback(),       // Novo campo
                     project.getJustification(),  // Novo campo
-                    project.getIdManager()       // Novo campo
+                    project.getIdManager()   ,
+                   project.getCoauthors() != null ? project.getCoauthors().stream()
+                            .map(coauthor -> new CoauthorDTO(
+                                    coauthor.getName(),
+                                    coauthor.getEmail(),
+                                    coauthor.getPhone()
+                            ))
+                            .collect(Collectors.toList()) : null// Novo campo
             )).collect(Collectors.toList());
         } else {
             return projects.stream().map(project -> new AcademicProjectResponseStudentDTO(
@@ -76,7 +84,14 @@ public class ListAcademicProjectsByUserEmailUseCase {
                     student.get().getName(),
                     project.getFeedback(),
                     project.getJustification(),
-                    project.getIdManager()
+                    project.getIdManager(),
+                    project.getCoauthors() != null ? project.getCoauthors().stream()
+                            .map(coauthor -> new CoauthorDTO(
+                                    coauthor.getName(),
+                                    coauthor.getEmail(),
+                                    coauthor.getPhone()
+                            ))
+                            .collect(Collectors.toList()) : null
             )).collect(Collectors.toList());
         }
     }

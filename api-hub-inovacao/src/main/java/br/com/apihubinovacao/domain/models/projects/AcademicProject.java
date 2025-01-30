@@ -33,7 +33,7 @@ public class AcademicProject {
     @Column(name = "status", nullable = false)
     private StatusSolicitation status;
 
-    @OneToMany(mappedBy = "academicProject", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "academicProject", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Coauthor> coauthors;
 
     @ManyToOne

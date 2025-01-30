@@ -1,5 +1,6 @@
 package br.com.apihubinovacao.domain.usecases.projects.get;
 
+import br.com.apihubinovacao.domain.dtos.coauthor.CoauthorDTO;
 import br.com.apihubinovacao.domain.dtos.projects.AcademicProjectResponseStudentDTO;
 import br.com.apihubinovacao.domain.models.projects.AcademicProject;
 import br.com.apihubinovacao.domain.repositories.AcademicProjectRepository;
@@ -37,7 +38,14 @@ public class ListAcademicProjectsForStudentUseCase {
                 project.getStudent().getName(),
                 project.getFeedback(),
                 project.getJustification(),
-                project.getIdManager()
+                project.getIdManager(),
+                project.getCoauthors() != null ? project.getCoauthors().stream()
+                        .map(coauthor -> new CoauthorDTO(
+                                coauthor.getName(),
+                                coauthor.getEmail(),
+                                coauthor.getPhone()
+                        ))
+                        .collect(Collectors.toList()) : null
         )).collect(Collectors.toList());
     }
 }
