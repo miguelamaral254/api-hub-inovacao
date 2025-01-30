@@ -4,7 +4,7 @@ import br.com.apihubinovacao.domain.dtos.AcademicProjectCreateDTO;
 import br.com.apihubinovacao.domain.dtos.AcademicProjectResponseDTO;
 import br.com.apihubinovacao.domain.exceptions.BusinessException;
 import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
-import br.com.apihubinovacao.domain.models.AcademicProject;
+import br.com.apihubinovacao.domain.models.projects.AcademicProject;
 import br.com.apihubinovacao.domain.repositories.AcademicProjectRepository;
 import br.com.apihubinovacao.domain.repositories.ProfessorRepository;  // Importando o repositório de professores
 import br.com.apihubinovacao.domain.repositories.StudentRepository;   // Importando o repositório de estudantes

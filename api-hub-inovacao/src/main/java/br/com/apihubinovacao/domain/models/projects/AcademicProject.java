@@ -1,11 +1,15 @@
-package br.com.apihubinovacao.domain.models;
+package br.com.apihubinovacao.domain.models.projects;
 
+import br.com.apihubinovacao.domain.models.users.Professor;
+import br.com.apihubinovacao.domain.models.users.Student;
 import jakarta.persistence.*;
 import br.com.apihubinovacao.domain.enums.TypeAP;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
+@Table(name = "ACADEMIC_PROJECT")
 public class AcademicProject {
 
     @Id
@@ -23,6 +27,17 @@ public class AcademicProject {
 
     @Column(name = "author_email")
     private String authorEmail;  // Agora armazenamos o e-mail do usuário diretamente
+
+    @OneToMany(mappedBy = "academicProject", fetch = FetchType.LAZY)
+    private List<Coauthor> coauthors; // Relacionamento com a tabela Co-autores
+
+    @ManyToOne
+    @JoinColumn(name = "professor_idUSER", nullable = false)
+    private Professor professor;
+
+    @ManyToOne
+    @JoinColumn(name = "student_idUSER", nullable = false)
+    private Student student;
 
     private LocalDate creationDate;
 
@@ -98,5 +113,13 @@ public class AcademicProject {
 
     public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public List<Coauthor> getCoauthors() {
+        return coauthors;
+    }
+
+    public void setCoauthors(List<Coauthor> coauthors) {
+        this.coauthors = coauthors;
     }
 }

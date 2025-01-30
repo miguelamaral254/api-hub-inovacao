@@ -1,6 +1,6 @@
 package br.com.apihubinovacao.domain.services;
 
-import br.com.apihubinovacao.domain.models.User;
+import br.com.apihubinovacao.domain.models.users.User;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;

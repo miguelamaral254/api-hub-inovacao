@@ -1,5 +1,6 @@
-package br.com.apihubinovacao.domain.models;
+package br.com.apihubinovacao.domain.models.users;
 
+import br.com.apihubinovacao.domain.models.projects.OpportunitiesBank;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -14,6 +15,9 @@ public class PartnerCompany extends User implements UserBase {
     @OneToMany(mappedBy = "partnerCompany", fetch = FetchType.LAZY)
     private List<Phone> phones;
 
+    @OneToMany(mappedBy = "partnerCompany", fetch = FetchType.LAZY)
+    private List<OpportunitiesBank> opportunitiesBanks;
+
     public String getCnpj() {
         return cnpj;
     }
@@ -25,5 +29,13 @@ public class PartnerCompany extends User implements UserBase {
     @Override
     public List<Phone> getPhones() {
         return phones != null ? phones : List.of();
+    }
+
+    public List<OpportunitiesBank> getOpportunitiesBanks() {
+        return opportunitiesBanks;
+    }
+
+    public void setOpportunitiesBanks(List<OpportunitiesBank> opportunitiesBanks) {
+        this.opportunitiesBanks = opportunitiesBanks;
     }
 }

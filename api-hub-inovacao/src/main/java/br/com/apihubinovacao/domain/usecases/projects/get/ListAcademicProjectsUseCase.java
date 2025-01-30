@@ -1,7 +1,7 @@
 package br.com.apihubinovacao.domain.usecases.projects.get;
 
 import br.com.apihubinovacao.domain.dtos.AcademicProjectResponseDTO;
-import br.com.apihubinovacao.domain.models.AcademicProject;
+import br.com.apihubinovacao.domain.models.projects.AcademicProject;
 import br.com.apihubinovacao.domain.repositories.AcademicProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

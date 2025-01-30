@@ -1,6 +1,6 @@
 package br.com.apihubinovacao.domain.repositories;
 
-import br.com.apihubinovacao.domain.models.Admin;
+import br.com.apihubinovacao.domain.models.users.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
