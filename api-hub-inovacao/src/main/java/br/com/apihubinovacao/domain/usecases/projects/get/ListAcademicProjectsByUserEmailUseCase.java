@@ -74,4 +74,5 @@ public class ListAcademicProjectsByUserEmailUseCase {
             )).collect(Collectors.toList());
         }
     }
+
 }

@@ -9,7 +9,8 @@ public class RouteDefinitions {
             "/auth/**",
             "/users/create-user-cpf",
             "/users/all-users",
-            "/users/create-user-cnpj"
+            "/users/create-user-cnpj",
+            "/projects/all",
     };
 
     // Rotas acessíveis para usuários autenticados
