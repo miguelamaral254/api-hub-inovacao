@@ -47,7 +47,6 @@ public class ProjectController {
         this.updateAcademicProjectDetailsUseCase = updateAcademicProjectDetailsUseCase;
     }
 
-    // Endpoint para criar um projeto para um professor
     @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'MANAGERS')")
     @PostMapping("/professor/create")
     public ResponseEntity<AcademicProjectResponseProfessorDTO> createProjectForProfessor(
@@ -56,7 +55,6 @@ public class ProjectController {
         return ResponseEntity.ok(createdProject);
     }
 
-    // Endpoint para criar um projeto para um estudante
     @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'MANAGERS')")
     @PostMapping("/student/create")
     public ResponseEntity<AcademicProjectResponseStudentDTO> createProjectForStudent(
@@ -65,7 +63,6 @@ public class ProjectController {
         return ResponseEntity.ok(createdProject);
     }
 
-    // Endpoint para listar todos os projetos de professores
     @PreAuthorize("hasAnyRole('PROFESSOR','ADMIN', 'MANAGERS')")
     @GetMapping("/all-professor")
     public ResponseEntity<List<AcademicProjectResponseProfessorDTO>> getAllProjectsForProfessor() {
@@ -80,7 +77,6 @@ public class ProjectController {
         return ResponseEntity.ok(projects);
     }
 
-    // Endpoint para listar projetos pelo e-mail do usuário (professor ou estudante)
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGERS')")
     @GetMapping("/by-email")
     public ResponseEntity<List<?>> getProjectsByUserEmail(@RequestParam String email) {
@@ -88,7 +84,6 @@ public class ProjectController {
         return ResponseEntity.ok(projects);
     }
 
-    // Novo Endpoint: Listar todos os projetos, independentemente do papel do autor
     @GetMapping("/all")
     public ResponseEntity<List<?>> getAllProjects() {
         List<?> projects = listAllAcademicProjectsUseCase.execute();
