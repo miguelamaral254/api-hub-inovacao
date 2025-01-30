@@ -7,6 +7,7 @@ import br.com.apihubinovacao.domain.usecases.projects.get.ListAcademicProjectsBy
 import br.com.apihubinovacao.domain.usecases.projects.get.ListAcademicProjectsForProfessorUseCase;
 import br.com.apihubinovacao.domain.usecases.projects.get.ListAcademicProjectsForStudentUseCase;
 import br.com.apihubinovacao.domain.usecases.projects.get.ListAllAcademicProjectsUseCase; // Novo UseCase
+import br.com.apihubinovacao.domain.usecases.projects.update.UpdateAcademicProjectDetailsUseCase;
 import br.com.apihubinovacao.domain.usecases.projects.update.UpdateAcademicProjectStatusUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ public class ProjectController {
     private final ListAcademicProjectsByUserEmailUseCase listAcademicProjectsByUserEmailUseCase;
     private final ListAllAcademicProjectsUseCase listAllAcademicProjectsUseCase; // Novo UseCase
     private final UpdateAcademicProjectStatusUseCase updateAcademicProjectStatusUseCase;
+    private final UpdateAcademicProjectDetailsUseCase updateAcademicProjectDetailsUseCase;
 
     @Autowired
     public ProjectController(
@@ -34,7 +36,7 @@ public class ProjectController {
             ListAcademicProjectsForProfessorUseCase listAcademicProjectsForProfessorUseCase,
             ListAcademicProjectsForStudentUseCase listAcademicProjectsForStudentUseCase,
             ListAcademicProjectsByUserEmailUseCase listAcademicProjectsByUserEmailUseCase,
-            ListAllAcademicProjectsUseCase listAllAcademicProjectsUseCase, UpdateAcademicProjectStatusUseCase updateAcademicProjectStatusUseCase) { // Novo UseCase
+            ListAllAcademicProjectsUseCase listAllAcademicProjectsUseCase, UpdateAcademicProjectStatusUseCase updateAcademicProjectStatusUseCase, UpdateAcademicProjectDetailsUseCase updateAcademicProjectDetailsUseCase) { // Novo UseCase
         this.createAcademicProjectForProfessorUseCase = createAcademicProjectForProfessorUseCase;
         this.createAcademicProjectForStudentUseCase = createAcademicProjectForStudentUseCase;
         this.listAcademicProjectsForProfessorUseCase = listAcademicProjectsForProfessorUseCase;
@@ -42,6 +44,7 @@ public class ProjectController {
         this.listAcademicProjectsByUserEmailUseCase = listAcademicProjectsByUserEmailUseCase;
         this.listAllAcademicProjectsUseCase = listAllAcademicProjectsUseCase; // Injeção do novo UseCase
         this.updateAcademicProjectStatusUseCase = updateAcademicProjectStatusUseCase;
+        this.updateAcademicProjectDetailsUseCase = updateAcademicProjectDetailsUseCase;
     }
 
     // Endpoint para criar um projeto para um professor
@@ -78,7 +81,7 @@ public class ProjectController {
     }
 
     // Endpoint para listar projetos pelo e-mail do usuário (professor ou estudante)
-    @PreAuthorize("hasAnyRole('PROFESSOR','STUDENT', 'ADMIN', 'MANAGERS')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGERS')")
     @GetMapping("/by-email")
     public ResponseEntity<List<?>> getProjectsByUserEmail(@RequestParam String email) {
         List<?> projects = listAcademicProjectsByUserEmailUseCase.execute(email);
@@ -97,6 +100,15 @@ public class ProjectController {
             @PathVariable Long projectId,
             @RequestBody UpdateAcademicProjectStatusDTO dto) {
         updateAcademicProjectStatusUseCase.execute(projectId, dto);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasAnyRole('PROFESSOR','STUDENT')")
+    @PutMapping("/{projectId}/details")
+    public ResponseEntity<Void> updateProjectDetails(
+            @PathVariable Long projectId,
+            @RequestBody UpdateAcademicProjectDetailsDTO updateDTO) {
+        updateAcademicProjectDetailsUseCase.execute(projectId, updateDTO);
         return ResponseEntity.noContent().build();
     }
 }

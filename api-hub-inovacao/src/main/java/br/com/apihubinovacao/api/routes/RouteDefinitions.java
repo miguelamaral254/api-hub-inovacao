@@ -21,6 +21,7 @@ public class RouteDefinitions {
             "/projects/professor/create",
             "/projects/all-student",
             "/projects/all-professor",
+            "/projects/{projectId}/details",
 
     };
 
@@ -29,8 +30,7 @@ public class RouteDefinitions {
             "/admin/**",
             "/users/all-platform-users",
             "/admin/create-manager",
-
-             "/projects/{projectId}/status",
+            "/projects/{projectId}/status",
     };
 
     // Métodos HTTP permitidos para rotas públicas
