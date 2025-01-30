@@ -4,7 +4,7 @@ import br.com.apihubinovacao.domain.dtos.AcademicProjectCreateDTO;
 import br.com.apihubinovacao.domain.dtos.AcademicProjectResponseDTO;
 
 import br.com.apihubinovacao.domain.usecases.projects.create.CreateAcademicProjectUseCase;
-import br.com.apihubinovacao.domain.usecases.projects.create.ListAcademicProjectsUseCase;
+import br.com.apihubinovacao.domain.usecases.projects.get.ListAcademicProjectsUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
