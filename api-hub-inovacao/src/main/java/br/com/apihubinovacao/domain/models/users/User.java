@@ -1,4 +1,4 @@
-package br.com.apihubinovacao.domain.models;
+package br.com.apihubinovacao.domain.models.users;
 
 import br.com.apihubinovacao.domain.enums.Role;
 import jakarta.persistence.*;

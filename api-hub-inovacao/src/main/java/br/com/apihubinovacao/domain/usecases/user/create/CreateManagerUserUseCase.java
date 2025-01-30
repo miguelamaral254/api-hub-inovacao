@@ -5,7 +5,7 @@ import br.com.apihubinovacao.domain.dtos.UserCreateCpfDTO;
 import br.com.apihubinovacao.domain.dtos.UserResponseCpfDTO;
 import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
 import br.com.apihubinovacao.domain.exceptions.BusinessException;
-import br.com.apihubinovacao.domain.models.Manager;
+import br.com.apihubinovacao.domain.models.users.Manager;
 import br.com.apihubinovacao.domain.repositories.ManagerRepository;
 import br.com.apihubinovacao.domain.services.PhoneService;
 import org.springframework.security.crypto.password.PasswordEncoder;

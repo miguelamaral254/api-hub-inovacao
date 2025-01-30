@@ -2,7 +2,7 @@ package br.com.apihubinovacao.domain.services;
 
 import br.com.apihubinovacao.domain.dtos.PhoneCreateDTO;
 import br.com.apihubinovacao.domain.dtos.PhoneResponseDTO;
-import br.com.apihubinovacao.domain.models.*;
+import br.com.apihubinovacao.domain.models.users.*;
 import br.com.apihubinovacao.domain.repositories.PhoneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

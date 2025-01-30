@@ -1,6 +1,6 @@
 package br.com.apihubinovacao.infrastructure.security;
 
-import br.com.apihubinovacao.domain.models.*;
+import br.com.apihubinovacao.domain.models.users.UserBase;
 import br.com.apihubinovacao.domain.repositories.*;
 import br.com.apihubinovacao.domain.services.JwtService;
 import jakarta.servlet.FilterChain;

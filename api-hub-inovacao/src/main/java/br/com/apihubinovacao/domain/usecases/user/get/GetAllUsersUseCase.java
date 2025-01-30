@@ -4,7 +4,7 @@ import br.com.apihubinovacao.domain.dtos.PhoneResponseDTO;
 import br.com.apihubinovacao.domain.dtos.UserResponseCnpjDTO;
 import br.com.apihubinovacao.domain.dtos.UserResponseCpfDTO;
 import br.com.apihubinovacao.domain.enums.Role;
-import br.com.apihubinovacao.domain.models.*;
+import br.com.apihubinovacao.domain.models.users.*;
 import br.com.apihubinovacao.domain.repositories.*;
 import org.springframework.stereotype.Service;
 

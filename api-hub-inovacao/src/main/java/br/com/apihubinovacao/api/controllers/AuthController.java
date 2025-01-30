@@ -3,7 +3,7 @@ package br.com.apihubinovacao.api.controllers;
 import br.com.apihubinovacao.domain.dtos.LoginRequestDTO;
 import br.com.apihubinovacao.domain.dtos.LoginResponseDTO;
 import br.com.apihubinovacao.domain.services.JwtService;
-import br.com.apihubinovacao.domain.models.UserBase;
+import br.com.apihubinovacao.domain.models.users.UserBase;
 import br.com.apihubinovacao.domain.usecases.user.validate.ValidateUserCredentialsUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -3,7 +3,7 @@ package br.com.apihubinovacao.domain.usecases.user.get;
 import br.com.apihubinovacao.domain.dtos.PhoneResponseDTO;
 import br.com.apihubinovacao.domain.dtos.UserResponseCnpjDTO;
 import br.com.apihubinovacao.domain.dtos.UserResponseCpfDTO;
-import br.com.apihubinovacao.domain.models.*;
+import br.com.apihubinovacao.domain.models.users.*;
 import br.com.apihubinovacao.domain.repositories.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

@@ -2,7 +2,7 @@ package br.com.apihubinovacao.domain.usecases.user.validate;
 
 import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
 import br.com.apihubinovacao.domain.exceptions.BusinessException;
-import br.com.apihubinovacao.domain.models.*;
+import br.com.apihubinovacao.domain.models.users.UserBase;
 import br.com.apihubinovacao.domain.repositories.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

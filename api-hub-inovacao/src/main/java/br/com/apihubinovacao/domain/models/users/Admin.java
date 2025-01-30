@@ -1,4 +1,4 @@
-package br.com.apihubinovacao.domain.models;
+package br.com.apihubinovacao.domain.models.users;
 
 import jakarta.persistence.*;
 
