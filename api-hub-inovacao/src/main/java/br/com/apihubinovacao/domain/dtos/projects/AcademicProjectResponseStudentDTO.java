@@ -1,7 +1,10 @@
 package br.com.apihubinovacao.domain.dtos.projects;
 
+import br.com.apihubinovacao.domain.dtos.coauthor.CoauthorDTO;
 import br.com.apihubinovacao.domain.enums.StatusSolicitation;
 import br.com.apihubinovacao.domain.enums.TypeAP;
+
+import java.util.List;
 
 public record AcademicProjectResponseStudentDTO(
         Long id,
@@ -18,5 +21,6 @@ public record AcademicProjectResponseStudentDTO(
         String studentName,
         String feedback,
         String justification,
-        Long idManager
+        Long idManager,
+        List<CoauthorDTO> coauthors
 ) {}

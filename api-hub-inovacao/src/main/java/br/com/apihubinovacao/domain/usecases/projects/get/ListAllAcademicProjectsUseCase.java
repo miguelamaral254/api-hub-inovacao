@@ -1,5 +1,6 @@
 package br.com.apihubinovacao.domain.usecases.projects.get;
 
+import br.com.apihubinovacao.domain.dtos.coauthor.CoauthorDTO;
 import br.com.apihubinovacao.domain.dtos.projects.AcademicProjectResponseProfessorDTO;
 import br.com.apihubinovacao.domain.dtos.projects.AcademicProjectResponseStudentDTO;
 import br.com.apihubinovacao.domain.models.projects.AcademicProject;
@@ -54,8 +55,14 @@ public class ListAllAcademicProjectsUseCase {
                                 professor.get().getName(),
                                 project.getFeedback(),       // Novo campo
                                 project.getJustification(),  // Novo campo
-                                project.getIdManager()       // Novo campo
-                        );
+                                project.getIdManager()     ,
+                                project.getCoauthors() != null ? project.getCoauthors().stream()
+                                        .map(coauthor -> new CoauthorDTO(
+                                                coauthor.getName(),
+                                                coauthor.getEmail(),
+                                                coauthor.getPhone()
+                                        ))
+                                        .collect(Collectors.toList()) : null);
                     } else if (student.isPresent()) {
                         // Se o autor for um estudante, retorna o DTO de estudante
                         return new AcademicProjectResponseStudentDTO(
@@ -73,8 +80,16 @@ public class ListAllAcademicProjectsUseCase {
                                 student.get().getName(),
                                 project.getFeedback(),       // Novo campo
                                 project.getJustification(),  // Novo campo
-                                project.getIdManager()       // Novo campo
-                        );
+                                project.getIdManager(),
+                                project.getCoauthors() != null ? project.getCoauthors().stream()
+                                .map(coauthor -> new CoauthorDTO(
+                                        coauthor.getName(),
+                                        coauthor.getEmail(),
+                                        coauthor.getPhone()
+                                ))
+                                .collect(Collectors.toList()) : null
+                        );       // Novo campo
+
                     } else {
                         throw new RuntimeException("Autor do projeto não encontrado: " + project.getAuthorEmail());
                     }

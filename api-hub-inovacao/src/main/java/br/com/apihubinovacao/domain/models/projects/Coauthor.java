@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "COAUTHOR_SUBMISSION")
 public class Coauthor {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,7 +27,20 @@ public class Coauthor {
     @JoinColumn(name = "ACADEMIC_PROJECT_id")
     private AcademicProject academicProject;
 
+    // Construtor padrão (necessário para JPA)
+    public Coauthor() {
+    }
 
+    // Construtor com parâmetros
+    public Coauthor(String name, String email, String phone, Startup startup, AcademicProject academicProject) {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.startup = startup;
+        this.academicProject = academicProject;
+    }
+
+    // Getters e Setters
     public Long getId() {
         return id;
     }
@@ -74,5 +88,4 @@ public class Coauthor {
     public void setAcademicProject(AcademicProject academicProject) {
         this.academicProject = academicProject;
     }
-
 }
