@@ -45,17 +45,17 @@ public class Startup {
     private StatusSolicitation status;
 
     @Column(name = "author_email")
-    private String authorEmail;  // Agora armazenamos o e-mail do usuário diretamente
+    private String authorEmail;
 
     @OneToMany(mappedBy = "startup", fetch = FetchType.LAZY)
-    private List<Coauthor> coauthors; // Relacionamento com a tabela Co-autores
+    private List<Coauthor> coauthors;
 
     @ManyToOne
-    @JoinColumn(name = "professor_idUSER", nullable = false)
+    @JoinColumn(name = "professor_idUSER")
     private Professor professor;
 
     @ManyToOne
-    @JoinColumn(name = "student_idUSER", nullable = false)
+    @JoinColumn(name = "student_idUSER")
     private Student student;
 
     @Column(name = "CNPJ", length = 14)

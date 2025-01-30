@@ -1,6 +1,6 @@
 package br.com.apihubinovacao.domain.usecases.projects.get;
 
-import br.com.apihubinovacao.domain.dtos.AcademicProjectResponseDTO;
+import br.com.apihubinovacao.domain.dtos.projects.AcademicProjectResponseProfessorDTO;
 import br.com.apihubinovacao.domain.models.projects.AcademicProject;
 import br.com.apihubinovacao.domain.repositories.AcademicProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,16 +10,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ListAcademicProjectsUseCase {
+public class ListAcademicProjectsForProfessorUseCase {
 
     @Autowired
     private AcademicProjectRepository academicProjectRepository;
 
-    public List<AcademicProjectResponseDTO> execute() {
+    public List<AcademicProjectResponseProfessorDTO> execute() {
 
-        List<AcademicProject> projects = academicProjectRepository.findAll();
+        List<AcademicProject> projects = academicProjectRepository.findAll()
+                .stream()
+                .filter(project -> project.getProfessor() != null)
+                .collect(Collectors.toList());
 
-        return projects.stream().map(project -> new AcademicProjectResponseDTO(
+        return projects.stream().map(project -> new AcademicProjectResponseProfessorDTO(
                 project.getId(),
                 project.getTitle(),
                 project.getDescription(),
@@ -28,7 +31,10 @@ public class ListAcademicProjectsUseCase {
                 project.getSiteLink(),
                 project.getTypeAP(),
                 project.getAuthorEmail(),
-                project.getCreationDate().toString()
+                project.getCreationDate().toString(),
+                project.getStatus(),
+                project.getProfessor().getId(),
+                project.getProfessor().getName()
         )).collect(Collectors.toList());
     }
 }

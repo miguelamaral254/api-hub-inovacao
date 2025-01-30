@@ -19,11 +19,11 @@ public class Coauthor {
     private String phone;
 
     @ManyToOne
-    @JoinColumn(name = "STARTUP_id", nullable = false)
+    @JoinColumn(name = "STARTUP_id")
     private Startup startup;
 
     @ManyToOne
-    @JoinColumn(name = "ACADEMIC_PROJECT_id", nullable = false)
+    @JoinColumn(name = "ACADEMIC_PROJECT_id")
     private AcademicProject academicProject;
 
 

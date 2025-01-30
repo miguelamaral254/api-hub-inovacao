@@ -1,5 +1,6 @@
 package br.com.apihubinovacao.domain.models.projects;
 
+import br.com.apihubinovacao.domain.enums.StatusSolicitation;
 import br.com.apihubinovacao.domain.models.users.Professor;
 import br.com.apihubinovacao.domain.models.users.Student;
 import jakarta.persistence.*;
@@ -26,23 +27,26 @@ public class AcademicProject {
     private TypeAP typeAP;
 
     @Column(name = "author_email")
-    private String authorEmail;  // Agora armazenamos o e-mail do usuário diretamente
+    private String authorEmail;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private StatusSolicitation status;
 
     @OneToMany(mappedBy = "academicProject", fetch = FetchType.LAZY)
-    private List<Coauthor> coauthors; // Relacionamento com a tabela Co-autores
+    private List<Coauthor> coauthors;
 
     @ManyToOne
-    @JoinColumn(name = "professor_idUSER", nullable = false)
+    @JoinColumn(name = "professor_idUSER")
     private Professor professor;
 
     @ManyToOne
-    @JoinColumn(name = "student_idUSER", nullable = false)
+    @JoinColumn(name = "student_idUSER")
     private Student student;
 
     private LocalDate creationDate;
 
     // Getters and Setters
-
     public Long getId() {
         return id;
     }
@@ -107,6 +111,14 @@ public class AcademicProject {
         this.authorEmail = authorEmail;
     }
 
+    public StatusSolicitation getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusSolicitation status) {
+        this.status = status;
+    }
+
     public LocalDate getCreationDate() {
         return creationDate;
     }
@@ -121,5 +133,21 @@ public class AcademicProject {
 
     public void setCoauthors(List<Coauthor> coauthors) {
         this.coauthors = coauthors;
+    }
+
+    public Professor getProfessor() {
+        return professor;
+    }
+
+    public void setProfessor(Professor professor) {
+        this.professor = professor;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
     }
 }

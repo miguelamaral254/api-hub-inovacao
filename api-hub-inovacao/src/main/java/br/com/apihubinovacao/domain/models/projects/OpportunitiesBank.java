@@ -42,7 +42,7 @@ public class OpportunitiesBank {
     private StatusSolicitation status;
 
     @Column(name = "author_email")
-    private String authorEmail;  // Agora armazenamos o e-mail do usuário diretamente
+    private String authorEmail;
 
     @ManyToOne
     @JoinColumn(name = "partnerCompany_idUSER", nullable = false)
