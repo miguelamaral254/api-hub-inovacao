@@ -1,4 +1,4 @@
-package br.com.apihubinovacao.domain.usecases.projects.create;
+package br.com.apihubinovacao.domain.usecases.projects.get;
 
 import br.com.apihubinovacao.domain.dtos.AcademicProjectResponseDTO;
 import br.com.apihubinovacao.domain.models.AcademicProject;
