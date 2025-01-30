@@ -15,6 +15,7 @@ public class RouteDefinitions {
     // Rotas acessíveis para usuários autenticados
     public static final String[] USER_ROUTES = {
             "/users/by-email",
+            "/projects/by-email",
             "/projects/student/create",
             "/projects/professor/create",
             "/projects/all-student",
@@ -26,7 +27,8 @@ public class RouteDefinitions {
     public static final String[] ADMIN_ROUTES = {
             "/admin/**",
             "/users/all-platform-users",
-            "/admin/create-manager"
+            "/admin/create-manager",
+
     };
 
     // Métodos HTTP permitidos para rotas públicas
