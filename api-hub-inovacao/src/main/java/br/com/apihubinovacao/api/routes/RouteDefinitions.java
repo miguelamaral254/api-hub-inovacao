@@ -15,6 +15,8 @@ public class RouteDefinitions {
     // Rotas acessíveis para usuários autenticados
     public static final String[] USER_ROUTES = {
             "/users/by-email",
+            "/projects/create",
+            "/projects/all",
 
     };
 
