@@ -15,5 +15,8 @@ public record AcademicProjectResponseProfessorDTO(
         String creationDate,
         StatusSolicitation status,
         Long professorId,
-        String professorName
+        String professorName,
+        String feedback,       // Novo campo
+        String justification,  // Novo campo
+        Long idManager         // Novo campo
 ) {}

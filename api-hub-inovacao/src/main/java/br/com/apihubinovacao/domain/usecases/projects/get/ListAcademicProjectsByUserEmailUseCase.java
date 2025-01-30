@@ -55,7 +55,10 @@ public class ListAcademicProjectsByUserEmailUseCase {
                     project.getCreationDate().toString(),
                     project.getStatus(),
                     professor.get().getId(),
-                    professor.get().getName()
+                    professor.get().getName(),
+                    project.getFeedback(),       // Novo campo
+                    project.getJustification(),  // Novo campo
+                    project.getIdManager()       // Novo campo
             )).collect(Collectors.toList());
         } else {
             return projects.stream().map(project -> new AcademicProjectResponseStudentDTO(
@@ -70,9 +73,11 @@ public class ListAcademicProjectsByUserEmailUseCase {
                     project.getCreationDate().toString(),
                     project.getStatus(),
                     student.get().getId(),
-                    student.get().getName()
+                    student.get().getName(),
+                    project.getFeedback(),
+                    project.getJustification(),
+                    project.getIdManager()
             )).collect(Collectors.toList());
         }
     }
-
 }

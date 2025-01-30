@@ -45,6 +45,14 @@ public class AcademicProject {
     private Student student;
 
     private LocalDate creationDate;
+    @Column(name = "feedback", nullable = true)
+    private String feedback;
+
+    @Column(name = "justification", nullable = true)
+    private String justification;
+
+    @Column(name = "id_manager", nullable = true)
+    private Long idManager;
 
     // Getters and Setters
     public Long getId() {
@@ -149,5 +157,28 @@ public class AcademicProject {
 
     public void setStudent(Student student) {
         this.student = student;
+    } public String getFeedback() {
+        return feedback;
     }
+
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
+    }
+
+    public String getJustification() {
+        return justification;
+    }
+
+    public void setJustification(String justification) {
+        this.justification = justification;
+    }
+
+    public Long getIdManager() {
+        return idManager;
+    }
+
+    public void setIdManager(Long idManager) {
+        this.idManager = idManager;
+    }
+
 }

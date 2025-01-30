@@ -37,6 +37,11 @@ public class CreateAcademicProjectForProfessorUseCase {
         project.setStatus(createDTO.status());
         project.setCreationDate(LocalDate.now());
 
+        // Inicializa os novos campos como null (ou com valores padrão, se necessário)
+        project.setFeedback(null);
+        project.setJustification(null);
+        project.setIdManager(null);
+
         project.setProfessor(professorRepository.findById(createDTO.professorId())
                 .orElseThrow(() -> new BusinessException(ErrorCodeEnum.USER_NOT_FOUND)));
 
@@ -54,7 +59,10 @@ public class CreateAcademicProjectForProfessorUseCase {
                 savedProject.getCreationDate().toString(),
                 savedProject.getStatus(),
                 savedProject.getProfessor().getId(),
-                project.getProfessor().getName()
+                savedProject.getProfessor().getName(),
+                savedProject.getFeedback(),       // Novo campo
+                savedProject.getJustification(),  // Novo campo
+                savedProject.getIdManager()       // Novo campo
         );
     }
 

@@ -34,7 +34,10 @@ public class ListAcademicProjectsForStudentUseCase {
                 project.getCreationDate().toString(),
                 project.getStatus(),
                 project.getStudent().getId(),
-                project.getStudent().getName()
+                project.getStudent().getName(),
+                project.getFeedback(),
+                project.getJustification(),
+                project.getIdManager()
         )).collect(Collectors.toList());
     }
 }

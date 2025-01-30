@@ -30,6 +30,7 @@ public class RouteDefinitions {
             "/users/all-platform-users",
             "/admin/create-manager",
 
+             "/projects/{projectId}/status",
     };
 
     // Métodos HTTP permitidos para rotas públicas

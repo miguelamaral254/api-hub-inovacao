@@ -51,7 +51,10 @@ public class ListAllAcademicProjectsUseCase {
                                 project.getCreationDate().toString(),
                                 project.getStatus(),
                                 professor.get().getId(),
-                                professor.get().getName()
+                                professor.get().getName(),
+                                project.getFeedback(),       // Novo campo
+                                project.getJustification(),  // Novo campo
+                                project.getIdManager()       // Novo campo
                         );
                     } else if (student.isPresent()) {
                         // Se o autor for um estudante, retorna o DTO de estudante
@@ -67,7 +70,10 @@ public class ListAllAcademicProjectsUseCase {
                                 project.getCreationDate().toString(),
                                 project.getStatus(),
                                 student.get().getId(),
-                                student.get().getName()
+                                student.get().getName(),
+                                project.getFeedback(),       // Novo campo
+                                project.getJustification(),  // Novo campo
+                                project.getIdManager()       // Novo campo
                         );
                     } else {
                         throw new RuntimeException("Autor do projeto não encontrado: " + project.getAuthorEmail());

@@ -15,5 +15,8 @@ public record AcademicProjectResponseStudentDTO(
         String creationDate,
         StatusSolicitation status,
         Long studentId,
-        String studentName // Nome do Estudante
+        String studentName,
+        String feedback,
+        String justification,
+        Long idManager
 ) {}
