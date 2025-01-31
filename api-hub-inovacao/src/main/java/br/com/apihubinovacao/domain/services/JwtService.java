@@ -43,7 +43,8 @@ public class JwtService {
                     role.equals("ROLE_ADMIN") ||
                             role.equals("ROLE_PROFESSOR") ||
                             role.equals("ROLE_STUDENT") ||
-                            role.equals("ROLE_MANAGER")
+                            role.equals("ROLE_MANAGER") ||
+                            role.equals("ROLE_PARTNER_COMPANY")
             );
         } catch (Exception e) {
             throw new BusinessException(ErrorCodeEnum.INVALID_TOKEN);

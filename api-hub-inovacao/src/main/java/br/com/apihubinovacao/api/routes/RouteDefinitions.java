@@ -11,6 +11,8 @@ public class RouteDefinitions {
             "/users/all-users",
             "/users/create-user-cnpj",
             "/projects/all",
+
+
     };
 
     // Rotas acessíveis para usuários autenticados
@@ -22,6 +24,11 @@ public class RouteDefinitions {
             "/projects/all-student",
             "/projects/all-professor",
             "/projects/{projectId}/details",
+            "/opportunities/create",
+            "/opportunities/all",
+            "/opportunities/company/{companyName}"
+
+
 
     };
 
