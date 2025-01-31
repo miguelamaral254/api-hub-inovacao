@@ -26,7 +26,7 @@ public class PublishController {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
-    @PostMapping("create-publish")
+    @PostMapping("create")
     public ResponseEntity<PublishResponseDTO> createPublishForManager(@RequestBody PublishCreateDTO publishCreateDTO) {
         PublishResponseDTO createdPublish = createPublishForManagerUseCase.execute(publishCreateDTO);
         return ResponseEntity.ok(createdPublish);
