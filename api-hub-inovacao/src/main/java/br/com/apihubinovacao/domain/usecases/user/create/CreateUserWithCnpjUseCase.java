@@ -1,8 +1,8 @@
 package br.com.apihubinovacao.domain.usecases.user.create;
 
-import br.com.apihubinovacao.domain.dtos.PhoneResponseDTO;
-import br.com.apihubinovacao.domain.dtos.UserCreateCnpjDTO;
-import br.com.apihubinovacao.domain.dtos.UserResponseCnpjDTO;
+import br.com.apihubinovacao.domain.dtos.phone.PhoneResponseDTO;
+import br.com.apihubinovacao.domain.dtos.user.UserCreateCnpjDTO;
+import br.com.apihubinovacao.domain.dtos.user.UserResponseCnpjDTO;
 import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
 import br.com.apihubinovacao.domain.enums.Role;
 import br.com.apihubinovacao.domain.exceptions.BusinessException;
@@ -11,7 +11,7 @@ import br.com.apihubinovacao.domain.models.users.PartnerCompany;
 import br.com.apihubinovacao.domain.models.users.User;
 import br.com.apihubinovacao.domain.repositories.AdminRepository;
 import br.com.apihubinovacao.domain.repositories.PartnerCompanyRepository;
-import br.com.apihubinovacao.domain.services.PhoneService;
+import br.com.apihubinovacao.domain.usecases.phone.create.CreatePhoneUseCase;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,18 +23,18 @@ public class CreateUserWithCnpjUseCase {
 
     private final AdminRepository adminRepository;
     private final PartnerCompanyRepository partnerCompanyRepository;
-    private final PhoneService phoneService;
+    private final CreatePhoneUseCase createPhoneUseCase;
     private final PasswordEncoder passwordEncoder;
 
     public CreateUserWithCnpjUseCase(
             AdminRepository adminRepository,
             PartnerCompanyRepository partnerCompanyRepository,
-            PhoneService phoneService,
+            CreatePhoneUseCase createPhoneUseCase,
             PasswordEncoder passwordEncoder
     ) {
         this.adminRepository = adminRepository;
         this.partnerCompanyRepository = partnerCompanyRepository;
-        this.phoneService = phoneService;
+        this.createPhoneUseCase = createPhoneUseCase;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -76,7 +76,7 @@ public class CreateUserWithCnpjUseCase {
     private void setCommonFields(User user, UserCreateCnpjDTO dto) {
         user.setName(dto.name());
         user.setEmail(dto.email());
-        user.setPassword(passwordEncoder.encode(dto.password())); // 🔒 Encriptação da senha
+        user.setPassword(passwordEncoder.encode(dto.password()));
         user.setRegistration(dto.registration());
         user.setRole(dto.role());
         user.setInstitutionOrganization(dto.institutionOrganization());
@@ -89,7 +89,7 @@ public class CreateUserWithCnpjUseCase {
 
     private UserResponseCnpjDTO saveAndReturn(User savedUser, UserCreateCnpjDTO dto) {
         List<PhoneResponseDTO> phones = dto.phones().stream()
-                .map(phoneDto -> phoneService.createPhone(phoneDto, savedUser))
+                .map(phoneDto -> createPhoneUseCase.execute(phoneDto, savedUser)) // Ajustado para usar o CreatePhoneUseCase
                 .collect(Collectors.toList());
 
         String cnpj = null;

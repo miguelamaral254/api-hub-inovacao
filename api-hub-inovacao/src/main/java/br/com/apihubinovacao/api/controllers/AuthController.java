@@ -1,7 +1,7 @@
 package br.com.apihubinovacao.api.controllers;
 
-import br.com.apihubinovacao.domain.dtos.LoginRequestDTO;
-import br.com.apihubinovacao.domain.dtos.LoginResponseDTO;
+import br.com.apihubinovacao.domain.dtos.auth.LoginRequestDTO;
+import br.com.apihubinovacao.domain.dtos.auth.LoginResponseDTO;
 import br.com.apihubinovacao.domain.services.JwtService;
 import br.com.apihubinovacao.domain.models.users.UserBase;
 import br.com.apihubinovacao.domain.usecases.user.validate.ValidateUserCredentialsUseCase;

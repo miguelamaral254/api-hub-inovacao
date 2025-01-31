@@ -1,5 +1,6 @@
-package br.com.apihubinovacao.domain.dtos;
+package br.com.apihubinovacao.domain.dtos.user;
 
+import br.com.apihubinovacao.domain.dtos.phone.PhoneResponseDTO;
 import br.com.apihubinovacao.domain.enums.Role;
 import java.util.List;
 

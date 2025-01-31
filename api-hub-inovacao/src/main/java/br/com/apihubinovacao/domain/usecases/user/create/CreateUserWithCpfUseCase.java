@@ -1,8 +1,8 @@
 package br.com.apihubinovacao.domain.usecases.user.create;
 
-import br.com.apihubinovacao.domain.dtos.PhoneResponseDTO;
-import br.com.apihubinovacao.domain.dtos.UserCreateCpfDTO;
-import br.com.apihubinovacao.domain.dtos.UserResponseCpfDTO;
+import br.com.apihubinovacao.domain.dtos.phone.PhoneResponseDTO;
+import br.com.apihubinovacao.domain.dtos.user.UserCreateCpfDTO;
+import br.com.apihubinovacao.domain.dtos.user.UserResponseCpfDTO;
 import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
 import br.com.apihubinovacao.domain.enums.Role;
 import br.com.apihubinovacao.domain.exceptions.BusinessException;
@@ -11,7 +11,7 @@ import br.com.apihubinovacao.domain.models.users.Student;
 import br.com.apihubinovacao.domain.models.users.User;
 import br.com.apihubinovacao.domain.repositories.ProfessorRepository;
 import br.com.apihubinovacao.domain.repositories.StudentRepository;
-import br.com.apihubinovacao.domain.services.PhoneService;
+import br.com.apihubinovacao.domain.usecases.phone.create.CreatePhoneUseCase;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,18 +23,18 @@ public class CreateUserWithCpfUseCase {
 
     private final StudentRepository studentRepository;
     private final ProfessorRepository professorRepository;
-    private final PhoneService phoneService;
+    private final CreatePhoneUseCase createPhoneUseCase;
     private final PasswordEncoder passwordEncoder;
 
     public CreateUserWithCpfUseCase(
             StudentRepository studentRepository,
             ProfessorRepository professorRepository,
-            PhoneService phoneService,
+            CreatePhoneUseCase createPhoneUseCase,
             PasswordEncoder passwordEncoder
     ) {
         this.studentRepository = studentRepository;
         this.professorRepository = professorRepository;
-        this.phoneService = phoneService;
+        this.createPhoneUseCase = createPhoneUseCase;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -95,7 +95,7 @@ public class CreateUserWithCpfUseCase {
 
     private UserResponseCpfDTO saveAndReturn(User savedUser, UserCreateCpfDTO dto) {
         List<PhoneResponseDTO> phones = dto.phones().stream()
-                .map(phoneDto -> phoneService.createPhone(phoneDto, savedUser))
+                .map(phoneDto -> createPhoneUseCase.execute(phoneDto, savedUser))
                 .collect(Collectors.toList());
 
         return new UserResponseCpfDTO(

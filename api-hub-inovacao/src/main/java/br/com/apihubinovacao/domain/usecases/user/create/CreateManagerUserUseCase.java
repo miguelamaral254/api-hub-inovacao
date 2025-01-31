@@ -1,13 +1,13 @@
 package br.com.apihubinovacao.domain.usecases.user.create;
 
-import br.com.apihubinovacao.domain.dtos.PhoneResponseDTO;
-import br.com.apihubinovacao.domain.dtos.UserCreateCpfDTO;
-import br.com.apihubinovacao.domain.dtos.UserResponseCpfDTO;
+import br.com.apihubinovacao.domain.dtos.phone.PhoneResponseDTO;
+import br.com.apihubinovacao.domain.dtos.user.UserCreateCpfDTO;
+import br.com.apihubinovacao.domain.dtos.user.UserResponseCpfDTO;
 import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
 import br.com.apihubinovacao.domain.exceptions.BusinessException;
 import br.com.apihubinovacao.domain.models.users.Manager;
 import br.com.apihubinovacao.domain.repositories.ManagerRepository;
-import br.com.apihubinovacao.domain.services.PhoneService;
+import br.com.apihubinovacao.domain.usecases.phone.create.CreatePhoneUseCase;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,16 +18,16 @@ import java.util.stream.Collectors;
 public class CreateManagerUserUseCase {
 
     private final ManagerRepository managerRepository;
-    private final PhoneService phoneService;
+    private final CreatePhoneUseCase createPhoneUseCase;
     private final PasswordEncoder passwordEncoder;
 
     public CreateManagerUserUseCase(
             ManagerRepository managerRepository,
-            PhoneService phoneService,
+            CreatePhoneUseCase createPhoneUseCase,
             PasswordEncoder passwordEncoder
     ) {
         this.managerRepository = managerRepository;
-        this.phoneService = phoneService;
+        this.createPhoneUseCase = createPhoneUseCase;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -75,7 +75,7 @@ public class CreateManagerUserUseCase {
 
     private UserResponseCpfDTO saveAndReturn(Manager savedManager, UserCreateCpfDTO dto) {
         List<PhoneResponseDTO> phones = dto.phones().stream()
-                .map(phoneDto -> phoneService.createPhone(phoneDto, savedManager))
+                .map(phoneDto -> createPhoneUseCase.execute(phoneDto, savedManager)) // Ajustado para usar o CreatePhoneUseCase
                 .collect(Collectors.toList());
 
         return new UserResponseCpfDTO(
