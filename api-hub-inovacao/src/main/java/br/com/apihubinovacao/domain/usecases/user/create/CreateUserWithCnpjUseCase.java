@@ -53,9 +53,14 @@ public class CreateUserWithCnpjUseCase {
         if (password == null || password.isEmpty()) throw new BusinessException(ErrorCodeEnum.INVALID_PASSWORD);
         if (cnpj == null || cnpj.isEmpty()) throw new BusinessException(ErrorCodeEnum.INVALID_CNPJ);
 
-        if (adminRepository.findByEmail(email).isPresent() ||
-                partnerCompanyRepository.findByEmail(email).isPresent()) {
+        // Verificando se o e-mail já está em uso
+        if (adminRepository.findByEmail(email).isPresent() || partnerCompanyRepository.findByEmail(email).isPresent()) {
             throw new BusinessException(ErrorCodeEnum.EMAIL_ALREADY_EXISTS);
+        }
+
+        // Verificando se o CNPJ já está em uso
+        if (adminRepository.findByCnpj(cnpj).isPresent() || partnerCompanyRepository.findByCnpj(cnpj).isPresent()) {
+            throw new BusinessException(ErrorCodeEnum.DUPLICATE_CNPJ);
         }
     }
 
@@ -89,7 +94,7 @@ public class CreateUserWithCnpjUseCase {
 
     private UserResponseCnpjDTO saveAndReturn(User savedUser, UserCreateCnpjDTO dto) {
         List<PhoneResponseDTO> phones = dto.phones().stream()
-                .map(phoneDto -> createPhoneUseCase.execute(phoneDto, savedUser)) // Ajustado para usar o CreatePhoneUseCase
+                .map(phoneDto -> createPhoneUseCase.execute(phoneDto, savedUser))
                 .collect(Collectors.toList());
 
         String cnpj = null;

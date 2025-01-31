@@ -39,7 +39,7 @@ public class CreateUserWithCpfUseCase {
     }
 
     public UserResponseCpfDTO execute(UserCreateCpfDTO dto) {
-        validateUserInput(dto.email(), dto.password(), dto.cpf());
+        validateUserInput(dto.email(), dto.password(), dto.cpf(), dto.registration());
 
         User user = createUserInstance(dto);
         setCommonFields(user, dto);
@@ -48,14 +48,22 @@ public class CreateUserWithCpfUseCase {
         return saveAndReturn(savedUser, dto);
     }
 
-    private void validateUserInput(String email, String password, String cpf) {
+    private void validateUserInput(String email, String password, String cpf, String registration) {
         if (email == null || email.isEmpty()) throw new BusinessException(ErrorCodeEnum.INVALID_EMAIL);
         if (password == null || password.isEmpty()) throw new BusinessException(ErrorCodeEnum.INVALID_PASSWORD);
         if (cpf == null || cpf.isEmpty()) throw new BusinessException(ErrorCodeEnum.INVALID_CPF);
+        if (registration == null || registration.isEmpty()) throw new BusinessException(ErrorCodeEnum.INVALID_REGISTRATION);
 
-        if (studentRepository.findByEmail(email).isPresent() ||
-                professorRepository.findByEmail(email).isPresent()) {
+        if (studentRepository.findByEmail(email).isPresent() || professorRepository.findByEmail(email).isPresent()) {
             throw new BusinessException(ErrorCodeEnum.EMAIL_ALREADY_EXISTS);
+        }
+
+        if (studentRepository.findByCpf(cpf).isPresent() || professorRepository.findByCpf(cpf).isPresent()) {
+            throw new BusinessException(ErrorCodeEnum.DUPLICATE_CPF);
+        }
+
+        if (studentRepository.findByRegistration(registration).isPresent() || professorRepository.findByRegistration(registration).isPresent()) {
+            throw new BusinessException(ErrorCodeEnum.DUPLICATE_REGISTRATION);
         }
     }
 
@@ -76,11 +84,7 @@ public class CreateUserWithCpfUseCase {
     private void setCommonFields(User user, UserCreateCpfDTO dto) {
         user.setName(dto.name());
         user.setEmail(dto.email());
-
         String encodedPassword = passwordEncoder.encode(dto.password());
-        System.out.println("Senha original: " + dto.password());
-        System.out.println("Senha criptografada: " + encodedPassword);
-
         user.setPassword(encodedPassword);
         user.setRegistration(dto.registration());
         user.setRole(dto.role());
