@@ -1,11 +1,13 @@
 package br.com.apihubinovacao.domain.usecases.projects.get;
 
+import br.com.apihubinovacao.domain.dtos.coauthor.CoauthorDTO;
 import br.com.apihubinovacao.domain.dtos.projects.AcademicProjectResponseProfessorDTO;
 import br.com.apihubinovacao.domain.models.projects.AcademicProject;
 import br.com.apihubinovacao.domain.repositories.AcademicProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +39,14 @@ public class ListAcademicProjectsForProfessorUseCase {
                 project.getProfessor().getName(),
                 project.getFeedback(),
                 project.getJustification(),
-                project.getIdManager()
+                project.getIdManager(),
+                project.getCoauthors() != null ? project.getCoauthors().stream()
+                        .map(coauthor -> new CoauthorDTO(
+                                coauthor.getName(),
+                                coauthor.getEmail(),
+                                coauthor.getPhone()
+                        ))
+                        .collect(Collectors.toList()) : new ArrayList<>()
         )).collect(Collectors.toList());
     }
 }

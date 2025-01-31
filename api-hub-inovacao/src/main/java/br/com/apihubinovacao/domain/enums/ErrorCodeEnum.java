@@ -7,6 +7,12 @@ public enum ErrorCodeEnum {
     DUPLICATE_USER("Duplicate user found", "ERR-002", 409),
     DUPLICATE_EMAIL("Duplicate email", "ERR-008", 409),
     INVALID_EMAIL("Invalid email format or missing", "ERR-013", 400),
+    DUPLICATE_CNPJ("CNPJ already exists", "ERR-015", 409),
+    DUPLICATE_CPF("CPF already exists", "ERR-016", 409),
+    DUPLICATE_REGISTRATION("Registration number already exists", "ERR-017", 409),
+    INVALID_REGISTRATION("Invalid registration number", "ERR-021", 409),
+    PARTNER_COMPANY_NOT_FOUND("Partner company not found", "ERR-024", 404),
+    EMAIL_DOES_NOT_MATCH("Email does not match", "ERR-025", 409),
 
     // Login
     LOGIN_FAILED("Incorrect Email or Password", "ERR-010", 401),
@@ -24,7 +30,10 @@ public enum ErrorCodeEnum {
     INVALID_PASSWORD("Invalid password format or missing", "ERR-014", 400),
     // Telefone
     PHONE_CREATION_FAILED("Failed to create phone record", "ERR-008", 500),
-
+    // Erros de oportunidades
+    OPPORTUNITY_NOT_FOUND("Opportunity not found", "ERR-030", 404),
+    OPPORTUNITY_CREATION_FAILED("Failed to create opportunity", "ERR-031", 500),
+    OPPORTUNITY_UPDATE_FAILED("Failed to update opportunity", "ERR-032", 500),
     // CNPJ e CPF
     INVALID_CNPJ("Invalid CNPJ format or missing", "ERR-009", 400),
     INVALID_CPF("Invalid CPF format or missing", "ERR-011", 400),
@@ -32,7 +41,8 @@ public enum ErrorCodeEnum {
     // Role inválida
     INVALID_ROLE("Invalid user role", "ERR-012", 400),
     // Projeto
-    PROJECT_NOT_FOUND("Project not found", "ERR-015", 404),
+    PROJECT_NOT_FOUND("Project not found", "ERR-019", 404),
+    AUTHOR_NOT_FOUND("Author not found", "ERR-023", 404),
     // Serviço genérico
     SERVER_ERROR("Internal server error", "ERR-500", 500);
 

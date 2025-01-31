@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface PartnerCompanyRepository extends JpaRepository<PartnerCompany, Long> {
     Optional<PartnerCompany> findByEmail(String email);
+    Optional<PartnerCompany> findByCnpj(String cnpj);
 }

@@ -1,7 +1,11 @@
 package br.com.apihubinovacao.domain.usecases.projects.get;
 
-import br.com.apihubinovacao.domain.dtos.projects.AcademicProjectResponseProfessorDTO;
-import br.com.apihubinovacao.domain.dtos.projects.AcademicProjectResponseStudentDTO;
+import br.com.apihubinovacao.domain.dtos.coauthor.CoauthorDTO;
+import br.com.apihubinovacao.domain.dtos.projects.AcademicProjectResponseProfessorApprovedDTO;
+import br.com.apihubinovacao.domain.dtos.projects.AcademicProjectResponseStudentApprovedDTO;
+import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
+import br.com.apihubinovacao.domain.enums.StatusSolicitation;
+import br.com.apihubinovacao.domain.exceptions.BusinessException;
 import br.com.apihubinovacao.domain.models.projects.AcademicProject;
 import br.com.apihubinovacao.domain.models.users.Professor;
 import br.com.apihubinovacao.domain.models.users.Student;
@@ -11,6 +15,7 @@ import br.com.apihubinovacao.domain.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,18 +33,17 @@ public class ListAllAcademicProjectsUseCase {
     private StudentRepository studentRepository;
 
     public List<?> execute() {
-        // Busca todos os projetos no repositório
-        List<AcademicProject> projects = academicProjectRepository.findAll();
+        List<AcademicProject> approvedProjects = academicProjectRepository.findAll().stream()
+                .filter(project -> StatusSolicitation.APROVADA.name().equalsIgnoreCase(project.getStatus().name()))  // Comparação do enum com o nome
+                .collect(Collectors.toList());
 
-        // Para cada projeto, verifica se o autor é um professor ou estudante
-        return projects.stream()
+        return approvedProjects.stream()
                 .map(project -> {
                     Optional<Professor> professor = professorRepository.findByEmail(project.getAuthorEmail());
                     Optional<Student> student = studentRepository.findByEmail(project.getAuthorEmail());
 
                     if (professor.isPresent()) {
-                        // Se o autor for um professor, retorna o DTO de professor
-                        return new AcademicProjectResponseProfessorDTO(
+                        return new AcademicProjectResponseProfessorApprovedDTO(
                                 project.getId(),
                                 project.getTitle(),
                                 project.getDescription(),
@@ -49,16 +53,20 @@ public class ListAllAcademicProjectsUseCase {
                                 project.getTypeAP(),
                                 project.getAuthorEmail(),
                                 project.getCreationDate().toString(),
-                                project.getStatus(),
+                                project.getIdManager(),
                                 professor.get().getId(),
-                                professor.get().getName(),
-                                project.getFeedback(),       // Novo campo
-                                project.getJustification(),  // Novo campo
-                                project.getIdManager()       // Novo campo
+                                project.getCoauthors() != null && !project.getCoauthors().isEmpty() ? project.getCoauthors().stream()
+                                        .map(coauthor -> new CoauthorDTO(
+                                                coauthor.getName(),
+                                                coauthor.getEmail(),
+                                                coauthor.getPhone()
+                                        ))
+                                        .collect(Collectors.toList()) : new ArrayList<>()
                         );
-                    } else if (student.isPresent()) {
-                        // Se o autor for um estudante, retorna o DTO de estudante
-                        return new AcademicProjectResponseStudentDTO(
+                    }
+                    // Se for estudante
+                    else if (student.isPresent()) {
+                        return new AcademicProjectResponseStudentApprovedDTO(
                                 project.getId(),
                                 project.getTitle(),
                                 project.getDescription(),
@@ -68,15 +76,18 @@ public class ListAllAcademicProjectsUseCase {
                                 project.getTypeAP(),
                                 project.getAuthorEmail(),
                                 project.getCreationDate().toString(),
-                                project.getStatus(),
                                 student.get().getId(),
                                 student.get().getName(),
-                                project.getFeedback(),       // Novo campo
-                                project.getJustification(),  // Novo campo
-                                project.getIdManager()       // Novo campo
+                                project.getCoauthors() != null && !project.getCoauthors().isEmpty() ? project.getCoauthors().stream()
+                                        .map(coauthor -> new CoauthorDTO(
+                                                coauthor.getName(),
+                                                coauthor.getEmail(),
+                                                coauthor.getPhone()
+                                        ))
+                                        .collect(Collectors.toList()) : new ArrayList<>()
                         );
                     } else {
-                        throw new RuntimeException("Autor do projeto não encontrado: " + project.getAuthorEmail());
+                        throw new BusinessException(ErrorCodeEnum.AUTHOR_NOT_FOUND);
                     }
                 })
                 .collect(Collectors.toList());
