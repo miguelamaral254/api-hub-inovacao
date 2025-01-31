@@ -36,6 +36,7 @@ public class SecurityConfig {
                         .requestMatchers(RouteDefinitions.COMPANY_ROUTES).hasRole("PARTNER_COMPANY")
                         .requestMatchers(RouteDefinitions.MANAGERS_ROUTES).hasRole("MANAGER")
                         .requestMatchers(RouteDefinitions.ADMIN_ROUTES).hasRole("ADMIN")
+
                         .anyRequest().authenticated()
                 )
 

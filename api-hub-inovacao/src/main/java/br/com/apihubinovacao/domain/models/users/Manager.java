@@ -1,5 +1,6 @@
 package br.com.apihubinovacao.domain.models.users;
 
+import br.com.apihubinovacao.domain.models.Publish;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -13,6 +14,9 @@ public class Manager extends User implements UserBase {
 
     @OneToMany(mappedBy = "manager", fetch = FetchType.LAZY)
     private List<Phone> phones;
+
+    @OneToMany(mappedBy = "manager", fetch = FetchType.LAZY)
+    private List<Publish> publishes;
 
     public String getCpf() {
         return cpf;

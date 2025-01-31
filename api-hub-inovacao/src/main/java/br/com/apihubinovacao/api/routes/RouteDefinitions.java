@@ -12,9 +12,13 @@ public class RouteDefinitions {
             "/users/all-users",
             "/users/create-user-cnpj",
             "/projects/all",
+
             "/opportunities/approved/active",
 
 
+
+
+            "/publish/all"
 
     };
 
@@ -50,6 +54,9 @@ public class RouteDefinitions {
             "/admin/create-manager",
             "/projects/{projectId}/status",
             "/opportunities/{opportunityId}/status"
+
+
+            "/publish/create-publish",
 
     };
 
