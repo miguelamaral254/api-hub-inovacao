@@ -27,13 +27,13 @@ public class PublishController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     @PostMapping("create")
-    public ResponseEntity<PublishResponseDTO> createPublishForManager(@RequestBody PublishCreateDTO publishCreateDTO) {
+    public ResponseEntity<PublishResponseDTO> createPublish(@RequestBody PublishCreateDTO publishCreateDTO) {
         PublishResponseDTO createdPublish = createPublishForManagerUseCase.execute(publishCreateDTO);
         return ResponseEntity.ok(createdPublish);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<PublishResponseDTO>> getAllPublishForManager() {
+    public ResponseEntity<List<PublishResponseDTO>> getAllPublish() {
         List<PublishResponseDTO> publishs = listAllPublishUseCase.execute();
         return ResponseEntity.ok(publishs);
     }
