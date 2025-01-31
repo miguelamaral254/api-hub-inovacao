@@ -11,7 +11,8 @@ public enum ErrorCodeEnum {
     DUPLICATE_CPF("CPF already exists", "ERR-016", 409),
     DUPLICATE_REGISTRATION("Registration number already exists", "ERR-017", 409),
     INVALID_REGISTRATION("Invalid registration number", "ERR-021", 409),
-
+    PARTNER_COMPANY_NOT_FOUND("Partner company not found", "ERR-024", 404),
+    EMAIL_DOES_NOT_MATCH("Email does not match", "ERR-025", 409),
 
     // Login
     LOGIN_FAILED("Incorrect Email or Password", "ERR-010", 401),
@@ -29,7 +30,9 @@ public enum ErrorCodeEnum {
     INVALID_PASSWORD("Invalid password format or missing", "ERR-014", 400),
     // Telefone
     PHONE_CREATION_FAILED("Failed to create phone record", "ERR-008", 500),
-
+    // Erros de oportunidades
+    OPPORTUNITY_NOT_FOUND("Opportunity not found", "ERR-030", 404),
+    OPPORTUNITY_CREATION_FAILED("Failed to create opportunity", "ERR-031", 500),
     // CNPJ e CPF
     INVALID_CNPJ("Invalid CNPJ format or missing", "ERR-009", 400),
     INVALID_CPF("Invalid CPF format or missing", "ERR-011", 400),

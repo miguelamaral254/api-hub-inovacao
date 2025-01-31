@@ -6,6 +6,8 @@ import br.com.apihubinovacao.domain.models.projects.OpportunitiesBank;
 import br.com.apihubinovacao.domain.models.users.PartnerCompany;
 import br.com.apihubinovacao.domain.repositories.OpportunitiesBankRepository;
 import br.com.apihubinovacao.domain.repositories.PartnerCompanyRepository;
+import br.com.apihubinovacao.domain.exceptions.BusinessException;
+import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,37 +23,38 @@ public class CreateOpportunityUseCase {
     private PartnerCompanyRepository partnerCompanyRepository;
 
     public OpportunityResponseDTO execute(OpportunityCreateDTO opportunityCreateDTO) {
-        // Criação da instância da oportunidade
-        OpportunitiesBank opportunity = new OpportunitiesBank();
+        try {
+            OpportunitiesBank opportunity = new OpportunitiesBank();
+            opportunity.setTitle(opportunityCreateDTO.title());
+            opportunity.setDescription(opportunityCreateDTO.description());
+            opportunity.setUrlPhoto(opportunityCreateDTO.urlPhoto());
+            opportunity.setPdfLink(opportunityCreateDTO.pdfLink());
+            opportunity.setSiteLink(opportunityCreateDTO.siteLink());
+            opportunity.setAuthorEmail(opportunityCreateDTO.authorEmail());
+            opportunity.setStatus(opportunityCreateDTO.status());
+            opportunity.setFlagActive(opportunityCreateDTO.flagActive());
+            opportunity.setCreationDate(LocalDate.now());
 
-        // Definindo os valores a partir do DTO
-        opportunity.setTitle(opportunityCreateDTO.title());
-        opportunity.setDescription(opportunityCreateDTO.description());
-        opportunity.setUrlPhoto(opportunityCreateDTO.urlPhoto());
-        opportunity.setPdfLink(opportunityCreateDTO.pdfLink());
-        opportunity.setSiteLink(opportunityCreateDTO.siteLink());
-        opportunity.setAuthorEmail(opportunityCreateDTO.authorEmail());
-        opportunity.setStatus(opportunityCreateDTO.status());
-        opportunity.setFlagActive(opportunityCreateDTO.flagActive());
+            PartnerCompany partnerCompany = partnerCompanyRepository.findById(opportunityCreateDTO.partnerCompanyId())
+                    .orElseThrow(() -> new BusinessException(ErrorCodeEnum.PARTNER_COMPANY_NOT_FOUND));
 
-        // Definindo a data de criação (sem hora)
-        opportunity.setCreationDate(LocalDate.now());  // Aqui usamos LocalDate, sem hora
+            if (!partnerCompany.getEmail().equals(opportunityCreateDTO.authorEmail())) {
+                throw new BusinessException(ErrorCodeEnum.EMAIL_DOES_NOT_MATCH);
+            }
 
-        // Buscando a empresa parceira pelo ID
-        PartnerCompany partnerCompany = partnerCompanyRepository.findById(opportunityCreateDTO.partnerCompanyId())
-                .orElseThrow(() -> new IllegalArgumentException("Empresa parceira não encontrada"));
+            opportunity.setPartnerCompany(partnerCompany);
 
-        // Atribuindo a empresa parceira à oportunidade
-        opportunity.setPartnerCompany(partnerCompany);
+            OpportunitiesBank savedOpportunity = opportunitiesBankRepository.save(opportunity);
 
-        // Salvando a oportunidade no banco de dados
-        OpportunitiesBank savedOpportunity = opportunitiesBankRepository.save(opportunity);
+            return mapToOpportunityResponseDTO(savedOpportunity);
 
-        // Retornando a resposta com os dados da oportunidade salva
-        return mapToOpportunityResponseDTO(savedOpportunity);
+        } catch (BusinessException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCodeEnum.OPPORTUNITY_CREATION_FAILED);
+        }
     }
 
-    // Método para mapear a entidade OpportunitiesBank para OpportunityResponseDTO
     private OpportunityResponseDTO mapToOpportunityResponseDTO(OpportunitiesBank savedOpportunity) {
         return new OpportunityResponseDTO(
                 savedOpportunity.getId(),
