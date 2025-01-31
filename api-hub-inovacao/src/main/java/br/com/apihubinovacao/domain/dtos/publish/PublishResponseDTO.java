@@ -1,10 +1,9 @@
-package br.com.apihubinovacao.domain.dtos;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
+package br.com.apihubinovacao.domain.dtos.publish;
 
 import java.time.LocalDate;
 
-public record PublishCreateDTO(
+public record PublishResponseDTO(
+        Long id,
         String title,
         String description,
         String acessLink,

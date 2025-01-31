@@ -1,10 +1,9 @@
 package br.com.apihubinovacao.api.controllers;
 
-import br.com.apihubinovacao.domain.dtos.PublishCreateDTO;
-import br.com.apihubinovacao.domain.dtos.PublishResponseDTO;
+import br.com.apihubinovacao.domain.dtos.publish.PublishCreateDTO;
+import br.com.apihubinovacao.domain.dtos.publish.PublishResponseDTO;
 import br.com.apihubinovacao.domain.usecases.CreatePublishForManagerUseCase;
 import br.com.apihubinovacao.domain.usecases.ListAllPublishUseCase;
-import br.com.apihubinovacao.domain.usecases.user.get.GetAllUsersUseCase;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -26,14 +25,14 @@ public class PublishController {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
-    @PostMapping("create-publish")
-    public ResponseEntity<PublishResponseDTO> createPublishForManager(@RequestBody PublishCreateDTO publishCreateDTO) {
+    @PostMapping("create")
+    public ResponseEntity<PublishResponseDTO> createPublish(@RequestBody PublishCreateDTO publishCreateDTO) {
         PublishResponseDTO createdPublish = createPublishForManagerUseCase.execute(publishCreateDTO);
         return ResponseEntity.ok(createdPublish);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<PublishResponseDTO>> getAllPublishForManager() {
+    public ResponseEntity<List<PublishResponseDTO>> getAllPublish() {
         List<PublishResponseDTO> publishs = listAllPublishUseCase.execute();
         return ResponseEntity.ok(publishs);
     }

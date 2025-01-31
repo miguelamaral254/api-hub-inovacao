@@ -1,9 +1,8 @@
-package br.com.apihubinovacao.domain.dtos;
+package br.com.apihubinovacao.domain.dtos.publish;
 
 import java.time.LocalDate;
 
-public record PublishResponseDTO(
-        Long id,
+public record PublishCreateDTO(
         String title,
         String description,
         String acessLink,
