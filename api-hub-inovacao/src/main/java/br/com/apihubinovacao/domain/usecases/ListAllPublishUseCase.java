@@ -1,7 +1,6 @@
 package br.com.apihubinovacao.domain.usecases;
 
-import br.com.apihubinovacao.domain.dtos.PublishResponseDTO;
-import br.com.apihubinovacao.domain.models.Publish;
+import br.com.apihubinovacao.domain.dtos.publish.PublishResponseDTO;
 import br.com.apihubinovacao.domain.repositories.PublishRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

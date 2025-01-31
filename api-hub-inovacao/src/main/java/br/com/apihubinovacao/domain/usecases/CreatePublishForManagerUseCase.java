@@ -1,7 +1,7 @@
 package br.com.apihubinovacao.domain.usecases;
 
-import br.com.apihubinovacao.domain.dtos.PublishCreateDTO;
-import br.com.apihubinovacao.domain.dtos.PublishResponseDTO;
+import br.com.apihubinovacao.domain.dtos.publish.PublishCreateDTO;
+import br.com.apihubinovacao.domain.dtos.publish.PublishResponseDTO;
 import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
 import br.com.apihubinovacao.domain.exceptions.BusinessException;
 import br.com.apihubinovacao.domain.models.Publish;
