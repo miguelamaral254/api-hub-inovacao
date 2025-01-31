@@ -3,7 +3,9 @@ package br.com.apihubinovacao.domain.usecases.projects.get;
 import br.com.apihubinovacao.domain.dtos.coauthor.CoauthorDTO;
 import br.com.apihubinovacao.domain.dtos.projects.AcademicProjectResponseProfessorApprovedDTO;
 import br.com.apihubinovacao.domain.dtos.projects.AcademicProjectResponseStudentApprovedDTO;
+import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
 import br.com.apihubinovacao.domain.enums.StatusSolicitation;
+import br.com.apihubinovacao.domain.exceptions.BusinessException;
 import br.com.apihubinovacao.domain.models.projects.AcademicProject;
 import br.com.apihubinovacao.domain.models.users.Professor;
 import br.com.apihubinovacao.domain.models.users.Student;
@@ -13,6 +15,7 @@ import br.com.apihubinovacao.domain.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,7 +33,6 @@ public class ListAllAcademicProjectsUseCase {
     private StudentRepository studentRepository;
 
     public List<?> execute() {
-        // Filtra os projetos com status "APROVADA"
         List<AcademicProject> approvedProjects = academicProjectRepository.findAll().stream()
                 .filter(project -> StatusSolicitation.APROVADA.name().equalsIgnoreCase(project.getStatus().name()))  // Comparação do enum com o nome
                 .collect(Collectors.toList());
@@ -40,7 +42,6 @@ public class ListAllAcademicProjectsUseCase {
                     Optional<Professor> professor = professorRepository.findByEmail(project.getAuthorEmail());
                     Optional<Student> student = studentRepository.findByEmail(project.getAuthorEmail());
 
-                    // Se for professor
                     if (professor.isPresent()) {
                         return new AcademicProjectResponseProfessorApprovedDTO(
                                 project.getId(),
@@ -60,7 +61,7 @@ public class ListAllAcademicProjectsUseCase {
                                                 coauthor.getEmail(),
                                                 coauthor.getPhone()
                                         ))
-                                        .collect(Collectors.toList()) : null // Verifica se existe coautor
+                                        .collect(Collectors.toList()) : new ArrayList<>()
                         );
                     }
                     // Se for estudante
@@ -83,10 +84,10 @@ public class ListAllAcademicProjectsUseCase {
                                                 coauthor.getEmail(),
                                                 coauthor.getPhone()
                                         ))
-                                        .collect(Collectors.toList()) : null // Verifica se existe coautor
+                                        .collect(Collectors.toList()) : new ArrayList<>()
                         );
                     } else {
-                        throw new RuntimeException("Autor do projeto não encontrado: " + project.getAuthorEmail());
+                        throw new BusinessException(ErrorCodeEnum.AUTHOR_NOT_FOUND);
                     }
                 })
                 .collect(Collectors.toList());
