@@ -47,7 +47,7 @@ public class ProjectController {
         this.updateAcademicProjectDetailsUseCase = updateAcademicProjectDetailsUseCase;
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'MANAGERS')")
+    @PreAuthorize("hasAnyRole('USER')")
     @PostMapping("/professor/create")
     public ResponseEntity<AcademicProjectResponseProfessorDTO> createProjectForProfessor(
             @RequestBody AcademicProjectCreateProfessorDTO dto) {
@@ -55,7 +55,7 @@ public class ProjectController {
         return ResponseEntity.ok(createdProject);
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'MANAGERS')")
+    @PreAuthorize("hasAnyRole('USER')")
     @PostMapping("/student/create")
     public ResponseEntity<AcademicProjectResponseStudentDTO> createProjectForStudent(
             @RequestBody AcademicProjectCreateStudentDTO dto) {
@@ -89,7 +89,7 @@ public class ProjectController {
         List<?> projects = listAllAcademicProjectsUseCase.execute();
         return ResponseEntity.ok(projects);
     }
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGERS')")
+    @PreAuthorize("hasAnyRole('MANAGER')")
     @PutMapping("/{projectId}/status")
     public ResponseEntity<Void> updateProjectStatus(
             @PathVariable Long projectId,

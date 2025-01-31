@@ -45,6 +45,7 @@ public class AcademicProject {
     private Student student;
 
     private LocalDate creationDate;
+
     @Column(name = "feedback", nullable = true)
     private String feedback;
 

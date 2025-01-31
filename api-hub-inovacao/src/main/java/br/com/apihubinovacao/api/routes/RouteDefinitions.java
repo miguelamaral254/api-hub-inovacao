@@ -1,6 +1,7 @@
 package br.com.apihubinovacao.api.routes;
 
 import org.springframework.http.HttpMethod;
+import org.springframework.web.bind.annotation.PutMapping;
 
 public class RouteDefinitions {
 
@@ -11,6 +12,10 @@ public class RouteDefinitions {
             "/users/all-users",
             "/users/create-user-cnpj",
             "/projects/all",
+            "/opportunities/approved/active",
+
+
+
     };
 
     // Rotas acessíveis para usuários autenticados
@@ -23,7 +28,20 @@ public class RouteDefinitions {
             "/projects/all-professor",
             "/projects/{projectId}/details",
 
+
     };
+    public static final String[] COMPANY_ROUTES = {
+            "/opportunities/create",
+            "/opportunities/company/{companyName}",
+
+    };
+    public static final String[]  MANAGERS_ROUTES = {
+            "/projects/{projectId}/status",
+            "/opportunities/{opportunityId}/status",
+            "/users/all-platform-users",
+
+    };
+
 
     // Rotas acessíveis apenas para administradores
     public static final String[] ADMIN_ROUTES = {
@@ -31,6 +49,8 @@ public class RouteDefinitions {
             "/users/all-platform-users",
             "/admin/create-manager",
             "/projects/{projectId}/status",
+            "/opportunities/{opportunityId}/status"
+
     };
 
     // Métodos HTTP permitidos para rotas públicas

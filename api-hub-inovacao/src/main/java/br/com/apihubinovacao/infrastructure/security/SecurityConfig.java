@@ -32,8 +32,10 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(RouteDefinitions.PUBLIC_ROUTES).permitAll()
-                        .requestMatchers(RouteDefinitions.USER_ROUTES).hasAnyRole("PROFESSOR", "STUDENT", "ADMIN", "MANAGERS")
-                        .requestMatchers(RouteDefinitions.ADMIN_ROUTES).hasAnyRole("ADMIN","MANAGERS")
+                        .requestMatchers(RouteDefinitions.USER_ROUTES).hasAnyRole("PROFESSOR", "STUDENT","PARTNER_COMPANY", "ADMIN", "MANAGER")
+                        .requestMatchers(RouteDefinitions.COMPANY_ROUTES).hasRole("PARTNER_COMPANY")
+                        .requestMatchers(RouteDefinitions.MANAGERS_ROUTES).hasRole("MANAGER")
+                        .requestMatchers(RouteDefinitions.ADMIN_ROUTES).hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
 
