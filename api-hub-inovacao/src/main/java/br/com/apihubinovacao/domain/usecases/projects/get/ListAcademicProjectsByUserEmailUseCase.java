@@ -14,6 +14,7 @@ import br.com.apihubinovacao.domain.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -66,7 +67,7 @@ public class ListAcademicProjectsByUserEmailUseCase {
                                     coauthor.getEmail(),
                                     coauthor.getPhone()
                             ))
-                            .collect(Collectors.toList()) : null// Novo campo
+                            .collect(Collectors.toList()) : new ArrayList<>()
             )).collect(Collectors.toList());
         } else {
             return projects.stream().map(project -> new AcademicProjectResponseStudentDTO(
@@ -91,7 +92,7 @@ public class ListAcademicProjectsByUserEmailUseCase {
                                     coauthor.getEmail(),
                                     coauthor.getPhone()
                             ))
-                            .collect(Collectors.toList()) : null
+                            .collect(Collectors.toList()) : new ArrayList<>()
             )).collect(Collectors.toList());
         }
     }

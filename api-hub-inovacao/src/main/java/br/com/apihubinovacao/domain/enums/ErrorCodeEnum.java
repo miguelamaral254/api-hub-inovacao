@@ -38,6 +38,7 @@ public enum ErrorCodeEnum {
     INVALID_ROLE("Invalid user role", "ERR-012", 400),
     // Projeto
     PROJECT_NOT_FOUND("Project not found", "ERR-019", 404),
+    AUTHOR_NOT_FOUND("Author not found", "ERR-023", 404),
     // Serviço genérico
     SERVER_ERROR("Internal server error", "ERR-500", 500);
 

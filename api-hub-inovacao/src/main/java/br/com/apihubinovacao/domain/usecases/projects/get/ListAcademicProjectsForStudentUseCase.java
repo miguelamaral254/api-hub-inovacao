@@ -7,6 +7,7 @@ import br.com.apihubinovacao.domain.repositories.AcademicProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,7 +46,7 @@ public class ListAcademicProjectsForStudentUseCase {
                                 coauthor.getEmail(),
                                 coauthor.getPhone()
                         ))
-                        .collect(Collectors.toList()) : null
+                        .collect(Collectors.toList()) : new ArrayList<>()
         )).collect(Collectors.toList());
     }
 }
