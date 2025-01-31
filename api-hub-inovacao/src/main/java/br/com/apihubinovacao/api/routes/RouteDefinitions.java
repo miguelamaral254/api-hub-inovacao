@@ -6,15 +6,23 @@ public class RouteDefinitions {
 
     // Rotas públicas (acessíveis sem autenticação)
     public static final String[] PUBLIC_ROUTES = {
-            "/auth/**",  // Login e autenticação
-            "/users/create-user-cpf"  ,
+            "/auth/**",
+            "/users/create-user-cpf",
             "/users/all-users",
-            "/users/create-user-cnpj"
+            "/users/create-user-cnpj",
+            "/projects/all",
+            "/publish/all"
     };
 
     // Rotas acessíveis para usuários autenticados
     public static final String[] USER_ROUTES = {
             "/users/by-email",
+            "/projects/by-email",
+            "/projects/student/create",
+            "/projects/professor/create",
+            "/projects/all-student",
+            "/projects/all-professor",
+            "/projects/{projectId}/details",
 
     };
 
@@ -22,7 +30,9 @@ public class RouteDefinitions {
     public static final String[] ADMIN_ROUTES = {
             "/admin/**",
             "/users/all-platform-users",
-            "/admin/create-manager"
+            "/admin/create-manager",
+            "/projects/{projectId}/status",
+            "/publish/create-publish",
     };
 
     // Métodos HTTP permitidos para rotas públicas

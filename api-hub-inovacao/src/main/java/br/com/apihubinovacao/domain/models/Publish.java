@@ -1,26 +1,29 @@
 package br.com.apihubinovacao.domain.models;
 
+import br.com.apihubinovacao.domain.models.users.Manager;
 import jakarta.persistence.*;
 
-@Entity
-@Table(name = "PUBLISH")
-public class Publish {
 
+import java.time.LocalDate;
+
+@Entity
+@Table(name = "publish")
+public class Publish {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "INTEGRATOR_PROJECT_idINTEGRATOR_PROJECT")
-    private IntegratorProject integratorProject;
+    private String title;
+    private String description;
+    private String acessLink;
+    private String photoLink;
+    private LocalDate initialDate;
+    private LocalDate finalDate;
+    private LocalDate publishedDate;
 
     @ManyToOne
-    @JoinColumn(name = "STARTUP_idSTARTUP")
-    private Startup startup;
-
-    @ManyToOne
-    @JoinColumn(name = "OPPORTUNITIES_BANK_idOPPORTUNITIES_BANK")
-    private OpportunitiesBank opportunitiesBank;
+    @JoinColumn(name = "manager_id")
+    private Manager manager;
 
 
     public Long getId() {
@@ -31,27 +34,67 @@ public class Publish {
         this.id = id;
     }
 
-    public IntegratorProject getIntegratorProject() {
-        return integratorProject;
+    public String getTitle() {
+        return title;
     }
 
-    public void setIntegratorProject(IntegratorProject integratorProject) {
-        this.integratorProject = integratorProject;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public Startup getStartup() {
-        return startup;
+    public String getDescription() {
+        return description;
     }
 
-    public void setStartup(Startup startup) {
-        this.startup = startup;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public OpportunitiesBank getOpportunitiesBank() {
-        return opportunitiesBank;
+    public String getAcessLink() {
+        return acessLink;
     }
 
-    public void setOpportunitiesBank(OpportunitiesBank opportunitiesBank) {
-        this.opportunitiesBank = opportunitiesBank;
+    public void setAcessLink(String acessLink) {
+        this.acessLink = acessLink;
+    }
+
+    public String getPhotoLink() {
+        return photoLink;
+    }
+
+    public void setPhotoLink(String photoLink) {
+        this.photoLink = photoLink;
+    }
+
+    public LocalDate getFinalDate() {
+        return finalDate;
+    }
+
+    public void setFinalDate(LocalDate finalDate) {
+        this.finalDate = finalDate;
+    }
+
+    public LocalDate getInitialDate() {
+        return initialDate;
+    }
+
+    public void setInitialDate(LocalDate initialDate) {
+        this.initialDate = initialDate;
+    }
+
+    public Manager getManager() {
+        return manager;
+    }
+
+    public void setManager(Manager manager) {
+        this.manager = manager;
+    }
+
+    public LocalDate getPublishedDate() {
+        return publishedDate;
+    }
+
+    public void setPublishedDate(LocalDate publishedDate) {
+        this.publishedDate = publishedDate;
     }
 }

@@ -5,7 +5,7 @@ import br.com.apihubinovacao.domain.dtos.UserResponseCnpjDTO;
 import br.com.apihubinovacao.domain.dtos.UserResponseCpfDTO;
 import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
 import br.com.apihubinovacao.domain.exceptions.BusinessException;
-import br.com.apihubinovacao.domain.models.*;
+import br.com.apihubinovacao.domain.models.users.*;
 import br.com.apihubinovacao.domain.repositories.*;
 import org.springframework.stereotype.Service;
 

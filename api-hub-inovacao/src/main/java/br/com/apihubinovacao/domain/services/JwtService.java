@@ -39,7 +39,12 @@ public class JwtService {
                     .getBody();
 
             String role = claims.get("role", String.class);
-            return role != null && (role.equals("ROLE_USER") || role.equals("ROLE_ADMIN"));
+            return role != null && (
+                    role.equals("ROLE_ADMIN") ||
+                            role.equals("ROLE_PROFESSOR") ||
+                            role.equals("ROLE_STUDENT") ||
+                            role.equals("ROLE_MANAGER")
+            );
         } catch (Exception e) {
             throw new BusinessException(ErrorCodeEnum.INVALID_TOKEN);
         }

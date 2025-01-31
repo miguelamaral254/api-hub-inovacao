@@ -46,18 +46,14 @@ public class UserController {
         return ResponseEntity.ok(createdUser);
     }
 
-    /**
-     * Criar usuário com CPF (Manager, Student ou Professor)
-     */
+
     @PostMapping("/create-user-cpf")
     public ResponseEntity<UserResponseCpfDTO> createUserWithCpf(@RequestBody UserCreateCpfDTO dto) {
         UserResponseCpfDTO createdUser = createUserWithCpfUseCase.execute(dto);
         return ResponseEntity.ok(createdUser);
     }
 
-    /**
-     * Buscar usuário por e-mail
-     */
+
     @GetMapping("/by-email")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<Object> getUserByEmail(@RequestParam String email) {
@@ -65,17 +61,13 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    /**
-     * Buscar todos os usuários ativos filtrando por Role
-     */
+
     @GetMapping("/all-users")
     public ResponseEntity<List<Object>> getAllUsers(@RequestParam Role role) {
         List<Object> users = getAllUsersUseCase.execute(role);
         return ResponseEntity.ok(users);
     }
-    /**
-     * Buscar todos os usuários da plataforma de forma paginada
-     */
+
     @GetMapping("/all-platform-users")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<Object>> getAllPlatformUsers(

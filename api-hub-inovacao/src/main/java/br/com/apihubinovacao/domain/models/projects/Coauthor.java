@@ -1,10 +1,10 @@
-package br.com.apihubinovacao.domain.models;
+package br.com.apihubinovacao.domain.models.projects;
 
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "COAUTHOR_SUBMISSION")
-public class CoauthorSubmission {
+public class Coauthor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,8 +19,13 @@ public class CoauthorSubmission {
     private String phone;
 
     @ManyToOne
-    @JoinColumn(name = "SUBMISSION_idSUBMISSION", nullable = false)
-    private Submission submission;
+    @JoinColumn(name = "STARTUP_id")
+    private Startup startup;
+
+    @ManyToOne
+    @JoinColumn(name = "ACADEMIC_PROJECT_id")
+    private AcademicProject academicProject;
+
 
     public Long getId() {
         return id;
@@ -54,11 +59,20 @@ public class CoauthorSubmission {
         this.phone = phone;
     }
 
-    public Submission getSubmission() {
-        return submission;
+    public Startup getStartup() {
+        return startup;
     }
 
-    public void setSubmission(Submission submission) {
-        this.submission = submission;
+    public void setStartup(Startup startup) {
+        this.startup = startup;
     }
+
+    public AcademicProject getAcademicProject() {
+        return academicProject;
+    }
+
+    public void setAcademicProject(AcademicProject academicProject) {
+        this.academicProject = academicProject;
+    }
+
 }
