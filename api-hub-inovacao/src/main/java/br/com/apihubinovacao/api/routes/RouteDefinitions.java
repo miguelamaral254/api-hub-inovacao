@@ -31,6 +31,7 @@ public class RouteDefinitions {
             "/users/all-platform-users",
             "/admin/create-manager",
             "/projects/{projectId}/status",
+            "/publish/create-publish",
     };
 
     // Métodos HTTP permitidos para rotas públicas
