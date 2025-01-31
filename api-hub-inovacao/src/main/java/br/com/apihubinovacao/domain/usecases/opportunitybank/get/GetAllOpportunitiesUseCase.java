@@ -26,15 +26,12 @@ public class GetAllOpportunitiesUseCase {
                         opportunity.getUrlPhoto(),
                         opportunity.getPdfLink(),
                         opportunity.getSiteLink(),
+                        opportunity.getTypeBO(),
                         opportunity.getAuthorEmail(),
                         opportunity.getStatus(),
                         opportunity.getCreationDate(),
                         opportunity.isFlagActive(),
-                        opportunity.getPartnerCompany().getId(),
-                        opportunity.getValidationDate(),
-                        opportunity.getFeedback(),
-                        opportunity.getJustification(),
-                        opportunity.getIdManager()
+                        opportunity.getPartnerCompany().getId()
                 ))
                 .collect(Collectors.toList());
     }

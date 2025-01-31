@@ -2,6 +2,7 @@ package br.com.apihubinovacao.domain.usecases.opportunitybank.create;
 
 import br.com.apihubinovacao.domain.dtos.OpportunityBank.OpportunityCreateDTO;
 import br.com.apihubinovacao.domain.dtos.OpportunityBank.OpportunityResponseDTO;
+import br.com.apihubinovacao.domain.enums.StatusSolicitation;
 import br.com.apihubinovacao.domain.models.projects.OpportunitiesBank;
 import br.com.apihubinovacao.domain.models.users.PartnerCompany;
 import br.com.apihubinovacao.domain.repositories.OpportunitiesBankRepository;
@@ -30,9 +31,13 @@ public class CreateOpportunityUseCase {
             opportunity.setUrlPhoto(opportunityCreateDTO.urlPhoto());
             opportunity.setPdfLink(opportunityCreateDTO.pdfLink());
             opportunity.setSiteLink(opportunityCreateDTO.siteLink());
+            opportunity.setTypeBO(opportunityCreateDTO.typeBO());
             opportunity.setAuthorEmail(opportunityCreateDTO.authorEmail());
-            opportunity.setStatus(opportunityCreateDTO.status());
-            opportunity.setFlagActive(opportunityCreateDTO.flagActive());
+
+            opportunity.setStatus(opportunityCreateDTO.status() != null ? opportunityCreateDTO.status() : StatusSolicitation.valueOf("PENDENTE"));
+
+            opportunity.setFlagActive(opportunityCreateDTO.flagActive() ? opportunityCreateDTO.flagActive() : true);
+
             opportunity.setCreationDate(LocalDate.now());
 
             PartnerCompany partnerCompany = partnerCompanyRepository.findById(opportunityCreateDTO.partnerCompanyId())
@@ -46,7 +51,7 @@ public class CreateOpportunityUseCase {
 
             OpportunitiesBank savedOpportunity = opportunitiesBankRepository.save(opportunity);
 
-            return mapToOpportunityResponseDTO(savedOpportunity);
+            return mapToOpportunityDTO(savedOpportunity);
 
         } catch (BusinessException e) {
             throw e;
@@ -55,7 +60,7 @@ public class CreateOpportunityUseCase {
         }
     }
 
-    private OpportunityResponseDTO mapToOpportunityResponseDTO(OpportunitiesBank savedOpportunity) {
+    private OpportunityResponseDTO mapToOpportunityDTO(OpportunitiesBank savedOpportunity) {
         return new OpportunityResponseDTO(
                 savedOpportunity.getId(),
                 savedOpportunity.getTitle(),
@@ -63,15 +68,12 @@ public class CreateOpportunityUseCase {
                 savedOpportunity.getUrlPhoto(),
                 savedOpportunity.getPdfLink(),
                 savedOpportunity.getSiteLink(),
+                savedOpportunity.getTypeBO(),
                 savedOpportunity.getAuthorEmail(),
                 savedOpportunity.getStatus(),
                 savedOpportunity.getCreationDate(),
                 savedOpportunity.isFlagActive(),
-                savedOpportunity.getPartnerCompany().getId(),
-                savedOpportunity.getValidationDate(),
-                savedOpportunity.getFeedback(),
-                savedOpportunity.getJustification(),
-                savedOpportunity.getIdManager()
+                savedOpportunity.getPartnerCompany().getId()
         );
     }
 }

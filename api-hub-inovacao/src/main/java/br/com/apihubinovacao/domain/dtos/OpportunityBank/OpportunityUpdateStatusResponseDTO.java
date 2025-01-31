@@ -5,7 +5,9 @@ import br.com.apihubinovacao.domain.enums.TypeBO;
 
 import java.time.LocalDate;
 
-public record OpportunityCreateDTO(
+
+public record OpportunityUpdateStatusResponseDTO(
+        Long id,
         String title,
         String description,
         String urlPhoto,
@@ -14,6 +16,13 @@ public record OpportunityCreateDTO(
         TypeBO typeBO,
         String authorEmail,
         StatusSolicitation status,
+        LocalDate creationDate,
         boolean flagActive,
-        Long partnerCompanyId
-) {}
+        Long partnerCompanyId,
+        LocalDate validationDate,
+        String feedback,
+        String justification,
+        Long idManager
+
+) {
+}

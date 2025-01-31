@@ -33,6 +33,7 @@ public enum ErrorCodeEnum {
     // Erros de oportunidades
     OPPORTUNITY_NOT_FOUND("Opportunity not found", "ERR-030", 404),
     OPPORTUNITY_CREATION_FAILED("Failed to create opportunity", "ERR-031", 500),
+    OPPORTUNITY_UPDATE_FAILED("Failed to update opportunity", "ERR-032", 500),
     // CNPJ e CPF
     INVALID_CNPJ("Invalid CNPJ format or missing", "ERR-009", 400),
     INVALID_CPF("Invalid CPF format or missing", "ERR-011", 400),

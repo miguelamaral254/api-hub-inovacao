@@ -3,6 +3,7 @@ package br.com.apihubinovacao.domain.usecases.opportunitybank.get;
 import br.com.apihubinovacao.domain.dtos.OpportunityBank.OpportunityResponseDTO;
 import br.com.apihubinovacao.domain.models.projects.OpportunitiesBank;
 import br.com.apihubinovacao.domain.repositories.OpportunitiesBankRepository;
+import br.com.apihubinovacao.domain.enums.StatusSolicitation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,13 +11,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class GetOpportunitiesByCompanyNameUseCase {
+public class GetApprovedActiveOpportunitiesUseCase {
 
     @Autowired
     private OpportunitiesBankRepository opportunitiesBankRepository;
 
-    public List<OpportunityResponseDTO> execute(String companyName) {
-        List<OpportunitiesBank> opportunitiesList = opportunitiesBankRepository.findByPartnerCompanyName(companyName);
+    public List<OpportunityResponseDTO> execute() {
+        List<OpportunitiesBank> opportunitiesList = opportunitiesBankRepository
+                .findByStatusAndFlagActive(StatusSolicitation.APROVADA, true);
 
         return opportunitiesList.stream()
                 .map(opportunity -> new OpportunityResponseDTO(
@@ -32,7 +34,6 @@ public class GetOpportunitiesByCompanyNameUseCase {
                         opportunity.getCreationDate(),
                         opportunity.isFlagActive(),
                         opportunity.getPartnerCompany().getId()
-
                 ))
                 .collect(Collectors.toList());
     }

@@ -1,6 +1,7 @@
 package br.com.apihubinovacao.domain.models.projects;
 
 import br.com.apihubinovacao.domain.enums.StatusSolicitation;
+import br.com.apihubinovacao.domain.enums.TypeBO;
 import br.com.apihubinovacao.domain.models.users.PartnerCompany;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
@@ -20,6 +21,16 @@ public class OpportunitiesBank {
     private String urlPhoto;
     private String pdfLink;
     private String siteLink;
+
+    public TypeBO getTypeBO() {
+        return typeBO;
+    }
+
+    public void setTypeBO(TypeBO typeBO) {
+        this.typeBO = typeBO;
+    }
+
+    private TypeBO typeBO;
 
     @Column(name = "author_email")
     private String authorEmail;
