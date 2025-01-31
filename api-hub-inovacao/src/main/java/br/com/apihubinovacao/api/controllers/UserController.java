@@ -1,6 +1,9 @@
 package br.com.apihubinovacao.api.controllers;
 
-import br.com.apihubinovacao.domain.dtos.*;
+import br.com.apihubinovacao.domain.dtos.user.UserCreateCnpjDTO;
+import br.com.apihubinovacao.domain.dtos.user.UserCreateCpfDTO;
+import br.com.apihubinovacao.domain.dtos.user.UserResponseCnpjDTO;
+import br.com.apihubinovacao.domain.dtos.user.UserResponseCpfDTO;
 import br.com.apihubinovacao.domain.enums.Role;
 import br.com.apihubinovacao.domain.usecases.user.create.CreateUserWithCnpjUseCase;
 import br.com.apihubinovacao.domain.usecases.user.create.CreateUserWithCpfUseCase;
