@@ -19,6 +19,7 @@ public class Publish {
     private String photoLink;
     private LocalDate initialDate;
     private LocalDate finalDate;
+    private LocalDate publishedDate;
 
     @ManyToOne
     @JoinColumn(name = "manager_id")
@@ -87,5 +88,13 @@ public class Publish {
 
     public void setManager(Manager manager) {
         this.manager = manager;
+    }
+
+    public LocalDate getPublishedDate() {
+        return publishedDate;
+    }
+
+    public void setPublishedDate(LocalDate publishedDate) {
+        this.publishedDate = publishedDate;
     }
 }

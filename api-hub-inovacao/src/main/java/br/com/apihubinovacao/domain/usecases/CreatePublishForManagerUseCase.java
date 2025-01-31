@@ -13,6 +13,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 
 @Service
 public class CreatePublishForManagerUseCase {
@@ -70,6 +72,7 @@ public class CreatePublishForManagerUseCase {
         publish.setPhotoLink(publishCreateDTO.photoLink());
         publish.setInitialDate(publishCreateDTO.initialDate());
         publish.setFinalDate(publishCreateDTO.finalDate());
+        publish.setPublishedDate(LocalDate.now());
         publish.setManager(manager);
 
 
@@ -83,7 +86,8 @@ public class CreatePublishForManagerUseCase {
                 savedPublish.getAcessLink(),
                 savedPublish.getPhotoLink(),
                 savedPublish.getInitialDate(),
-                savedPublish.getFinalDate());
+                savedPublish.getFinalDate(),
+                savedPublish.getPublishedDate());
 
     }
 }

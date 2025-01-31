@@ -9,5 +9,6 @@ public record PublishResponseDTO(
         String acessLink,
         String photoLink,
         LocalDate initialDate,
-        LocalDate finalDate
+        LocalDate finalDate,
+        LocalDate publishedDate
 ) {}

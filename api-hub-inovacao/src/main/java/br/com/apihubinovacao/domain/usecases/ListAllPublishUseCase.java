@@ -27,7 +27,8 @@ public class ListAllPublishUseCase {
                         publish.getAcessLink(),
                         publish.getPhotoLink(),
                         publish.getInitialDate(),
-                        publish.getFinalDate()
+                        publish.getFinalDate(),
+                        publish.getPublishedDate()
                 ))
                 .collect(Collectors.toList());
     }
