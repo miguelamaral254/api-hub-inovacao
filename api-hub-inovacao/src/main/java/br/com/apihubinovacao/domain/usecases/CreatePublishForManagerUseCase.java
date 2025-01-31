@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class CreatePublishForManager {
+public class CreatePublishForManagerUseCase {
 
     @Autowired
     private JwtService jwtService;
@@ -52,14 +52,14 @@ public class CreatePublishForManager {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             throw new BusinessException(ErrorCodeEnum.INVALID_TOKEN);
         }
-
         String token = authHeader.replace("Bearer ", "");
 
         // extrai email
         String email = jwtService.extractEmail(token);
+
         // busca pelo email o id de quem adicionou
         Manager manager = managerRepository.findByEmail(email)
-                .orElseThrow(() -> new BusinessException(ErrorCodeEnum.INVALID_TOKEN));
+                .orElseThrow(() -> new BusinessException(ErrorCodeEnum.INVALID_ROLE));
 
 
 

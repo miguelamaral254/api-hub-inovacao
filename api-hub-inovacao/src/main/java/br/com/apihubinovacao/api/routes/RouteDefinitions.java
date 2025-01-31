@@ -11,6 +11,7 @@ public class RouteDefinitions {
             "/users/all-users",
             "/users/create-user-cnpj",
             "/projects/all",
+            "/publish/all"
     };
 
     // Rotas acessíveis para usuários autenticados
