@@ -15,7 +15,7 @@ public record AcademicProjectResponseProfessorApprovedDTO(
         TypeAP typeAP,
         String currentUserEmail,
         String creationDate,
-        Long studentId,
         Long professorId,
+        String professorName,
         List<CoauthorDTO> coauthors
-) {}
+){}
