@@ -17,6 +17,7 @@ public record OpportunityResponseDTO(
         StatusSolicitation status,
         LocalDate creationDate,
         boolean flagActive,
-        Long partnerCompanyId
+        Long partnerCompanyId,
+        String institutionOrganization
 
 ) {}
