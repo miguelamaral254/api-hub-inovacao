@@ -12,7 +12,9 @@ public class RouteDefinitions {
             "/users/create-user-cnpj",
             "/projects/all",
             "/opportunities/approved/active",
-            "/publish/all"
+            "/publish/all",
+            "/opportunities/all",
+
 
     };
     public static final String[] USER_ROUTES = {

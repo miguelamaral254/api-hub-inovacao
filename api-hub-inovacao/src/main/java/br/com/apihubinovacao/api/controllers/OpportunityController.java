@@ -46,7 +46,6 @@ public class OpportunityController {
     }
 
     // Endpoint para buscar todas as oportunidades
-    @PreAuthorize("hasRole('PARTNER_COMPANY')")
     @GetMapping("/all")
     public ResponseEntity<List<OpportunityResponseDTO>> getAllOpportunities() {
         List<OpportunityResponseDTO> opportunities = getAllOpportunitiesUseCase.execute();

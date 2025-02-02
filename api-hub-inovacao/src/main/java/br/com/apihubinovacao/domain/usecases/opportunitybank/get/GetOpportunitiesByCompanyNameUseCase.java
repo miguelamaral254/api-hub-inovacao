@@ -31,7 +31,9 @@ public class GetOpportunitiesByCompanyNameUseCase {
                         opportunity.getStatus(),
                         opportunity.getCreationDate(),
                         opportunity.isFlagActive(),
-                        opportunity.getPartnerCompany().getId()
+                        opportunity.getPartnerCompany().getId(),
+                        opportunity.getPartnerCompany().getInstitutionOrganization() // Pegando o institutionOrganization
+
 
                 ))
                 .collect(Collectors.toList());
