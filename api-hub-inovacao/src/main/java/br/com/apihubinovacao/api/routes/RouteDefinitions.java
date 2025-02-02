@@ -31,6 +31,7 @@ public class RouteDefinitions {
     public static final String[] COMPANY_ROUTES = {
             "/opportunities/create",
             "/opportunities/company/{companyName}",
+            "/{opportunityId}/details",
 
     };
     public static final String[]  MANAGERS_ROUTES = {
