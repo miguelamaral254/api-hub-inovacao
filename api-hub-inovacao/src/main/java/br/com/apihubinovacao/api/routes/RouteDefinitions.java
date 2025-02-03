@@ -1,7 +1,6 @@
 package br.com.apihubinovacao.api.routes;
 
 import org.springframework.http.HttpMethod;
-import org.springframework.web.bind.annotation.PutMapping;
 
 public class RouteDefinitions {
 
