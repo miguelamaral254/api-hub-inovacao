@@ -44,5 +44,7 @@ public class UpdateOpportunityDetailsUseCase {
         if (updateDetailsDTO.siteLink() != null){
             opportunities.setSiteLink(updateDetailsDTO.siteLink());
         }
+        opportunitiesBankRepository.save(opportunities);
+
     }
 }
