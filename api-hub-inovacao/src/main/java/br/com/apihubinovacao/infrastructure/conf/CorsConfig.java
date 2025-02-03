@@ -11,7 +11,38 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @Configuration
+public class CorsConfig {
+
+    private final Dotenv dotenv;
+
+    public CorsConfig() {
+        this.dotenv = Dotenv.configure()
+                .ignoreIfMalformed()
+                .ignoreIfMissing()
+                .load();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowCredentials(true);
+
+        // Permite todas as origens
+        corsConfiguration.addAllowedOriginPattern("*");
+
+        corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        corsConfiguration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return source;
+    }
+}
+
+/*
+* @Configuration
 public class CorsConfig {
 
     private final Dotenv dotenv;
@@ -49,3 +80,6 @@ public class CorsConfig {
                 .collect(Collectors.toList());
     }
 }
+
+*
+* */
