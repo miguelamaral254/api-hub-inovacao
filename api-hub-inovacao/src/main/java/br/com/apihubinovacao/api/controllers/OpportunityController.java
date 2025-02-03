@@ -1,13 +1,11 @@
 package br.com.apihubinovacao.api.controllers;
 
-import br.com.apihubinovacao.domain.dtos.OpportunityBank.OpportunityCreateDTO;
-import br.com.apihubinovacao.domain.dtos.OpportunityBank.OpportunityResponseDTO;
-import br.com.apihubinovacao.domain.dtos.OpportunityBank.OpportunityUpdateStatusDTO;
-import br.com.apihubinovacao.domain.dtos.OpportunityBank.OpportunityUpdateStatusResponseDTO;
+import br.com.apihubinovacao.domain.dtos.OpportunityBank.*;
 import br.com.apihubinovacao.domain.usecases.opportunitybank.create.CreateOpportunityUseCase;
 import br.com.apihubinovacao.domain.usecases.opportunitybank.get.GetAllOpportunitiesUseCase;
 import br.com.apihubinovacao.domain.usecases.opportunitybank.get.GetApprovedActiveOpportunitiesUseCase;
 import br.com.apihubinovacao.domain.usecases.opportunitybank.get.GetOpportunitiesByCompanyNameUseCase;
+import br.com.apihubinovacao.domain.usecases.opportunitybank.update.UpdateOpportunityDetailsUseCase;
 import br.com.apihubinovacao.domain.usecases.opportunitybank.update.UpdateOpportunityStatusUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,17 +23,19 @@ public class OpportunityController {
     private final GetOpportunitiesByCompanyNameUseCase getOpportunitiesByCompanyNameUseCase;
     private final UpdateOpportunityStatusUseCase updateOpportunityStatusUseCase;
     private final GetApprovedActiveOpportunitiesUseCase getApprovedActiveOpportunitiesUseCase;
+    private final UpdateOpportunityDetailsUseCase updateOpportunityDetailsUseCase;
 
     @Autowired
     public OpportunityController(CreateOpportunityUseCase createOpportunityUseCase,
                                  GetAllOpportunitiesUseCase getAllOpportunitiesUseCase,
                                  GetOpportunitiesByCompanyNameUseCase getOpportunitiesByCompanyNameUseCase,
-                                 UpdateOpportunityStatusUseCase updateOpportunityStatusUseCase, GetApprovedActiveOpportunitiesUseCase getApprovedActiveOpportunitiesUseCase) {
+                                 UpdateOpportunityStatusUseCase updateOpportunityStatusUseCase, GetApprovedActiveOpportunitiesUseCase getApprovedActiveOpportunitiesUseCase, UpdateOpportunityDetailsUseCase updateOpportunityDetailsUseCase) {
         this.createOpportunityUseCase = createOpportunityUseCase;
         this.getAllOpportunitiesUseCase = getAllOpportunitiesUseCase;
         this.getOpportunitiesByCompanyNameUseCase = getOpportunitiesByCompanyNameUseCase;
         this.updateOpportunityStatusUseCase = updateOpportunityStatusUseCase;
         this.getApprovedActiveOpportunitiesUseCase = getApprovedActiveOpportunitiesUseCase;
+        this.updateOpportunityDetailsUseCase = updateOpportunityDetailsUseCase;
     }
 
     // Endpoint para criar uma nova oportunidade
@@ -71,5 +71,14 @@ public class OpportunityController {
 
         OpportunityUpdateStatusResponseDTO updatedOpportunity = updateOpportunityStatusUseCase.execute(opportunityId, opportunityUpdateStatusDTO);
         return ResponseEntity.ok(updatedOpportunity);
+    }
+
+    @PutMapping("/{opportunityId}/details")
+    public ResponseEntity<Void> updateOpportunityDetails(
+            @PathVariable Long opportunityId,
+            @RequestBody UpdateOpportunityDetailsDTO updateDTO
+    ){
+       updateOpportunityDetailsUseCase.execute(opportunityId, updateDTO);
+        return ResponseEntity.noContent().build();
     }
 }
