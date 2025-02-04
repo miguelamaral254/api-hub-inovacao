@@ -32,7 +32,7 @@ public class Student extends User implements UserBase {
 
     @Override
     public List<Phone> getPhones() {
-        return phones != null ? phones : List.of();  // Agora retorna os telefones associados ao estudante
+        return phones != null ? phones : List.of();
     }
 
     public List<Startup> getStartups() {

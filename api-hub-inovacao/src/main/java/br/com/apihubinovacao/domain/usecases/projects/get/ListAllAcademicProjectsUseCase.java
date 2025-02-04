@@ -34,7 +34,7 @@ public class ListAllAcademicProjectsUseCase {
 
     public List<?> execute() {
         List<AcademicProject> approvedProjects = academicProjectRepository.findAll().stream()
-                .filter(project -> StatusSolicitation.APROVADA.name().equalsIgnoreCase(project.getStatus().name()))  // Comparação do enum com o nome
+                .filter(project -> StatusSolicitation.APROVADA.name().equalsIgnoreCase(project.getStatus().name()))
                 .collect(Collectors.toList());
 
         return approvedProjects.stream()
@@ -53,14 +53,10 @@ public class ListAllAcademicProjectsUseCase {
                                 project.getTypeAP(),
                                 project.getAuthorEmail(),
                                 project.getCreationDate().toString(),
-                                project.getIdManager(),
                                 professor.get().getId(),
+                                professor.get().getName(),
                                 project.getCoauthors() != null && !project.getCoauthors().isEmpty() ? project.getCoauthors().stream()
-                                        .map(coauthor -> new CoauthorDTO(
-                                                coauthor.getName(),
-                                                coauthor.getEmail(),
-                                                coauthor.getPhone()
-                                        ))
+                                        .map(coauthor -> new CoauthorDTO(coauthor.getName(), coauthor.getEmail(), coauthor.getPhone()))
                                         .collect(Collectors.toList()) : new ArrayList<>()
                         );
                     }

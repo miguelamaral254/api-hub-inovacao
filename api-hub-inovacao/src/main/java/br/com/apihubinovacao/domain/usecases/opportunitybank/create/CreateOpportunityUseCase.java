@@ -73,7 +73,8 @@ public class CreateOpportunityUseCase {
                 savedOpportunity.getStatus(),
                 savedOpportunity.getCreationDate(),
                 savedOpportunity.isFlagActive(),
-                savedOpportunity.getPartnerCompany().getId()
+                savedOpportunity.getPartnerCompany().getId(),
+                savedOpportunity.getPartnerCompany().getInstitutionOrganization()
         );
     }
 }

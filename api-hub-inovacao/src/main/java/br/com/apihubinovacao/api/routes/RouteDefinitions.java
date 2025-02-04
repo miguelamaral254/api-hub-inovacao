@@ -1,7 +1,6 @@
 package br.com.apihubinovacao.api.routes;
 
 import org.springframework.http.HttpMethod;
-import org.springframework.web.bind.annotation.PutMapping;
 
 public class RouteDefinitions {
 
@@ -12,7 +11,9 @@ public class RouteDefinitions {
             "/users/create-user-cnpj",
             "/projects/all",
             "/opportunities/approved/active",
-            "/publish/all"
+            "/publish/all",
+            "/opportunities/all",
+
 
     };
     public static final String[] USER_ROUTES = {
@@ -29,6 +30,8 @@ public class RouteDefinitions {
     public static final String[] COMPANY_ROUTES = {
             "/opportunities/create",
             "/opportunities/company/{companyName}",
+            "/{opportunityId}/details",
+            "/opportunities/{opportunityId}/details",
 
     };
     public static final String[]  MANAGERS_ROUTES = {
@@ -37,6 +40,7 @@ public class RouteDefinitions {
             "/users/all-platform-users",
             "/publish/create",
             "/projects/manager/all",
+
 
 
 

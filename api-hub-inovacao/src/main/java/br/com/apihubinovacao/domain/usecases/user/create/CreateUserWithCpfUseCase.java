@@ -89,7 +89,9 @@ public class CreateUserWithCpfUseCase {
         user.setRegistration(dto.registration());
         user.setRole(dto.role());
         user.setInstitutionOrganization(dto.institutionOrganization());
-        user.setUserStatus(dto.userStatus());
+
+        // Aqui, garantimos que o status do usuário seja sempre true ao ser criado
+        user.setUserStatus(true);
     }
 
     private User saveUser(User user) {
