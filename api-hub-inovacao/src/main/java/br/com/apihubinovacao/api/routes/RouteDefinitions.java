@@ -36,6 +36,8 @@ public class RouteDefinitions {
             "/opportunities/{opportunityId}/status",
             "/users/all-platform-users",
             "/publish/create",
+            "/projects/manager/all",
+
 
 
 
