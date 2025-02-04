@@ -1,11 +1,24 @@
-# Etapa 1: Construção da aplicação
-FROM maven:3.9.0-openjdk-23 AS builder
-WORKDIR /app
-COPY . /app
-RUN mvn clean package -DskipTests
+FROM ubuntu:22.04 AS builder
 
-# Etapa 2: Execução da aplicação
-FROM openjdk:23-jdk-slim
+# Instalar dependências e JDK
+RUN apt-get update && \
+    apt-get install -y software-properties-common \
+    && add-apt-repository ppa:openjdk-r/ppa \
+    && apt-get update && \
+    apt-get install -y openjdk-23-jdk maven
+
 WORKDIR /app
-COPY --from=builder /app/target/*.jar app.jar
-ENTRYPOINT ["java", "-jar", "app.jar"]
+
+COPY . /app
+
+RUN mvn clean install
+
+FROM openjdk:23
+
+WORKDIR /app
+
+COPY --from=builder /app/target/*.jar /app/app.jar
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]

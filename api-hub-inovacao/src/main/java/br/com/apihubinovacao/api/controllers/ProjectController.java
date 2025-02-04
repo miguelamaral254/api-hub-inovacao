@@ -1,18 +1,17 @@
     package br.com.apihubinovacao.api.controllers;
 
-    import br.com.apihubinovacao.domain.dtos.projects.*;
-    import br.com.apihubinovacao.domain.usecases.projects.create.CreateAcademicProjectForProfessorUseCase;
-    import br.com.apihubinovacao.domain.usecases.projects.create.CreateAcademicProjectForStudentUseCase;
-    import br.com.apihubinovacao.domain.usecases.projects.get.ListAcademicProjectsByUserEmailUseCase;
-    import br.com.apihubinovacao.domain.usecases.projects.get.ListAcademicProjectsForProfessorUseCase;
-    import br.com.apihubinovacao.domain.usecases.projects.get.ListAcademicProjectsForStudentUseCase;
-    import br.com.apihubinovacao.domain.usecases.projects.get.ListAllAcademicProjectsUseCase; // Novo UseCase
-    import br.com.apihubinovacao.domain.usecases.projects.update.UpdateAcademicProjectDetailsUseCase;
-    import br.com.apihubinovacao.domain.usecases.projects.update.UpdateAcademicProjectStatusUseCase;
-    import org.springframework.beans.factory.annotation.Autowired;
-    import org.springframework.http.ResponseEntity;
-    import org.springframework.security.access.prepost.PreAuthorize;
-    import org.springframework.web.bind.annotation.*;
+
+import br.com.apihubinovacao.domain.dtos.projects.*;
+import br.com.apihubinovacao.domain.usecases.projects.create.CreateAcademicProjectForProfessorUseCase;
+import br.com.apihubinovacao.domain.usecases.projects.create.CreateAcademicProjectForStudentUseCase;
+import br.com.apihubinovacao.domain.usecases.projects.get.*;
+import br.com.apihubinovacao.domain.usecases.projects.update.UpdateAcademicProjectDetailsUseCase;
+import br.com.apihubinovacao.domain.usecases.projects.update.UpdateAcademicProjectStatusUseCase;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+springframework.web.bind.annotation.*;
+
 
     import java.util.List;
 
@@ -20,32 +19,33 @@
     @RequestMapping("/projects")
     public class ProjectController {
 
-        private final CreateAcademicProjectForProfessorUseCase createAcademicProjectForProfessorUseCase;
-        private final CreateAcademicProjectForStudentUseCase createAcademicProjectForStudentUseCase;
-        private final ListAcademicProjectsForProfessorUseCase listAcademicProjectsForProfessorUseCase;
-        private final ListAcademicProjectsForStudentUseCase listAcademicProjectsForStudentUseCase;
-        private final ListAcademicProjectsByUserEmailUseCase listAcademicProjectsByUserEmailUseCase;
-        private final ListAllAcademicProjectsUseCase listAllAcademicProjectsUseCase; // Novo UseCase
-        private final UpdateAcademicProjectStatusUseCase updateAcademicProjectStatusUseCase;
-        private final UpdateAcademicProjectDetailsUseCase updateAcademicProjectDetailsUseCase;
+    private final CreateAcademicProjectForProfessorUseCase createAcademicProjectForProfessorUseCase;
+    private final CreateAcademicProjectForStudentUseCase createAcademicProjectForStudentUseCase;
+    private final ListAcademicProjectsForProfessorUseCase listAcademicProjectsForProfessorUseCase;
+    private final ListAcademicProjectsForStudentUseCase listAcademicProjectsForStudentUseCase;
+    private final ListAcademicProjectsByUserEmailUseCase listAcademicProjectsByUserEmailUseCase;
+    private final ListAllAcademicProjectsUseCase listAllAcademicProjectsUseCase; // Novo UseCase
+    private final UpdateAcademicProjectStatusUseCase updateAcademicProjectStatusUseCase;
+    private final UpdateAcademicProjectDetailsUseCase updateAcademicProjectDetailsUseCase;
+    private final ListAllAcademicProjectsForManagerUseCase listAllAcademicProjectsForManagerUseCase;
 
-        @Autowired
-        public ProjectController(
-                CreateAcademicProjectForProfessorUseCase createAcademicProjectForProfessorUseCase,
-                CreateAcademicProjectForStudentUseCase createAcademicProjectForStudentUseCase,
-                ListAcademicProjectsForProfessorUseCase listAcademicProjectsForProfessorUseCase,
-                ListAcademicProjectsForStudentUseCase listAcademicProjectsForStudentUseCase,
-                ListAcademicProjectsByUserEmailUseCase listAcademicProjectsByUserEmailUseCase,
-                ListAllAcademicProjectsUseCase listAllAcademicProjectsUseCase, UpdateAcademicProjectStatusUseCase updateAcademicProjectStatusUseCase, UpdateAcademicProjectDetailsUseCase updateAcademicProjectDetailsUseCase) { // Novo UseCase
-            this.createAcademicProjectForProfessorUseCase = createAcademicProjectForProfessorUseCase;
-            this.createAcademicProjectForStudentUseCase = createAcademicProjectForStudentUseCase;
-            this.listAcademicProjectsForProfessorUseCase = listAcademicProjectsForProfessorUseCase;
-            this.listAcademicProjectsForStudentUseCase = listAcademicProjectsForStudentUseCase;
-            this.listAcademicProjectsByUserEmailUseCase = listAcademicProjectsByUserEmailUseCase;
-            this.listAllAcademicProjectsUseCase = listAllAcademicProjectsUseCase; // Injeção do novo UseCase
-            this.updateAcademicProjectStatusUseCase = updateAcademicProjectStatusUseCase;
-            this.updateAcademicProjectDetailsUseCase = updateAcademicProjectDetailsUseCase;
-        }
+    @Autowired
+    public ProjectController(
+            CreateAcademicProjectForProfessorUseCase createAcademicProjectForProfessorUseCase,
+            CreateAcademicProjectForStudentUseCase createAcademicProjectForStudentUseCase,
+            ListAcademicProjectsForProfessorUseCase listAcademicProjectsForProfessorUseCase,
+            ListAcademicProjectsForStudentUseCase listAcademicProjectsForStudentUseCase,
+            ListAcademicProjectsByUserEmailUseCase listAcademicProjectsByUserEmailUseCase,
+            ListAllAcademicProjectsUseCase listAllAcademicProjectsUseCase, UpdateAcademicProjectStatusUseCase updateAcademicProjectStatusUseCase, UpdateAcademicProjectDetailsUseCase updateAcademicProjectDetailsUseCase, ListAllAcademicProjectsForManagerUseCase listAllAcademicProjectsForManagerUseCase) { // Novo UseCase
+        this.createAcademicProjectForProfessorUseCase = createAcademicProjectForProfessorUseCase;
+        this.createAcademicProjectForStudentUseCase = createAcademicProjectForStudentUseCase;
+        this.listAcademicProjectsForProfessorUseCase = listAcademicProjectsForProfessorUseCase;
+        this.listAcademicProjectsForStudentUseCase = listAcademicProjectsForStudentUseCase;
+        this.listAcademicProjectsByUserEmailUseCase = listAcademicProjectsByUserEmailUseCase;
+        this.listAllAcademicProjectsUseCase = listAllAcademicProjectsUseCase;
+        this.updateAcademicProjectStatusUseCase = updateAcademicProjectStatusUseCase;
+        this.updateAcademicProjectDetailsUseCase = updateAcademicProjectDetailsUseCase;
+        this.listAllAcademicProjectsForManagerUseCase = listAllAcademicProjectsForManagerUseCase;
 
         @PreAuthorize("hasAnyRole('USER')")
         @PostMapping("/professor/create")
@@ -83,19 +83,25 @@
             return ResponseEntity.ok(projects);
         }
 
-        @GetMapping("/all")
-        public ResponseEntity<List<?>> getAllProjects() {
-            List<?> projects = listAllAcademicProjectsUseCase.execute();
-            return ResponseEntity.ok(projects);
-        }
-        @PreAuthorize("hasAnyRole('MANAGER')")
-        @PutMapping("/{projectId}/status")
-        public ResponseEntity<Void> updateProjectStatus(
-                @PathVariable Long projectId,
-                @RequestBody UpdateAcademicProjectStatusDTO dto) {
-            updateAcademicProjectStatusUseCase.execute(projectId, dto);
-            return ResponseEntity.noContent().build();
-        }
+    @GetMapping("/all")
+    public ResponseEntity<List<?>> getAllProjects() {
+        List<?> projects = listAllAcademicProjectsUseCase.execute();
+        return ResponseEntity.ok(projects);
+    }
+    @GetMapping("manager/all")
+    public ResponseEntity<List<?>> getAllProjectsForManager() {
+        List<?> projects = listAllAcademicProjectsForManagerUseCase.execute();
+        return ResponseEntity.ok(projects);
+    }
+    @PreAuthorize("hasAnyRole('MANAGER')")
+    @PutMapping("/{projectId}/status")
+    public ResponseEntity<Void> updateProjectStatus(
+            @PathVariable Long projectId,
+            @RequestBody UpdateAcademicProjectStatusDTO dto) {
+        updateAcademicProjectStatusUseCase.execute(projectId, dto);
+        return ResponseEntity.noContent().build();
+    }
+
 
         @PreAuthorize("hasAnyRole('PROFESSOR','STUDENT')")
         @PutMapping("/{projectId}/details")
