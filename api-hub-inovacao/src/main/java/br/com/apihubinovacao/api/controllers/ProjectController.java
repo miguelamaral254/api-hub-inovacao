@@ -1,5 +1,4 @@
-    package br.com.apihubinovacao.api.controllers;
-
+package br.com.apihubinovacao.api.controllers;
 
 import br.com.apihubinovacao.domain.dtos.projects.*;
 import br.com.apihubinovacao.domain.usecases.projects.create.CreateAcademicProjectForProfessorUseCase;
@@ -10,14 +9,13 @@ import br.com.apihubinovacao.domain.usecases.projects.update.UpdateAcademicProje
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
-    import java.util.List;
-
-    @RestController
-    @RequestMapping("/projects")
-    public class ProjectController {
+@RestController
+@RequestMapping("/projects")
+public class ProjectController {
 
     private final CreateAcademicProjectForProfessorUseCase createAcademicProjectForProfessorUseCase;
     private final CreateAcademicProjectForStudentUseCase createAcademicProjectForStudentUseCase;
@@ -46,42 +44,44 @@ springframework.web.bind.annotation.*;
         this.updateAcademicProjectStatusUseCase = updateAcademicProjectStatusUseCase;
         this.updateAcademicProjectDetailsUseCase = updateAcademicProjectDetailsUseCase;
         this.listAllAcademicProjectsForManagerUseCase = listAllAcademicProjectsForManagerUseCase;
+    }
 
-        @PreAuthorize("hasAnyRole('USER')")
-        @PostMapping("/professor/create")
-        public ResponseEntity<AcademicProjectResponseProfessorDTO> createProjectForProfessor(
-                @RequestBody AcademicProjectCreateProfessorDTO dto) {
-            AcademicProjectResponseProfessorDTO createdProject = createAcademicProjectForProfessorUseCase.execute(dto);
-            return ResponseEntity.ok(createdProject);
-        }
+    @PreAuthorize("hasAnyRole('USER')")
+    @PostMapping("/professor/create")
+    public ResponseEntity<AcademicProjectResponseProfessorDTO> createProjectForProfessor(
+            @RequestBody AcademicProjectCreateProfessorDTO dto) {
+        AcademicProjectResponseProfessorDTO createdProject = createAcademicProjectForProfessorUseCase.execute(dto);
+        return ResponseEntity.ok(createdProject);
+    }
 
-        @PreAuthorize("hasAnyRole('USER')")
-        @PostMapping("/student/create")
-        public ResponseEntity<AcademicProjectResponseStudentDTO> createProjectForStudent(
-                @RequestBody AcademicProjectCreateStudentDTO dto) {
-            AcademicProjectResponseStudentDTO createdProject = createAcademicProjectForStudentUseCase.execute(dto);
-            return ResponseEntity.ok(createdProject);
-        }
+    @PreAuthorize("hasAnyRole('USER')")
+    @PostMapping("/student/create")
+    public ResponseEntity<AcademicProjectResponseStudentDTO> createProjectForStudent(
+            @RequestBody AcademicProjectCreateStudentDTO dto) {
+        AcademicProjectResponseStudentDTO createdProject = createAcademicProjectForStudentUseCase.execute(dto);
+        return ResponseEntity.ok(createdProject);
+    }
 
-        @PreAuthorize("hasAnyRole('PROFESSOR','ADMIN', 'MANAGERS')")
-        @GetMapping("/all-professor")
-        public ResponseEntity<List<AcademicProjectResponseProfessorDTO>> getAllProjectsForProfessor() {
-            List<AcademicProjectResponseProfessorDTO> projects = listAcademicProjectsForProfessorUseCase.execute();
-            return ResponseEntity.ok(projects);
-        }
+    @PreAuthorize("hasAnyRole('PROFESSOR','ADMIN', 'MANAGERS')")
+    @GetMapping("/all-professor")
+    public ResponseEntity<List<AcademicProjectResponseProfessorDTO>> getAllProjectsForProfessor() {
+        List<AcademicProjectResponseProfessorDTO> projects = listAcademicProjectsForProfessorUseCase.execute();
+        return ResponseEntity.ok(projects);
+    }
 
-        @PreAuthorize("hasAnyRole('STUDENT', 'ADMIN', 'MANAGERS')")
-        @GetMapping("/all-student")
-        public ResponseEntity<List<AcademicProjectResponseStudentDTO>> getAllProjectsForStudent() {
-            List<AcademicProjectResponseStudentDTO> projects = listAcademicProjectsForStudentUseCase.execute();
-            return ResponseEntity.ok(projects);
-        }
+    @PreAuthorize("hasAnyRole('STUDENT', 'ADMIN', 'MANAGERS')")
+    @GetMapping("/all-student")
+    public ResponseEntity<List<AcademicProjectResponseStudentDTO>> getAllProjectsForStudent() {
+        List<AcademicProjectResponseStudentDTO> projects = listAcademicProjectsForStudentUseCase.execute();
+        return ResponseEntity.ok(projects);
+    }
 
-        @GetMapping("/by-email")
-        public ResponseEntity<List<?>> getProjectsByUserEmail(@RequestParam String email) {
-            List<?> projects = listAcademicProjectsByUserEmailUseCase.execute(email);
-            return ResponseEntity.ok(projects);
-        }
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGERS')")
+    @GetMapping("/by-email")
+    public ResponseEntity<List<?>> getProjectsByUserEmail(@RequestParam String email) {
+        List<?> projects = listAcademicProjectsByUserEmailUseCase.execute(email);
+        return ResponseEntity.ok(projects);
+    }
 
     @GetMapping("/all")
     public ResponseEntity<List<?>> getAllProjects() {
@@ -102,13 +102,12 @@ springframework.web.bind.annotation.*;
         return ResponseEntity.noContent().build();
     }
 
-
-        @PreAuthorize("hasAnyRole('PROFESSOR','STUDENT')")
-        @PutMapping("/{projectId}/details")
-        public ResponseEntity<Void> updateProjectDetails(
-                @PathVariable Long projectId,
-                @RequestBody UpdateAcademicProjectDetailsDTO updateDTO) {
-            updateAcademicProjectDetailsUseCase.execute(projectId, updateDTO);
-            return ResponseEntity.noContent().build();
-        }
+    @PreAuthorize("hasAnyRole('PROFESSOR','STUDENT')")
+    @PutMapping("/{projectId}/details")
+    public ResponseEntity<Void> updateProjectDetails(
+            @PathVariable Long projectId,
+            @RequestBody UpdateAcademicProjectDetailsDTO updateDTO) {
+        updateAcademicProjectDetailsUseCase.execute(projectId, updateDTO);
+        return ResponseEntity.noContent().build();
     }
+}
