@@ -21,5 +21,6 @@ public record StartupResponseProfessorDTO(
         String feedback,
         String justification,
         Long idManager,
+        String cnpj,
         List<CoauthorDTO> coauthors) {
 }
