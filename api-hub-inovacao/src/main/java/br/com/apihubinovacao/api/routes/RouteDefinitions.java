@@ -40,8 +40,7 @@ public class RouteDefinitions {
             "/users/all-platform-users",
             "/publish/create",
             "/projects/manager/all",
-
-
+            "publish/{publishId}/update"
 
 
 
