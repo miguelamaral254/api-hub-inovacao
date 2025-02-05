@@ -34,3 +34,4 @@ build/
 
 .env
 api-hub-inovacao/.env
+/src/main/resources/application.properties
