@@ -26,6 +26,8 @@ public class RouteDefinitions {
             "/projects/{projectId}/details",
             "startup/student/create",
             "startup/student/startups",
+            "startup/professor/create",
+            "startup/professor/startups",
 
 
     };
