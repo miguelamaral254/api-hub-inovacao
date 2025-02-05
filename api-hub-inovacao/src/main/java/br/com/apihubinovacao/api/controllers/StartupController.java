@@ -42,17 +42,17 @@ public class StartupController {
         return ResponseEntity.ok(createdStartupForStudent);
     }
 
-    @PreAuthorize("hasAnyRole('STUDENT')")
-    @GetMapping("/student/startups")
-    public ResponseEntity<List<StartupResponseStudentDTO>> getAllStartupsStudent() {
-        return ResponseEntity.ok(listStartupsForStudentUseCase.execute());
-    }
-
     @PreAuthorize("hasAnyRole('PROFESSOR')")
     @PostMapping("/professor/create")
     public ResponseEntity<StartupResponseProfessorDTO> createStartup(@RequestBody StartupCreateProfessorDTO dto) {
         StartupResponseProfessorDTO createdStartupForProfessor = createStartupForProfessor.execute(dto);
         return ResponseEntity.ok(createdStartupForProfessor);
+    }
+
+    @PreAuthorize("hasAnyRole('STUDENT')")
+    @GetMapping("/student/startups")
+    public ResponseEntity<List<StartupResponseStudentDTO>> getAllStartupsStudent() {
+        return ResponseEntity.ok(listStartupsForStudentUseCase.execute());
     }
 
     @PreAuthorize("hasAnyRole('PROFESSOR')")
@@ -65,6 +65,13 @@ public class StartupController {
     public ResponseEntity<List<?>> getAllStartups() {
         List<?> startups = listAllStartupsUseCase.execute();
         return ResponseEntity.ok(startups);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    @GetMapping("/by-email")
+    public ResponseEntity<List<?>> getProjectsByUserEmail(@RequestParam String email) {
+        List<?> startup = listStartupByUserEmailUseCase.execute(email);
+        return ResponseEntity.ok(startup);
     }
 
 
