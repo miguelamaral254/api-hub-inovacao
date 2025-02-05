@@ -3,7 +3,7 @@ package br.com.apihubinovacao.domain.models.projects;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "COAUTHOR_SUBMISSION")
+@Table(name = "COAUTHOR")
 public class Coauthor {
 
     @Id

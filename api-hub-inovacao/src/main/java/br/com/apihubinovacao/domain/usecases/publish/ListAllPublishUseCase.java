@@ -1,4 +1,4 @@
-package br.com.apihubinovacao.domain.usecases;
+package br.com.apihubinovacao.domain.usecases.publish;
 
 import br.com.apihubinovacao.domain.dtos.publish.PublishResponseDTO;
 import br.com.apihubinovacao.domain.repositories.PublishRepository;

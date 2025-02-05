@@ -1,4 +1,4 @@
-package br.com.apihubinovacao.domain.usecases;
+package br.com.apihubinovacao.domain.usecases.publish;
 
 import br.com.apihubinovacao.domain.dtos.publish.UpdatePublishDetailsDTO;
 import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
