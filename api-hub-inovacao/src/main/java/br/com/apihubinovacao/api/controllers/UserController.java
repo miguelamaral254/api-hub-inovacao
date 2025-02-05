@@ -72,7 +72,6 @@ public class UserController {
     }
 
     @GetMapping("/all-platform-users")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<Object>> getAllPlatformUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {

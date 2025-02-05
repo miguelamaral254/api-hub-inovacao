@@ -13,6 +13,8 @@ public class RouteDefinitions {
             "/opportunities/approved/active",
             "/publish/all",
             "/opportunities/all",
+            "/users/all-platform-users",
+
 
 
     };
@@ -47,7 +49,6 @@ public class RouteDefinitions {
     };
     public static final String[] ADMIN_ROUTES = {
             "/admin/**",
-            "/users/all-platform-users",
             "/admin/create-manager",
             "/projects/{projectId}/status",
             "/opportunities/{opportunityId}/status",
