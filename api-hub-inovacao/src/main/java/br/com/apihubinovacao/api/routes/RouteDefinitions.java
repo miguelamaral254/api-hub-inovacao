@@ -13,6 +13,7 @@ public class RouteDefinitions {
             "/opportunities/approved/active",
             "/publish/all",
             "/opportunities/all",
+            "/startup/all"
 
 
     };
@@ -24,10 +25,10 @@ public class RouteDefinitions {
             "/projects/all-student",
             "/projects/all-professor",
             "/projects/{projectId}/details",
-            "startup/student/create",
-            "startup/student/startups",
-            "startup/professor/create",
-            "startup/professor/startups",
+            "/startup/student/create",
+            "/startup/student/startups",
+            "/startup/professor/create",
+            "/startup/professor/startups",
 
 
     };

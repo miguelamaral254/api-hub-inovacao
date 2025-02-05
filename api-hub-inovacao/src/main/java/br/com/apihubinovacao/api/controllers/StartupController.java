@@ -6,6 +6,8 @@ import br.com.apihubinovacao.domain.dtos.startups.StartupResponseProfessorDTO;
 import br.com.apihubinovacao.domain.dtos.startups.StartupResponseStudentDTO;
 import br.com.apihubinovacao.domain.usecases.startup.create.CreateStartupForProfessor;
 import br.com.apihubinovacao.domain.usecases.startup.create.CreateStartupForStudent;
+import br.com.apihubinovacao.domain.usecases.startup.get.ListAllStartupsUseCase;
+import br.com.apihubinovacao.domain.usecases.startup.get.ListStartupByUserEmailUseCase;
 import br.com.apihubinovacao.domain.usecases.startup.get.ListStartupsForProfessorUseCase;
 import br.com.apihubinovacao.domain.usecases.startup.get.ListStartupsForStudentUseCase;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +23,16 @@ public class StartupController {
     private final CreateStartupForStudent createStartupForStudent;
     private final CreateStartupForProfessor createStartupForProfessor;
     private final ListStartupsForProfessorUseCase listStartupsForProfessorUseCase;
+    private final ListAllStartupsUseCase listAllStartupsUseCase;
+    private final ListStartupByUserEmailUseCase listStartupByUserEmailUseCase;
 
-    public StartupController(ListStartupsForStudentUseCase listStartupsForStudentUseCase, CreateStartupForStudent createStartupForStudent, CreateStartupForProfessor createStartupForProfessor, ListStartupsForProfessorUseCase listStartupsForProfessorUseCase) {
+    public StartupController(ListStartupsForStudentUseCase listStartupsForStudentUseCase, CreateStartupForStudent createStartupForStudent, CreateStartupForProfessor createStartupForProfessor, ListStartupsForProfessorUseCase listStartupsForProfessorUseCase, ListAllStartupsUseCase listAllStartupsUseCase, ListStartupByUserEmailUseCase listStartupByUserEmailUseCase) {
         this.listStartupsForStudentUseCase = listStartupsForStudentUseCase;
         this.createStartupForStudent = createStartupForStudent;
         this.createStartupForProfessor = createStartupForProfessor;
         this.listStartupsForProfessorUseCase = listStartupsForProfessorUseCase;
+        this.listAllStartupsUseCase = listAllStartupsUseCase;
+        this.listStartupByUserEmailUseCase = listStartupByUserEmailUseCase;
     }
 
     @PreAuthorize("hasAnyRole('STUDENT')")
@@ -53,6 +59,12 @@ public class StartupController {
     @GetMapping("/professor/startups")
     public ResponseEntity<List<StartupResponseProfessorDTO>> getAllStartupsProfessor() {
         return ResponseEntity.ok(listStartupsForProfessorUseCase.execute());
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<?>> getAllStartups() {
+        List<?> startups = listAllStartupsUseCase.execute();
+        return ResponseEntity.ok(startups);
     }
 
 
