@@ -43,8 +43,11 @@ public enum ErrorCodeEnum {
     // Projeto
     PROJECT_NOT_FOUND("Project not found", "ERR-019", 404),
     AUTHOR_NOT_FOUND("Author not found", "ERR-023", 404),
+    // Edital
+    PUBLISH_NOT_FOUND("Publish not found", "ERR-024", 404),
     // Serviço genérico
     SERVER_ERROR("Internal server error", "ERR-500", 500);
+
 
     private final String message;
     private final String code;
