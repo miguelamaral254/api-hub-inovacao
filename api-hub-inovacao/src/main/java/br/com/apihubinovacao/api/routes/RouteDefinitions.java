@@ -46,7 +46,8 @@ public class RouteDefinitions {
             "/publish/create",
             "/projects/manager/all",
             "/publish/{publishId}/update",
-            "/startup/by-email"
+            "/startup/by-email",
+            "/startup/{startupId}/status"
 
 
 
