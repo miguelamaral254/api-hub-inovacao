@@ -13,7 +13,8 @@ public class RouteDefinitions {
             "/opportunities/approved/active",
             "/publish/all",
             "/opportunities/all",
-            "/startup/all"
+            "/users/all-platform-users",
+
 
 
     };
@@ -25,11 +26,6 @@ public class RouteDefinitions {
             "/projects/all-student",
             "/projects/all-professor",
             "/projects/{projectId}/details",
-            "/startup/student/create",
-            "/startup/student/startups",
-            "/startup/professor/create",
-            "/startup/professor/startups",
-            "/{startupId}/details",
 
 
     };
@@ -46,21 +42,16 @@ public class RouteDefinitions {
             "/users/all-platform-users",
             "/publish/create",
             "/projects/manager/all",
-            "/publish/{publishId}/update",
-            "/startup/by-email",
-            "/startup/{startupId}/status"
+            "publish/{publishId}/update"
 
 
 
     };
     public static final String[] ADMIN_ROUTES = {
             "/admin/**",
-            "/users/all-platform-users",
             "/admin/create-manager",
             "/projects/{projectId}/status",
             "/opportunities/{opportunityId}/status",
-            "/startup//by-email",
-
 
     };
     public static final HttpMethod[] PUBLIC_HTTP_METHODS = {
