@@ -33,7 +33,7 @@ public class ListAllStartupsUseCase {
 
     public List<?> execute() {
         List<Startup> approvedStartups = startupRepository.findAll().stream()
-                .filter(project -> StatusSolicitation.APROVADA.name().equalsIgnoreCase(project.getStatus().name()))
+                .filter(startup -> StatusSolicitation.APROVADA.name().equalsIgnoreCase(startup.getStatus().name()))
                 .collect(Collectors.toList());
 
         return approvedStartups.stream()
