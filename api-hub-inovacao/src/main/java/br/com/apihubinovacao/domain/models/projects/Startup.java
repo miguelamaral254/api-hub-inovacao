@@ -24,7 +24,6 @@ public class Startup {
     @Column(name = "description", length = 500, nullable = false)
     private String description;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @Column(name = "creation_date", nullable = false)
     private LocalDate creationDate;
 
@@ -32,7 +31,7 @@ public class Startup {
     private String urlPhoto;
 
     @Column(name = "siteLink", length = 200)
-    private String site;
+    private String siteLink;
 
     @Column(name = "pdfLink")
     private String pdfLink;
@@ -47,8 +46,9 @@ public class Startup {
     @Column(name = "author_email")
     private String authorEmail;
 
-    @OneToMany(mappedBy = "startup", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "startup", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Coauthor> coauthors;
+
 
     @ManyToOne
     @JoinColumn(name = "professor_idUSER")
@@ -58,8 +58,41 @@ public class Startup {
     @JoinColumn(name = "student_idUSER")
     private Student student;
 
-    @Column(name = "CNPJ", length = 14)
+    @Column(name = "CNPJ", length = 18)
     private String cnpj;
+
+    @Column(name = "feedback", nullable = true)
+    private String feedback;
+
+    @Column(name = "justification", nullable = true)
+    private String justification;
+
+    @Column(name = "id_manager", nullable = true)
+    private Long idManager;
+
+    public String getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
+    }
+
+    public String getJustification() {
+        return justification;
+    }
+
+    public void setJustification(String justification) {
+        this.justification = justification;
+    }
+
+    public Long getIdManager() {
+        return idManager;
+    }
+
+    public void setIdManager(Long idManager) {
+        this.idManager = idManager;
+    }
 
     public Long getId() {
         return id;
@@ -101,12 +134,12 @@ public class Startup {
         this.urlPhoto = urlPhoto;
     }
 
-    public String getSite() {
-        return site;
+    public String getSiteLink() {
+        return siteLink;
     }
 
-    public void setSite(String site) {
-        this.site = site;
+    public void setSiteLink(String siteLink) {
+        this.siteLink = siteLink;
     }
 
     public String getPdfLink() {

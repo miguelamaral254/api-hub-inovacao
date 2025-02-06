@@ -1,12 +1,12 @@
-package br.com.apihubinovacao.domain.usecases.projects.update;
+package br.com.apihubinovacao.domain.usecases.startup.update;
 
 import br.com.apihubinovacao.domain.dtos.coauthor.CoauthorDTO;
-import br.com.apihubinovacao.domain.dtos.projects.UpdateAcademicProjectDetailsDTO;
-import br.com.apihubinovacao.domain.exceptions.BusinessException;
+import br.com.apihubinovacao.domain.dtos.startups.UpdateStartupDetailsDTO;
 import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
-import br.com.apihubinovacao.domain.models.projects.AcademicProject;
+import br.com.apihubinovacao.domain.exceptions.BusinessException;
 import br.com.apihubinovacao.domain.models.projects.Coauthor;
-import br.com.apihubinovacao.domain.repositories.AcademicProjectRepository;
+import br.com.apihubinovacao.domain.models.projects.Startup;
+import br.com.apihubinovacao.domain.repositories.StartupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,46 +14,49 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UpdateAcademicProjectDetailsUseCase {
+public class UpdateStartupDetailsUseCase {
 
     @Autowired
-    private AcademicProjectRepository academicProjectRepository;
+    private StartupRepository startupRepository;
 
-    public void execute(Long projectId, UpdateAcademicProjectDetailsDTO updateDTO) {
-        Optional<AcademicProject> projectOpt = academicProjectRepository.findById(projectId);
+    public void execute(Long startupId, UpdateStartupDetailsDTO updateDTO) {
+        Optional<Startup> startupOpt = startupRepository.findById(startupId);
 
-        if (projectOpt.isEmpty()) {
-            throw new BusinessException(ErrorCodeEnum.PROJECT_NOT_FOUND);
+        if (startupOpt.isEmpty()) {
+            throw new BusinessException(ErrorCodeEnum.STARTUP_NOT_FOUND);
         }
 
-        AcademicProject project = projectOpt.get();
+        Startup startup = startupOpt.get();
 
         if (updateDTO.title() != null) {
-            project.setTitle(updateDTO.title());
+            startup.setTitle(updateDTO.title());
         }
         if (updateDTO.description() != null) {
-            project.setDescription(updateDTO.description());
+            startup.setDescription(updateDTO.description());
         }
         if (updateDTO.urlPhoto() != null) {
-            project.setUrlPhoto(updateDTO.urlPhoto());
+            startup.setUrlPhoto(updateDTO.urlPhoto());
         }
         if (updateDTO.pdfLink() != null) {
-            project.setPdfLink(updateDTO.pdfLink());
+            startup.setPdfLink(updateDTO.pdfLink());
         }
         if (updateDTO.siteLink() != null) {
-            project.setSiteLink(updateDTO.siteLink());
+            startup.setSiteLink(updateDTO.siteLink());
+        }
+        if (updateDTO.cnpj() != null) {
+            startup.setCnpj(updateDTO.cnpj());
         }
 
         if (updateDTO.coauthors() != null) {
-            updateCoauthors(project, updateDTO.coauthors());
+            updateCoauthors(startup, updateDTO.coauthors());
         }
 
 
-        academicProjectRepository.save(project);
+        startupRepository.save(startup);
     }
 
-    private void updateCoauthors(AcademicProject project, List<CoauthorDTO> coauthorDTOs) {
-        List<Coauthor> existingCoauthors = project.getCoauthors();
+    private void updateCoauthors(Startup startup, List<CoauthorDTO> coauthorDTOs) {
+        List<Coauthor> existingCoauthors = startup.getCoauthors();
 
         for (CoauthorDTO dto : coauthorDTOs) {
             Optional<Coauthor> existingCoauthorOpt = existingCoauthors.stream()
@@ -75,16 +78,15 @@ public class UpdateAcademicProjectDetailsUseCase {
                         dto.name() != null ? dto.name() : "Nome Padrão",
                         dto.email(),
                         dto.phone() != null ? dto.phone() : "Telefone Padrão",
-                        null,
-                        project
+                        startup,
+                        null
                 );
                 existingCoauthors.add(newCoauthor);
             }
         }
 
-        project.setCoauthors(existingCoauthors);
+        startup.setCoauthors(existingCoauthors);
 
     }
-
 
 }
