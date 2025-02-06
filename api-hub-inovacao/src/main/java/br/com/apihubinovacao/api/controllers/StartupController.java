@@ -26,6 +26,7 @@ public class StartupController {
     private final ListAllStartupsUseCase listAllStartupsUseCase;
     private final ListStartupByUserEmailUseCase listStartupByUserEmailUseCase;
     private final UpdateStartupStatusUseCase updateStartupStatusUseCase;
+    private final UpdateStartupDetailsUseCase updateStartupDetailsUseCase;
 
 
 
@@ -36,7 +37,9 @@ public class StartupController {
             ListStartupsForProfessorUseCase listStartupsForProfessorUseCase,
             ListAllStartupsUseCase listAllStartupsUseCase,
             ListStartupByUserEmailUseCase listStartupByUserEmailUseCase,
-            UpdateStartupStatusUseCase updateStartupStatusUseCase)
+            UpdateStartupStatusUseCase updateStartupStatusUseCase,
+            UpdateStartupDetailsUseCase updateStartupDetailsUseCase
+            )
     {
         this.listStartupsForStudentUseCase = listStartupsForStudentUseCase;
         this.createStartupForStudent = createStartupForStudent;
@@ -45,7 +48,7 @@ public class StartupController {
         this.listAllStartupsUseCase = listAllStartupsUseCase;
         this.listStartupByUserEmailUseCase = listStartupByUserEmailUseCase;
         this.updateStartupStatusUseCase = updateStartupStatusUseCase;
-
+        this.updateStartupDetailsUseCase = updateStartupDetailsUseCase;
     }
 
     @PreAuthorize("hasAnyRole('STUDENT')")
@@ -96,6 +99,15 @@ public class StartupController {
         updateStartupStatusUseCase.execute(startupId, dto);
         return ResponseEntity.noContent().build();
 
+    }
+
+    @PreAuthorize("hasAnyRole('PROFESSOR','STUDENT')")
+    @PutMapping("/{startupId}/details")
+    public ResponseEntity<Void> updateStartupDetails(
+            @PathVariable Long startupId,
+            @RequestBody UpdateStartupDetailsDTO updateDTO) {
+        updateStartupDetailsUseCase.execute(startupId, updateDTO);
+        return ResponseEntity.noContent().build();
     }
 
 

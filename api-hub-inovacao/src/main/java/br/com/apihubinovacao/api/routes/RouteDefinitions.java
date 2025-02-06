@@ -29,6 +29,7 @@ public class RouteDefinitions {
             "/startup/student/startups",
             "/startup/professor/create",
             "/startup/professor/startups",
+            "/{startupId}/details",
 
 
     };
