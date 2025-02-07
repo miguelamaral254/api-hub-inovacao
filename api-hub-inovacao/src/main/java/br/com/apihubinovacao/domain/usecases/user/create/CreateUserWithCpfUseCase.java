@@ -6,9 +6,11 @@ import br.com.apihubinovacao.domain.dtos.user.UserResponseCpfDTO;
 import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
 import br.com.apihubinovacao.domain.enums.Role;
 import br.com.apihubinovacao.domain.exceptions.BusinessException;
+import br.com.apihubinovacao.domain.models.users.Manager; // Adicionando o import do Manager
 import br.com.apihubinovacao.domain.models.users.Professor;
 import br.com.apihubinovacao.domain.models.users.Student;
 import br.com.apihubinovacao.domain.models.users.User;
+import br.com.apihubinovacao.domain.repositories.ManagerRepository;
 import br.com.apihubinovacao.domain.repositories.ProfessorRepository;
 import br.com.apihubinovacao.domain.repositories.StudentRepository;
 import br.com.apihubinovacao.domain.usecases.phone.create.CreatePhoneUseCase;
@@ -25,21 +27,23 @@ public class CreateUserWithCpfUseCase {
     private final ProfessorRepository professorRepository;
     private final CreatePhoneUseCase createPhoneUseCase;
     private final PasswordEncoder passwordEncoder;
+    private final ManagerRepository managerRepository;
 
     public CreateUserWithCpfUseCase(
             StudentRepository studentRepository,
             ProfessorRepository professorRepository,
             CreatePhoneUseCase createPhoneUseCase,
-            PasswordEncoder passwordEncoder
-    ) {
+            PasswordEncoder passwordEncoder,
+            ManagerRepository managerRepository) {
         this.studentRepository = studentRepository;
         this.professorRepository = professorRepository;
         this.createPhoneUseCase = createPhoneUseCase;
         this.passwordEncoder = passwordEncoder;
+        this.managerRepository = managerRepository;
     }
 
     public UserResponseCpfDTO execute(UserCreateCpfDTO dto) {
-        validateUserInput(dto.email(), dto.password(), dto.cpf(), dto.registration());
+        validateUserInput(dto.email(), dto.password(), dto.cpf(), dto.registration(), dto.role());
 
         User user = createUserInstance(dto);
         setCommonFields(user, dto);
@@ -48,7 +52,7 @@ public class CreateUserWithCpfUseCase {
         return saveAndReturn(savedUser, dto);
     }
 
-    private void validateUserInput(String email, String password, String cpf, String registration) {
+    private void validateUserInput(String email, String password, String cpf, String registration, Role role) {
         if (email == null || email.isEmpty()) throw new BusinessException(ErrorCodeEnum.INVALID_EMAIL);
         if (password == null || password.isEmpty()) throw new BusinessException(ErrorCodeEnum.INVALID_PASSWORD);
         if (cpf == null || cpf.isEmpty()) throw new BusinessException(ErrorCodeEnum.INVALID_CPF);
@@ -65,6 +69,11 @@ public class CreateUserWithCpfUseCase {
         if (studentRepository.findByRegistration(registration).isPresent() || professorRepository.findByRegistration(registration).isPresent()) {
             throw new BusinessException(ErrorCodeEnum.DUPLICATE_REGISTRATION);
         }
+
+        // Verificar se a role é válida
+        if (role == null || !Role.MANAGER.equals(role) && !Role.STUDENT.equals(role) && !Role.PROFESSOR.equals(role)) {
+            throw new BusinessException(ErrorCodeEnum.INVALID_ROLE);
+        }
     }
 
     private User createUserInstance(UserCreateCpfDTO dto) {
@@ -76,6 +85,11 @@ public class CreateUserWithCpfUseCase {
             Professor professor = new Professor();
             professor.setCpf(dto.cpf());
             return professor;
+        } else if (dto.role() == Role.MANAGER) {
+            // Criação de um manager
+            Manager manager = new Manager();
+            manager.setCpf(dto.cpf());
+            return manager;
         } else {
             throw new BusinessException(ErrorCodeEnum.INVALID_ROLE);
         }
@@ -96,7 +110,13 @@ public class CreateUserWithCpfUseCase {
 
     private User saveUser(User user) {
         if (user instanceof Student) return studentRepository.save((Student) user);
-        else return professorRepository.save((Professor) user);
+        else if (user instanceof Professor) return professorRepository.save((Professor) user);
+        else if (user instanceof Manager) {
+            // Salvar Manager
+            return managerRepository.save((Manager) user);
+        } else {
+            throw new BusinessException(ErrorCodeEnum.INVALID_ROLE);
+        }
     }
 
     private UserResponseCpfDTO saveAndReturn(User savedUser, UserCreateCpfDTO dto) {
@@ -109,7 +129,8 @@ public class CreateUserWithCpfUseCase {
                 savedUser.getRegistration(), savedUser.getRole(),
                 savedUser.getInstitutionOrganization(), savedUser.isUserStatus(),
                 savedUser instanceof Student ? ((Student) savedUser).getCpf() :
-                        ((Professor) savedUser).getCpf(), phones
+                        savedUser instanceof Professor ? ((Professor) savedUser).getCpf() : ((Manager) savedUser).getCpf(),
+                phones
         );
     }
 }
