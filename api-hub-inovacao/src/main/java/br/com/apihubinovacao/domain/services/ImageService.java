@@ -12,7 +12,7 @@ import java.util.UUID;
 @Service
 public class ImageService {
 
-    private static final String UPLOAD_DIR = "/home/miguel-amaral/api-hub-inovacao/api-hub-inovacao/uploads/";
+    private static final String UPLOAD_DIR = "/app/uploads/";
 
     public String saveImage(MultipartFile file, HttpServletRequest request) throws IOException {
         File directory = new File(UPLOAD_DIR);
