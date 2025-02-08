@@ -9,9 +9,12 @@ import br.com.apihubinovacao.domain.models.projects.AcademicProject;
 import br.com.apihubinovacao.domain.models.projects.Coauthor;
 import br.com.apihubinovacao.domain.repositories.AcademicProjectRepository;
 import br.com.apihubinovacao.domain.repositories.ProfessorRepository;
+import br.com.apihubinovacao.domain.services.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,13 +28,25 @@ public class CreateAcademicProjectForProfessorUseCase {
     @Autowired
     private ProfessorRepository professorRepository;
 
-    public AcademicProjectResponseProfessorDTO execute(AcademicProjectCreateProfessorDTO createDTO) {
+    @Autowired
+    private ImageService imageService;
+
+    public AcademicProjectResponseProfessorDTO execute(AcademicProjectCreateProfessorDTO createDTO, MultipartFile file, HttpServletRequest request) {
         validateCreateDTO(createDTO);
+
+        String imageUrl = null;
+        if (file != null && !file.isEmpty()) {
+            try {
+                imageUrl = imageService.saveImage(file, request);
+            } catch (Exception e) {
+                throw new BusinessException(ErrorCodeEnum.FILE_UPLOAD_FAILED);
+            }
+        }
 
         AcademicProject project = new AcademicProject();
         project.setTitle(createDTO.title());
         project.setDescription(createDTO.description());
-        project.setUrlPhoto(createDTO.urlPhoto());
+        project.setUrlPhoto(imageUrl); // Agora salva a imagem
         project.setPdfLink(createDTO.pdfLink());
         project.setSiteLink(createDTO.siteLink());
         project.setTypeAP(createDTO.typeAP());
@@ -52,7 +67,7 @@ public class CreateAcademicProjectForProfessorUseCase {
                         coauthor.setName(coauthorDTO.name());
                         coauthor.setEmail(coauthorDTO.email());
                         coauthor.setPhone(coauthorDTO.phone());
-                        coauthor.setAcademicProject(project); // Define o projeto como dono do coautor
+                        coauthor.setAcademicProject(project);
                         return coauthor;
                     })
                     .collect(Collectors.toList());
