@@ -33,5 +33,3 @@ build/
 .vscode/
 
 .env
-api-hub-inovacao/.env
-/src/main/resources/application.properties
