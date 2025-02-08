@@ -23,8 +23,7 @@ public class GetAllOpportunitiesUseCase {
                         opportunity.getId(),
                         opportunity.getTitle(),
                         opportunity.getDescription(),
-                        // A URL da foto será o caminho relativo + nome do arquivo
-                        "/uploads/" + opportunity.getUrlPhoto(), // Ajuste aqui
+                        opportunity.getUrlPhoto(),  // ✅ Agora está certo
                         opportunity.getPdfLink(),
                         opportunity.getSiteLink(),
                         opportunity.getTypeBO(),
