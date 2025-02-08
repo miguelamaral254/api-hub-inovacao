@@ -1,16 +1,22 @@
 package br.com.apihubinovacao.api.controllers;
 
 import br.com.apihubinovacao.domain.dtos.projects.*;
+import br.com.apihubinovacao.domain.enums.StatusSolicitation;
+import br.com.apihubinovacao.domain.enums.TypeAP;
+import br.com.apihubinovacao.domain.services.ImageService;
 import br.com.apihubinovacao.domain.usecases.projects.create.CreateAcademicProjectForProfessorUseCase;
 import br.com.apihubinovacao.domain.usecases.projects.create.CreateAcademicProjectForStudentUseCase;
 import br.com.apihubinovacao.domain.usecases.projects.get.*;
 import br.com.apihubinovacao.domain.usecases.projects.update.UpdateAcademicProjectDetailsUseCase;
 import br.com.apihubinovacao.domain.usecases.projects.update.UpdateAcademicProjectStatusUseCase;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -26,6 +32,7 @@ public class ProjectController {
     private final UpdateAcademicProjectStatusUseCase updateAcademicProjectStatusUseCase;
     private final UpdateAcademicProjectDetailsUseCase updateAcademicProjectDetailsUseCase;
     private final ListAllAcademicProjectsForManagerUseCase listAllAcademicProjectsForManagerUseCase;
+    private final ImageService imageService;
 
     @Autowired
     public ProjectController(
@@ -34,7 +41,7 @@ public class ProjectController {
             ListAcademicProjectsForProfessorUseCase listAcademicProjectsForProfessorUseCase,
             ListAcademicProjectsForStudentUseCase listAcademicProjectsForStudentUseCase,
             ListAcademicProjectsByUserEmailUseCase listAcademicProjectsByUserEmailUseCase,
-            ListAllAcademicProjectsUseCase listAllAcademicProjectsUseCase, UpdateAcademicProjectStatusUseCase updateAcademicProjectStatusUseCase, UpdateAcademicProjectDetailsUseCase updateAcademicProjectDetailsUseCase, ListAllAcademicProjectsForManagerUseCase listAllAcademicProjectsForManagerUseCase) { // Novo UseCase
+            ListAllAcademicProjectsUseCase listAllAcademicProjectsUseCase, UpdateAcademicProjectStatusUseCase updateAcademicProjectStatusUseCase, UpdateAcademicProjectDetailsUseCase updateAcademicProjectDetailsUseCase, ListAllAcademicProjectsForManagerUseCase listAllAcademicProjectsForManagerUseCase, ImageService imageService) { // Novo UseCase
         this.createAcademicProjectForProfessorUseCase = createAcademicProjectForProfessorUseCase;
         this.createAcademicProjectForStudentUseCase = createAcademicProjectForStudentUseCase;
         this.listAcademicProjectsForProfessorUseCase = listAcademicProjectsForProfessorUseCase;
@@ -44,21 +51,68 @@ public class ProjectController {
         this.updateAcademicProjectStatusUseCase = updateAcademicProjectStatusUseCase;
         this.updateAcademicProjectDetailsUseCase = updateAcademicProjectDetailsUseCase;
         this.listAllAcademicProjectsForManagerUseCase = listAllAcademicProjectsForManagerUseCase;
+        this.imageService = imageService;
     }
 
     @PreAuthorize("hasAnyRole('USER')")
     @PostMapping("/professor/create")
     public ResponseEntity<AcademicProjectResponseProfessorDTO> createProjectForProfessor(
-            @RequestBody AcademicProjectCreateProfessorDTO dto) {
-        AcademicProjectResponseProfessorDTO createdProject = createAcademicProjectForProfessorUseCase.execute(dto);
+            @RequestParam("title") String title,
+            @RequestParam("description") String description,
+            @RequestParam("urlPhoto") MultipartFile file,
+            @RequestParam("pdfLink") String pdfLink,
+            @RequestParam("siteLink") String siteLink,
+            @RequestParam("typeAP") String typeAP,
+            @RequestParam("authorEmail") String authorEmail,
+            @RequestParam("status") String status,
+            @RequestParam("professorId") long professorId,
+            HttpServletRequest request
+    ) {
+        String imagePath;
+        try {
+            imagePath = imageService.saveImage(file, request);
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body(null);
+        }
+
+        AcademicProjectCreateProfessorDTO projectDTO = new AcademicProjectCreateProfessorDTO(
+                title, description, imagePath, pdfLink, siteLink,
+                TypeAP.valueOf(typeAP), authorEmail, StatusSolicitation.valueOf(status), professorId, null
+        );
+
+        AcademicProjectResponseProfessorDTO createdProject = createAcademicProjectForProfessorUseCase.execute(projectDTO, file, request);
+
         return ResponseEntity.ok(createdProject);
     }
 
     @PreAuthorize("hasAnyRole('USER')")
     @PostMapping("/student/create")
     public ResponseEntity<AcademicProjectResponseStudentDTO> createProjectForStudent(
-            @RequestBody AcademicProjectCreateStudentDTO dto) {
-        AcademicProjectResponseStudentDTO createdProject = createAcademicProjectForStudentUseCase.execute(dto);
+            @RequestParam("title") String title,
+            @RequestParam("description") String description,
+            @RequestParam("urlPhoto") MultipartFile file,
+            @RequestParam("pdfLink") String pdfLink,
+            @RequestParam("siteLink") String siteLink,
+            @RequestParam("typeAP") String typeAP,
+            @RequestParam("authorEmail") String authorEmail,
+            @RequestParam("status") String status,
+            @RequestParam("studentId") long studentId,
+            HttpServletRequest request
+    ) {
+        String imagePath;
+        try {
+            imagePath = imageService.saveImage(file, request);
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body(null);
+        }
+
+        AcademicProjectCreateStudentDTO projectDTO = new AcademicProjectCreateStudentDTO(
+                title, description, imagePath, pdfLink, siteLink,
+                TypeAP.valueOf(typeAP), authorEmail, StatusSolicitation.valueOf(status), studentId, null
+        );
+
+        AcademicProjectResponseStudentDTO createdProject = createAcademicProjectForStudentUseCase.execute(projectDTO, file, request);
+
         return ResponseEntity.ok(createdProject);
     }
 
