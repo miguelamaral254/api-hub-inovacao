@@ -1,6 +1,9 @@
 package br.com.apihubinovacao.api.controllers;
 
 import br.com.apihubinovacao.domain.dtos.OpportunityBank.*;
+import br.com.apihubinovacao.domain.enums.StatusSolicitation;
+import br.com.apihubinovacao.domain.enums.TypeBO;
+import br.com.apihubinovacao.domain.services.ImageService;
 import br.com.apihubinovacao.domain.usecases.opportunitybank.create.CreateOpportunityUseCase;
 import br.com.apihubinovacao.domain.usecases.opportunitybank.get.GetAllOpportunitiesUseCase;
 import br.com.apihubinovacao.domain.usecases.opportunitybank.get.GetApprovedActiveOpportunitiesUseCase;
@@ -11,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -24,24 +29,60 @@ public class OpportunityController {
     private final UpdateOpportunityStatusUseCase updateOpportunityStatusUseCase;
     private final GetApprovedActiveOpportunitiesUseCase getApprovedActiveOpportunitiesUseCase;
     private final UpdateOpportunityDetailsUseCase updateOpportunityDetailsUseCase;
+    private final ImageService imageService;
 
     @Autowired
     public OpportunityController(CreateOpportunityUseCase createOpportunityUseCase,
                                  GetAllOpportunitiesUseCase getAllOpportunitiesUseCase,
                                  GetOpportunitiesByCompanyNameUseCase getOpportunitiesByCompanyNameUseCase,
-                                 UpdateOpportunityStatusUseCase updateOpportunityStatusUseCase, GetApprovedActiveOpportunitiesUseCase getApprovedActiveOpportunitiesUseCase, UpdateOpportunityDetailsUseCase updateOpportunityDetailsUseCase) {
+                                 UpdateOpportunityStatusUseCase updateOpportunityStatusUseCase, GetApprovedActiveOpportunitiesUseCase getApprovedActiveOpportunitiesUseCase, UpdateOpportunityDetailsUseCase updateOpportunityDetailsUseCase, ImageService imageService) {
         this.createOpportunityUseCase = createOpportunityUseCase;
         this.getAllOpportunitiesUseCase = getAllOpportunitiesUseCase;
         this.getOpportunitiesByCompanyNameUseCase = getOpportunitiesByCompanyNameUseCase;
         this.updateOpportunityStatusUseCase = updateOpportunityStatusUseCase;
         this.getApprovedActiveOpportunitiesUseCase = getApprovedActiveOpportunitiesUseCase;
         this.updateOpportunityDetailsUseCase = updateOpportunityDetailsUseCase;
+        this.imageService = imageService;
     }
 
-    // Endpoint para criar uma nova oportunidade
+
+
     @PostMapping("/create")
-    public ResponseEntity<OpportunityResponseDTO> createOpportunity(@RequestBody OpportunityCreateDTO opportunityCreateDTO) {
-        OpportunityResponseDTO createdOpportunity = createOpportunityUseCase.execute(opportunityCreateDTO);
+    public ResponseEntity<OpportunityResponseDTO> createOpportunity(
+            @RequestParam("title") String title,
+            @RequestParam("description") String description,
+            @RequestParam("urlPhoto") MultipartFile file,  // Arquivo da imagem
+            @RequestParam("pdfLink") String pdfLink,
+            @RequestParam("siteLink") String siteLink,
+            @RequestParam("typeBO") String typeBO,
+            @RequestParam("authorEmail") String authorEmail,
+            @RequestParam("status") String status,
+            @RequestParam("flagActive") boolean flagActive,
+            @RequestParam("partnerCompanyId") long partnerCompanyId) {
+
+        // Salvar a imagem primeiro e obter o caminho dela
+        String imagePath;
+        try {
+            imagePath = imageService.saveImage(file);
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body(null);  // Retorna erro caso o upload falhe
+        }
+
+        // Criar DTO com o caminho da imagem salva
+        OpportunityCreateDTO opportunity = new OpportunityCreateDTO(
+                title,
+                description,
+                imagePath,  // Caminho da imagem salva
+                pdfLink,
+                siteLink,
+                TypeBO.valueOf(typeBO),  // Converter string para enum
+                authorEmail,
+                StatusSolicitation.valueOf(status),  // Converter string para enum
+                flagActive,
+                partnerCompanyId
+        );
+
+        OpportunityResponseDTO createdOpportunity = createOpportunityUseCase.execute(opportunity);
         return ResponseEntity.ok(createdOpportunity);
     }
 

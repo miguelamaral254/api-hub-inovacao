@@ -23,7 +23,8 @@ public class GetAllOpportunitiesUseCase {
                         opportunity.getId(),
                         opportunity.getTitle(),
                         opportunity.getDescription(),
-                        opportunity.getUrlPhoto(),
+                        // A URL da foto será o caminho relativo + nome do arquivo
+                        "/uploads/" + opportunity.getUrlPhoto(), // Ajuste aqui
                         opportunity.getPdfLink(),
                         opportunity.getSiteLink(),
                         opportunity.getTypeBO(),
@@ -33,7 +34,6 @@ public class GetAllOpportunitiesUseCase {
                         opportunity.isFlagActive(),
                         opportunity.getPartnerCompany().getId(),
                         opportunity.getPartnerCompany().getInstitutionOrganization()
-
                 ))
                 .collect(Collectors.toList());
     }
