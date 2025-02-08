@@ -12,7 +12,7 @@ import java.util.UUID;
 @Service
 public class ImageService {
 
-    private static final String UPLOAD_DIR = "uploads/";
+    private static final String UPLOAD_DIR = "/home/miguel-amaral/api-hub-inovacao/api-hub-inovacao/uploads/";
 
     public String saveImage(MultipartFile file, HttpServletRequest request) throws IOException {
         File directory = new File(UPLOAD_DIR);
@@ -20,16 +20,21 @@ public class ImageService {
             directory.mkdirs();
         }
 
-        String fileExtension = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+        String originalFileName = file.getOriginalFilename();
+        if (originalFileName == null || !originalFileName.contains(".")) {
+            throw new IOException("Nome de arquivo inválido.");
+        }
+
+        String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
         String fileName = UUID.randomUUID().toString() + fileExtension;
 
-        File imageFile = new File(UPLOAD_DIR + fileName);
+        File imageFile = new File(UPLOAD_DIR, fileName);
 
         try (FileOutputStream fos = new FileOutputStream(imageFile)) {
             fos.write(file.getBytes());
         }
 
-        String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-        return baseUrl + "/uploads/" + fileName;
+        return "https://missaonrf25.pe.senac.br/appevento/uploads/" + fileName;
     }
 }
+

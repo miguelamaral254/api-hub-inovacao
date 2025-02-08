@@ -11,3 +11,5 @@ services:
     environment:
       - JAVA_OPTS=-Xmx512m
     restart: unless-stopped
+    volumes:
+      - /home/miguel-amaral/api-hub-inovacao/api-hub-inovacao/uploads:/app/uploads
