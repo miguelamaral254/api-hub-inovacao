@@ -31,6 +31,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/uploads/**").permitAll() // 🔥 LIBERA O ACESSO PÚBLICO ÀS IMAGENS
                         .requestMatchers(RouteDefinitions.PUBLIC_ROUTES).permitAll()
                         .requestMatchers(RouteDefinitions.USER_ROUTES).hasAnyRole("PROFESSOR", "STUDENT","PARTNER_COMPANY", "ADMIN", "MANAGER")
                         .requestMatchers(RouteDefinitions.COMPANY_ROUTES).hasRole("PARTNER_COMPANY")

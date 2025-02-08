@@ -13,8 +13,8 @@ import br.com.apihubinovacao.domain.services.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.time.LocalDate;
+
 @Service
 public class CreateOpportunityUseCase {
 
@@ -25,17 +25,14 @@ public class CreateOpportunityUseCase {
     private PartnerCompanyRepository partnerCompanyRepository;
 
     @Autowired
-    private ImageService imageService; // Injetando o ImageService
+    private ImageService imageService;
 
     public OpportunityResponseDTO execute(OpportunityCreateDTO opportunityCreateDTO) {
         try {
             OpportunitiesBank opportunity = new OpportunitiesBank();
             opportunity.setTitle(opportunityCreateDTO.title());
             opportunity.setDescription(opportunityCreateDTO.description());
-
-            // Agora, `urlPhoto` já contém o caminho correto salvo no controlador
             opportunity.setUrlPhoto(opportunityCreateDTO.urlPhoto());
-
             opportunity.setPdfLink(opportunityCreateDTO.pdfLink());
             opportunity.setSiteLink(opportunityCreateDTO.siteLink());
             opportunity.setTypeBO(opportunityCreateDTO.typeBO());
@@ -62,6 +59,7 @@ public class CreateOpportunityUseCase {
             throw new BusinessException(ErrorCodeEnum.OPPORTUNITY_CREATION_FAILED);
         }
     }
+
     private OpportunityResponseDTO mapToOpportunityDTO(OpportunitiesBank savedOpportunity) {
         return new OpportunityResponseDTO(
                 savedOpportunity.getId(),

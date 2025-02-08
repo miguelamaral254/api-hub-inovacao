@@ -10,6 +10,7 @@ import br.com.apihubinovacao.domain.usecases.opportunitybank.get.GetApprovedActi
 import br.com.apihubinovacao.domain.usecases.opportunitybank.get.GetOpportunitiesByCompanyNameUseCase;
 import br.com.apihubinovacao.domain.usecases.opportunitybank.update.UpdateOpportunityDetailsUseCase;
 import br.com.apihubinovacao.domain.usecases.opportunitybank.update.UpdateOpportunityStatusUseCase;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -51,42 +52,33 @@ public class OpportunityController {
     public ResponseEntity<OpportunityResponseDTO> createOpportunity(
             @RequestParam("title") String title,
             @RequestParam("description") String description,
-            @RequestParam("urlPhoto") MultipartFile file,  // Arquivo da imagem
+            @RequestParam("urlPhoto") MultipartFile file,
             @RequestParam("pdfLink") String pdfLink,
             @RequestParam("siteLink") String siteLink,
             @RequestParam("typeBO") String typeBO,
             @RequestParam("authorEmail") String authorEmail,
             @RequestParam("status") String status,
             @RequestParam("flagActive") boolean flagActive,
-            @RequestParam("partnerCompanyId") long partnerCompanyId) {
-
-        // Salvar a imagem primeiro e obter o caminho dela
+            @RequestParam("partnerCompanyId") long partnerCompanyId,
+            HttpServletRequest request
+    ) {
         String imagePath;
         try {
-            imagePath = imageService.saveImage(file);
+            imagePath = imageService.saveImage(file, request);
         } catch (IOException e) {
-            return ResponseEntity.status(500).body(null);  // Retorna erro caso o upload falhe
+            return ResponseEntity.status(500).body(null);
         }
 
-        // Criar DTO com o caminho da imagem salva
         OpportunityCreateDTO opportunity = new OpportunityCreateDTO(
-                title,
-                description,
-                imagePath,  // Caminho da imagem salva
-                pdfLink,
-                siteLink,
-                TypeBO.valueOf(typeBO),  // Converter string para enum
-                authorEmail,
-                StatusSolicitation.valueOf(status),  // Converter string para enum
-                flagActive,
-                partnerCompanyId
+                title, description, imagePath, pdfLink, siteLink,
+                TypeBO.valueOf(typeBO), authorEmail, StatusSolicitation.valueOf(status), flagActive, partnerCompanyId
         );
 
         OpportunityResponseDTO createdOpportunity = createOpportunityUseCase.execute(opportunity);
+
         return ResponseEntity.ok(createdOpportunity);
     }
 
-    // Endpoint para buscar todas as oportunidades
     @GetMapping("/all")
     public ResponseEntity<List<OpportunityResponseDTO>> getAllOpportunities() {
         List<OpportunityResponseDTO> opportunities = getAllOpportunitiesUseCase.execute();
