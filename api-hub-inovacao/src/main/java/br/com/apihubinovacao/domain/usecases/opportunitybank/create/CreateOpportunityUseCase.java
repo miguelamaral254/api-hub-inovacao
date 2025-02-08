@@ -9,6 +9,7 @@ import br.com.apihubinovacao.domain.repositories.OpportunitiesBankRepository;
 import br.com.apihubinovacao.domain.repositories.PartnerCompanyRepository;
 import br.com.apihubinovacao.domain.exceptions.BusinessException;
 import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
+import br.com.apihubinovacao.domain.services.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,9 @@ public class CreateOpportunityUseCase {
     @Autowired
     private PartnerCompanyRepository partnerCompanyRepository;
 
+    @Autowired
+    private ImageService imageService;
+
     public OpportunityResponseDTO execute(OpportunityCreateDTO opportunityCreateDTO) {
         try {
             OpportunitiesBank opportunity = new OpportunitiesBank();
@@ -33,11 +37,8 @@ public class CreateOpportunityUseCase {
             opportunity.setSiteLink(opportunityCreateDTO.siteLink());
             opportunity.setTypeBO(opportunityCreateDTO.typeBO());
             opportunity.setAuthorEmail(opportunityCreateDTO.authorEmail());
-
-            opportunity.setStatus(opportunityCreateDTO.status() != null ? opportunityCreateDTO.status() : StatusSolicitation.valueOf("PENDENTE"));
-
-            opportunity.setFlagActive(opportunityCreateDTO.flagActive() ? opportunityCreateDTO.flagActive() : true);
-
+            opportunity.setStatus(opportunityCreateDTO.status() != null ? opportunityCreateDTO.status() : StatusSolicitation.PENDENTE);
+            opportunity.setFlagActive(opportunityCreateDTO.flagActive());
             opportunity.setCreationDate(LocalDate.now());
 
             PartnerCompany partnerCompany = partnerCompanyRepository.findById(opportunityCreateDTO.partnerCompanyId())
@@ -48,7 +49,6 @@ public class CreateOpportunityUseCase {
             }
 
             opportunity.setPartnerCompany(partnerCompany);
-
             OpportunitiesBank savedOpportunity = opportunitiesBankRepository.save(opportunity);
 
             return mapToOpportunityDTO(savedOpportunity);

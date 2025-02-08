@@ -13,6 +13,7 @@ public enum ErrorCodeEnum {
     INVALID_REGISTRATION("Invalid registration number", "ERR-021", 409),
     PARTNER_COMPANY_NOT_FOUND("Partner company not found", "ERR-024", 404),
     EMAIL_DOES_NOT_MATCH("Email does not match", "ERR-025", 409),
+    FILE_UPLOAD_FAILED("Failed to upload", "ERR-030", 400),
 
     // Login
     LOGIN_FAILED("Incorrect Email or Password", "ERR-010", 401),
