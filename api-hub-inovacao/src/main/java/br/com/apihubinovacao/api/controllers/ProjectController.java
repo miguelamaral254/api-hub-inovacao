@@ -105,7 +105,6 @@ public class ProjectController {
         List<?> projects = listAllAcademicProjectsForManagerUseCase.execute();
         return ResponseEntity.ok(projects);
     }
-    @PreAuthorize("hasAnyRole('MANAGER')")
     @PutMapping("/{projectId}/status")
     public ResponseEntity<Void> updateProjectStatus(
             @PathVariable Long projectId,

@@ -34,8 +34,8 @@ public class SecurityConfig {
                         .requestMatchers("/uploads/**").permitAll() // 🔥 LIBERA O ACESSO PÚBLICO ÀS IMAGENS
                         .requestMatchers(RouteDefinitions.PUBLIC_ROUTES).permitAll()
                         .requestMatchers(RouteDefinitions.USER_ROUTES).hasAnyRole("PROFESSOR", "STUDENT","PARTNER_COMPANY", "ADMIN", "MANAGER")
-                        .requestMatchers(RouteDefinitions.COMPANY_ROUTES).hasRole("PARTNER_COMPANY")
-                        .requestMatchers(RouteDefinitions.MANAGERS_ROUTES).hasRole("MANAGER")
+                        .requestMatchers(RouteDefinitions.COMPANY_ROUTES).hasAnyRole("PARTNER_COMPANY" ,"MANAGER","ADMIN")
+                        .requestMatchers(RouteDefinitions.MANAGERS_ROUTES).hasAnyRole("MANAGER","ADMIN")
                         .requestMatchers(RouteDefinitions.ADMIN_ROUTES).hasRole("ADMIN")
 
                         .anyRequest().authenticated()

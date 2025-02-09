@@ -15,7 +15,9 @@ public class RouteDefinitions {
             "/opportunities/all",
             "/users/all-platform-users",
             "/startup/all",
-            "publish/{publishId}/update"
+            "publish/{publishId}/update",
+            "/publish/create",
+
 
 
 
@@ -47,7 +49,6 @@ public class RouteDefinitions {
     public static final String[]  MANAGERS_ROUTES = {
             "/projects/{projectId}/status",
             "/opportunities/{opportunityId}/status",
-            "/publish/create",
             "/projects/manager/all",
             "/startup/by-email",
             "/startup/{startupId}/status"
