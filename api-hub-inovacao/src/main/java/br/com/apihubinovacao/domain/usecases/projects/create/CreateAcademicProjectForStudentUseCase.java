@@ -11,9 +11,13 @@ import br.com.apihubinovacao.domain.models.projects.AcademicProject;
 import br.com.apihubinovacao.domain.models.projects.Coauthor;
 import br.com.apihubinovacao.domain.repositories.AcademicProjectRepository;
 import br.com.apihubinovacao.domain.repositories.StudentRepository;
+import br.com.apihubinovacao.domain.services.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,26 +31,28 @@ public class CreateAcademicProjectForStudentUseCase {
     @Autowired
     private StudentRepository studentRepository;
 
-    public AcademicProjectResponseStudentDTO execute(AcademicProjectCreateStudentDTO createDTO) {
+    @Autowired
+    private ImageService imageService;
+
+    public AcademicProjectResponseStudentDTO execute(AcademicProjectCreateStudentDTO createDTO, MultipartFile imageFile, HttpServletRequest request) {
         validateCreateDTO(createDTO);
 
         AcademicProject project = new AcademicProject();
         project.setTitle(createDTO.title());
         project.setDescription(createDTO.description());
-        project.setUrlPhoto(createDTO.urlPhoto());
         project.setPdfLink(createDTO.pdfLink());
         project.setSiteLink(createDTO.siteLink());
         project.setTypeAP(createDTO.typeAP());
         project.setAuthorEmail(createDTO.userEmail());
         project.setStatus(createDTO.status());
         project.setCreationDate(LocalDate.now());
-        // Inicializa os novos campos como null (ou com valores padrão, se necessário)
         project.setFeedback(null);
         project.setJustification(null);
         project.setIdManager(null);
 
         project.setStudent(studentRepository.findById(createDTO.studentId())
                 .orElseThrow(() -> new BusinessException(ErrorCodeEnum.USER_NOT_FOUND)));
+
         if (createDTO.coauthors() != null) {
             List<Coauthor> coauthors = createDTO.coauthors().stream()
                     .map(coauthorDTO -> {
@@ -59,6 +65,16 @@ public class CreateAcademicProjectForStudentUseCase {
                     })
                     .collect(Collectors.toList());
             project.setCoauthors(coauthors);
+        }
+
+        // Processamento da imagem e salvamento do URL
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                String imageUrl = imageService.saveImage(imageFile, request);
+                project.setUrlPhoto(imageUrl);
+            } catch (IOException e) {
+                throw new BusinessException(ErrorCodeEnum.FILE_UPLOAD_FAILED);
+            }
         }
 
         AcademicProject savedProject = academicProjectRepository.save(project);

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,22 +32,12 @@ public class CreateAcademicProjectForProfessorUseCase {
     @Autowired
     private ImageService imageService;
 
-    public AcademicProjectResponseProfessorDTO execute(AcademicProjectCreateProfessorDTO createDTO, MultipartFile file, HttpServletRequest request) {
+    public AcademicProjectResponseProfessorDTO execute(AcademicProjectCreateProfessorDTO createDTO, MultipartFile imageFile, HttpServletRequest request) {
         validateCreateDTO(createDTO);
-
-        String imageUrl = null;
-        if (file != null && !file.isEmpty()) {
-            try {
-                imageUrl = imageService.saveImage(file, request);
-            } catch (Exception e) {
-                throw new BusinessException(ErrorCodeEnum.FILE_UPLOAD_FAILED);
-            }
-        }
 
         AcademicProject project = new AcademicProject();
         project.setTitle(createDTO.title());
         project.setDescription(createDTO.description());
-        project.setUrlPhoto(imageUrl); // Agora salva a imagem
         project.setPdfLink(createDTO.pdfLink());
         project.setSiteLink(createDTO.siteLink());
         project.setTypeAP(createDTO.typeAP());
@@ -72,6 +63,16 @@ public class CreateAcademicProjectForProfessorUseCase {
                     })
                     .collect(Collectors.toList());
             project.setCoauthors(coauthors);
+        }
+
+        // Processamento da imagem e salvamento do URL
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                String imageUrl = imageService.saveImage(imageFile, request);
+                project.setUrlPhoto(imageUrl);
+            } catch (IOException e) {
+                throw new BusinessException(ErrorCodeEnum.FILE_UPLOAD_FAILED);
+            }
         }
 
         AcademicProject savedProject = academicProjectRepository.save(project);
