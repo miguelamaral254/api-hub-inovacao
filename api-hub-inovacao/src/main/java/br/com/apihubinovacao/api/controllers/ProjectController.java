@@ -54,43 +54,24 @@ public class ProjectController {
         this.imageService = imageService;
     }
 
-    @PreAuthorize("hasAnyRole('USER')")
-    @PostMapping("/professor/create")
+    @PostMapping(value = "/professor/create", consumes = {"multipart/form-data"})
     public ResponseEntity<AcademicProjectResponseProfessorDTO> createProjectForProfessor(
-            @RequestParam("title") String title,
-            @RequestParam("description") String description,
-            @RequestParam("urlPhoto") MultipartFile file,
-            @RequestParam("pdfLink") String pdfLink,
-            @RequestParam("siteLink") String siteLink,
-            @RequestParam("typeAP") String typeAP,
-            @RequestParam("authorEmail") String authorEmail,
-            @RequestParam("status") String status,
-            @RequestParam("professorId") long professorId,
-            HttpServletRequest request
-    ) {
-        String imagePath;
-        try {
-            imagePath = imageService.saveImage(file, request);
-        } catch (IOException e) {
-            return ResponseEntity.status(500).body(null);
-        }
+            @RequestPart("dto") AcademicProjectCreateProfessorDTO dto,
+            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile,
+            HttpServletRequest request) {
 
-        AcademicProjectCreateProfessorDTO projectDTO = new AcademicProjectCreateProfessorDTO(
-                title, description, imagePath, pdfLink, siteLink,
-                TypeAP.valueOf(typeAP), authorEmail, StatusSolicitation.valueOf(status), professorId, null
-        );
-
-        AcademicProjectResponseProfessorDTO createdProject = createAcademicProjectForProfessorUseCase.execute(projectDTO, file, request);
-
+        AcademicProjectResponseProfessorDTO createdProject = createAcademicProjectForProfessorUseCase.execute(dto, imageFile, request);
         return ResponseEntity.ok(createdProject);
     }
 
-    @PostMapping("/student/create")
+    @PostMapping(value = "/student/create", consumes = {"multipart/form-data"})
     public ResponseEntity<AcademicProjectResponseStudentDTO> createProjectForStudent(
-            @RequestBody AcademicProjectCreateStudentDTO dto) {
-        AcademicProjectResponseStudentDTO createdProject = createAcademicProjectForStudentUseCase.execute(dto);
-        return ResponseEntity.ok(createdProject);
+            @RequestPart("dto") AcademicProjectCreateStudentDTO dto,
+            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile,
+            HttpServletRequest request) {
 
+        AcademicProjectResponseStudentDTO createdProject = createAcademicProjectForStudentUseCase.execute(dto, imageFile, request);
+        return ResponseEntity.ok(createdProject);
     }
 
     @PreAuthorize("hasAnyRole('PROFESSOR','ADMIN', 'MANAGERS')")

@@ -12,7 +12,8 @@ import java.util.UUID;
 @Service
 public class ImageService {
 
-    private static final String UPLOAD_DIR = "/app/uploads/";
+    // private static final String UPLOAD_DIR = "/app/uploads/";
+    private static final String UPLOAD_DIR = "uploads/";
 
     public String saveImage(MultipartFile file, HttpServletRequest request) throws IOException {
         File directory = new File(UPLOAD_DIR);
@@ -34,7 +35,10 @@ public class ImageService {
             fos.write(file.getBytes());
         }
 
-        return "https://missaonrf25.pe.senac.br/appevento/uploads/" + fileName;
+        // Obtém o esquema (http ou https) e o host (ex: localhost:8080 ou domínio real)
+        String baseUrl = request.getScheme() + "://" + request.getServerName() +
+                (request.getServerPort() != 80 && request.getServerPort() != 443 ? ":" + request.getServerPort() : "");
+
+        return baseUrl + "/uploads/" + fileName;
     }
 }
-
