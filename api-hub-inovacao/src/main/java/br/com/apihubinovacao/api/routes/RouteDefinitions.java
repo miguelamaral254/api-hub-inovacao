@@ -16,7 +16,6 @@ public class RouteDefinitions {
             "/users/all-platform-users",
             "/startup/all",
             "publish/{publishId}/update",
-            "/publish/create",
 
 
 
@@ -51,7 +50,9 @@ public class RouteDefinitions {
             "/opportunities/{opportunityId}/status",
             "/projects/manager/all",
             "/startup/by-email",
-            "/startup/{startupId}/status"
+            "/startup/{startupId}/status",
+            "/publish/create",
+
 
 
     };

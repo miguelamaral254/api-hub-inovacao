@@ -1,5 +1,6 @@
 package br.com.apihubinovacao.domain.models;
 
+import br.com.apihubinovacao.domain.models.users.Admin;
 import br.com.apihubinovacao.domain.models.users.Manager;
 import jakarta.persistence.*;
 
@@ -24,6 +25,10 @@ public class Publish {
     @ManyToOne
     @JoinColumn(name = "manager_id")
     private Manager manager;
+
+    @ManyToOne
+    @JoinColumn(name = "admin_id", nullable = true)
+    private Admin admin;
 
 
     public Long getId() {
@@ -89,6 +94,15 @@ public class Publish {
     public void setManager(Manager manager) {
         this.manager = manager;
     }
+
+    public Admin getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Admin admin) {
+        this.admin = admin;
+    }
+
 
     public LocalDate getPublishedDate() {
         return publishedDate;

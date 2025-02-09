@@ -6,9 +6,11 @@ import br.com.apihubinovacao.domain.dtos.publish.UpdatePublishDetailsDTO;
 import br.com.apihubinovacao.domain.usecases.publish.CreatePublishForManagerUseCase;
 import br.com.apihubinovacao.domain.usecases.publish.ListAllPublishUseCase;
 import br.com.apihubinovacao.domain.usecases.publish.UpdatePublishDetailsUseCase;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -29,12 +31,16 @@ public class PublishController {
         this.updatePublishDetailsUseCase = updatePublishDetailsUseCase;
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<PublishResponseDTO> createPublish(@RequestBody PublishCreateDTO publishCreateDTO) {
-        PublishResponseDTO createdPublish = createPublishForManagerUseCase.execute(publishCreateDTO);
+
+    @PostMapping(value = "/create", consumes = {"multipart/form-data"})
+    public ResponseEntity<PublishResponseDTO> createPublish(
+            @RequestPart("dto") PublishCreateDTO publishCreateDTO,
+            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile,
+            HttpServletRequest request) {
+
+        PublishResponseDTO createdPublish = createPublishForManagerUseCase.execute(publishCreateDTO, imageFile, request);
         return ResponseEntity.ok(createdPublish);
     }
-
     @GetMapping("/all")
     public ResponseEntity<List<PublishResponseDTO>> getAllPublish() {
         List<PublishResponseDTO> publishs = listAllPublishUseCase.execute();
