@@ -85,35 +85,12 @@ public class ProjectController {
         return ResponseEntity.ok(createdProject);
     }
 
-    @PreAuthorize("hasAnyRole('USER')")
     @PostMapping("/student/create")
     public ResponseEntity<AcademicProjectResponseStudentDTO> createProjectForStudent(
-            @RequestParam("title") String title,
-            @RequestParam("description") String description,
-            @RequestParam("urlPhoto") MultipartFile file,
-            @RequestParam("pdfLink") String pdfLink,
-            @RequestParam("siteLink") String siteLink,
-            @RequestParam("typeAP") String typeAP,
-            @RequestParam("authorEmail") String authorEmail,
-            @RequestParam("status") String status,
-            @RequestParam("studentId") long studentId,
-            HttpServletRequest request
-    ) {
-        String imagePath;
-        try {
-            imagePath = imageService.saveImage(file, request);
-        } catch (IOException e) {
-            return ResponseEntity.status(500).body(null);
-        }
-
-        AcademicProjectCreateStudentDTO projectDTO = new AcademicProjectCreateStudentDTO(
-                title, description, imagePath, pdfLink, siteLink,
-                TypeAP.valueOf(typeAP), authorEmail, StatusSolicitation.valueOf(status), studentId, null
-        );
-
-        AcademicProjectResponseStudentDTO createdProject = createAcademicProjectForStudentUseCase.execute(projectDTO, file, request);
-
+            @RequestBody AcademicProjectCreateStudentDTO dto) {
+        AcademicProjectResponseStudentDTO createdProject = createAcademicProjectForStudentUseCase.execute(dto);
         return ResponseEntity.ok(createdProject);
+
     }
 
     @PreAuthorize("hasAnyRole('PROFESSOR','ADMIN', 'MANAGERS')")
