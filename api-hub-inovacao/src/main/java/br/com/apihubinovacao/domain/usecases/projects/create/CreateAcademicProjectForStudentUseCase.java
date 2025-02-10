@@ -22,6 +22,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.transaction.annotation.Transactional;
+
 @Service
 public class CreateAcademicProjectForStudentUseCase {
 
@@ -34,6 +36,7 @@ public class CreateAcademicProjectForStudentUseCase {
     @Autowired
     private ImageService imageService;
 
+    @Transactional
     public AcademicProjectResponseStudentDTO execute(AcademicProjectCreateStudentDTO createDTO, MultipartFile imageFile, HttpServletRequest request) {
         validateCreateDTO(createDTO);
 
@@ -50,9 +53,11 @@ public class CreateAcademicProjectForStudentUseCase {
         project.setJustification(null);
         project.setIdManager(null);
 
+        // Encontrar estudante
         project.setStudent(studentRepository.findById(createDTO.studentId())
                 .orElseThrow(() -> new BusinessException(ErrorCodeEnum.USER_NOT_FOUND)));
 
+        // Adicionar coautores
         if (createDTO.coauthors() != null) {
             List<Coauthor> coauthors = createDTO.coauthors().stream()
                     .map(coauthorDTO -> {
@@ -77,8 +82,10 @@ public class CreateAcademicProjectForStudentUseCase {
             }
         }
 
+        // Salvando o projeto acadêmico
         AcademicProject savedProject = academicProjectRepository.save(project);
 
+        // Retornando o DTO de resposta
         return new AcademicProjectResponseStudentDTO(
                 savedProject.getId(),
                 savedProject.getTitle(),

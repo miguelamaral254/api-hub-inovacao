@@ -15,6 +15,7 @@ import br.com.apihubinovacao.domain.services.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -65,7 +66,7 @@ public class CreatePublishForManagerUseCase {
             throw new BusinessException(ErrorCodeEnum.INVALID_PUBLISH_DATE_RANGE);
         }
     }
-
+@Transactional
     public PublishResponseDTO execute(PublishCreateDTO publishCreateDTO, MultipartFile imageFile, HttpServletRequest request) {
         // ✅ Validação do DTO
         validateCreatePublish(publishCreateDTO);

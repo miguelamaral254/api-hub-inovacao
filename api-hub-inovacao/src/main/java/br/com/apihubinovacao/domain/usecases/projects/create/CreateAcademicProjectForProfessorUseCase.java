@@ -12,6 +12,7 @@ import br.com.apihubinovacao.domain.repositories.ProfessorRepository;
 import br.com.apihubinovacao.domain.services.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,6 +33,7 @@ public class CreateAcademicProjectForProfessorUseCase {
     @Autowired
     private ImageService imageService;
 
+    @Transactional
     public AcademicProjectResponseProfessorDTO execute(AcademicProjectCreateProfessorDTO createDTO, MultipartFile imageFile, HttpServletRequest request) {
         validateCreateDTO(createDTO);
 
@@ -65,7 +67,6 @@ public class CreateAcademicProjectForProfessorUseCase {
             project.setCoauthors(coauthors);
         }
 
-        // Processamento da imagem e salvamento do URL
         if (imageFile != null && !imageFile.isEmpty()) {
             try {
                 String imageUrl = imageService.saveImage(imageFile, request);
