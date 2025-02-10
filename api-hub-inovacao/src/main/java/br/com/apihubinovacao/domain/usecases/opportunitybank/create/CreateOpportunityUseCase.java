@@ -10,9 +10,13 @@ import br.com.apihubinovacao.domain.repositories.PartnerCompanyRepository;
 import br.com.apihubinovacao.domain.exceptions.BusinessException;
 import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
 import br.com.apihubinovacao.domain.services.ImageService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 
 @Service
@@ -27,36 +31,58 @@ public class CreateOpportunityUseCase {
     @Autowired
     private ImageService imageService;
 
-    public OpportunityResponseDTO execute(OpportunityCreateDTO opportunityCreateDTO) {
-        try {
-            OpportunitiesBank opportunity = new OpportunitiesBank();
-            opportunity.setTitle(opportunityCreateDTO.title());
-            opportunity.setDescription(opportunityCreateDTO.description());
-            opportunity.setUrlPhoto(opportunityCreateDTO.urlPhoto());
-            opportunity.setPdfLink(opportunityCreateDTO.pdfLink());
-            opportunity.setSiteLink(opportunityCreateDTO.siteLink());
-            opportunity.setTypeBO(opportunityCreateDTO.typeBO());
-            opportunity.setAuthorEmail(opportunityCreateDTO.authorEmail());
-            opportunity.setStatus(opportunityCreateDTO.status() != null ? opportunityCreateDTO.status() : StatusSolicitation.PENDENTE);
-            opportunity.setFlagActive(opportunityCreateDTO.flagActive());
-            opportunity.setCreationDate(LocalDate.now());
+    @Transactional
+    public OpportunityResponseDTO execute(OpportunityCreateDTO opportunityCreateDTO, MultipartFile imageFile, HttpServletRequest request) {
+        validateOpportunity(opportunityCreateDTO);
 
-            PartnerCompany partnerCompany = partnerCompanyRepository.findById(opportunityCreateDTO.partnerCompanyId())
-                    .orElseThrow(() -> new BusinessException(ErrorCodeEnum.PARTNER_COMPANY_NOT_FOUND));
+        PartnerCompany partnerCompany = partnerCompanyRepository.findById(opportunityCreateDTO.partnerCompanyId())
+                .orElseThrow(() -> new BusinessException(ErrorCodeEnum.PARTNER_COMPANY_NOT_FOUND));
 
-            if (!partnerCompany.getEmail().equals(opportunityCreateDTO.authorEmail())) {
-                throw new BusinessException(ErrorCodeEnum.EMAIL_DOES_NOT_MATCH);
+        if (!partnerCompany.getEmail().equals(opportunityCreateDTO.authorEmail())) {
+            throw new BusinessException(ErrorCodeEnum.EMAIL_DOES_NOT_MATCH);
+        }
+
+        String imageUrl = null;
+        if (imageFile != null && !imageFile.isEmpty()) {
+            if (imageFile.getSize() > 5 * 1024 * 1024) {
+                throw new BusinessException(ErrorCodeEnum.IMAGE_SIZE_EXCEEDED);
             }
+            try {
+                imageUrl = imageService.saveImage(imageFile, request);
+            } catch (IOException e) {
+                throw new BusinessException(ErrorCodeEnum.FILE_UPLOAD_FAILED);
+            }
+        }
 
-            opportunity.setPartnerCompany(partnerCompany);
-            OpportunitiesBank savedOpportunity = opportunitiesBankRepository.save(opportunity);
+        OpportunitiesBank opportunity = new OpportunitiesBank();
+        opportunity.setTitle(opportunityCreateDTO.title());
+        opportunity.setDescription(opportunityCreateDTO.description());
+        opportunity.setUrlPhoto(imageUrl);
+        opportunity.setPdfLink(opportunityCreateDTO.pdfLink());
+        opportunity.setSiteLink(opportunityCreateDTO.siteLink());
+        opportunity.setTypeBO(opportunityCreateDTO.typeBO());
+        opportunity.setAuthorEmail(opportunityCreateDTO.authorEmail());
+        opportunity.setStatus(opportunityCreateDTO.status() != null ? opportunityCreateDTO.status() : StatusSolicitation.PENDENTE);
+        opportunity.setFlagActive(opportunityCreateDTO.flagActive());
+        opportunity.setCreationDate(LocalDate.now());
+        opportunity.setPartnerCompany(partnerCompany);
 
-            return mapToOpportunityDTO(savedOpportunity);
+        OpportunitiesBank savedOpportunity = opportunitiesBankRepository.save(opportunity);
+        return mapToOpportunityDTO(savedOpportunity);
+    }
 
-        } catch (BusinessException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new BusinessException(ErrorCodeEnum.OPPORTUNITY_CREATION_FAILED);
+    private void validateOpportunity(OpportunityCreateDTO opportunityCreateDTO) {
+        if (opportunityCreateDTO == null) {
+            throw new BusinessException(ErrorCodeEnum.INVALID_OPPORTUNITY_DATA);
+        }
+        if (opportunityCreateDTO.title() == null || opportunityCreateDTO.title().trim().isEmpty()) {
+            throw new BusinessException(ErrorCodeEnum.INVALID_OPPORTUNITY_TITLE);
+        }
+        if (opportunityCreateDTO.description() == null || opportunityCreateDTO.description().trim().isEmpty()) {
+            throw new BusinessException(ErrorCodeEnum.INVALID_OPPORTUNITY_DESCRIPTION);
+        }
+        if (opportunityCreateDTO.partnerCompanyId() == null) {
+            throw new BusinessException(ErrorCodeEnum.INVALID_PARTNER_COMPANY);
         }
     }
 

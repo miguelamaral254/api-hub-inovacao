@@ -37,27 +37,40 @@ public class CreatePublishForManagerUseCase {
 
     @Autowired
     private ImageService imageService;
+
     @Autowired
     private AdminRepository adminRepository;
 
-    //Validação do DTO
-    public void validationCreatePublish(PublishCreateDTO publishCreateDTO) {
-        if (publishCreateDTO.title() == null || publishCreateDTO.title().isEmpty()) {
-            throw new BusinessException(ErrorCodeEnum.INVALID_REQUEST);
+    // 🔍 Enhanced DTO validation
+    private void validateCreatePublish(PublishCreateDTO publishCreateDTO) {
+        if (publishCreateDTO == null) {
+            throw new BusinessException(ErrorCodeEnum. INVALID_PUBLISH_DATA);
         }
-
-        if (publishCreateDTO.acessLink() == null || publishCreateDTO.acessLink().isEmpty()) {
-            throw new BusinessException(ErrorCodeEnum.INVALID_REQUEST);
+        if (publishCreateDTO.title() == null || publishCreateDTO.title().trim().isEmpty()) {
+            throw new BusinessException(ErrorCodeEnum.INVALID_PUBLISH_TITLE);
         }
-
-        if (publishCreateDTO.description() == null || publishCreateDTO.description().isEmpty()) {
-            throw new BusinessException(ErrorCodeEnum.INVALID_REQUEST);
+        if (publishCreateDTO.description() == null || publishCreateDTO.description().trim().isEmpty()) {
+            throw new BusinessException(ErrorCodeEnum.INVALID_PUBLISH_DESCRIPTION);
+        }
+        if (publishCreateDTO.acessLink() == null || publishCreateDTO.acessLink().trim().isEmpty()) {
+            throw new BusinessException(ErrorCodeEnum.INVALID_PUBLISH_ACCESS_LINK);
+        }
+        if (publishCreateDTO.initialDate() == null) {
+            throw new BusinessException(ErrorCodeEnum.INVALID_PUBLISH_INITIAL_DATE);
+        }
+        if (publishCreateDTO.finalDate() == null) {
+            throw new BusinessException(ErrorCodeEnum.INVALID_PUBLISH_FINAL_DATE);
+        }
+        if (publishCreateDTO.finalDate().isBefore(publishCreateDTO.initialDate())) {
+            throw new BusinessException(ErrorCodeEnum.INVALID_PUBLISH_DATE_RANGE);
         }
     }
 
     public PublishResponseDTO execute(PublishCreateDTO publishCreateDTO, MultipartFile imageFile, HttpServletRequest request) {
-        validationCreatePublish(publishCreateDTO);
+        // ✅ Validação do DTO
+        validateCreatePublish(publishCreateDTO);
 
+        // ✅ Validação do Token
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             throw new BusinessException(ErrorCodeEnum.INVALID_TOKEN);
@@ -66,19 +79,19 @@ public class CreatePublishForManagerUseCase {
         String token = authHeader.replace("Bearer ", "");
         String email = jwtService.extractEmail(token);
 
-        // 🔍 Buscar o usuário tanto na tabela `Manager` quanto na `Admin`
+        // ✅ Verificar se o usuário é Admin ou Manager
         Manager manager = managerRepository.findByEmail(email).orElse(null);
         Admin admin = adminRepository.findByEmail(email).orElse(null);
 
         if (manager == null && admin == null) {
-            System.out.println("❌ Nenhum Manager ou Admin encontrado para o e-mail: " + email);
             throw new BusinessException(ErrorCodeEnum.INVALID_ROLE);
         }
 
-        System.out.println("✅ Usuário autorizado: " + (manager != null ? "Manager: " + manager.getName() : "Admin: " + admin.getName()));
-
         String imageUrl = null;
         if (imageFile != null && !imageFile.isEmpty()) {
+            if (imageFile.getSize() > 5 * 1024 * 1024) {
+                throw new BusinessException(ErrorCodeEnum.IMAGE_SIZE_EXCEEDED);
+            }
             try {
                 imageUrl = imageService.saveImage(imageFile, request);
             } catch (IOException e) {
@@ -86,6 +99,7 @@ public class CreatePublishForManagerUseCase {
             }
         }
 
+        // ✅ Criar nova publicação
         Publish publish = new Publish();
         publish.setTitle(publishCreateDTO.title());
         publish.setDescription(publishCreateDTO.description());
@@ -95,10 +109,10 @@ public class CreatePublishForManagerUseCase {
         publish.setFinalDate(publishCreateDTO.finalDate());
         publish.setPublishedDate(LocalDate.now());
 
-        // ✅ Definir o Manager ou Admin como responsável
+        // ✅ Definir quem criou a publicação
         if (manager != null) {
             publish.setManager(manager);
-        } else if (admin != null) {
+        } else {
             publish.setAdmin(admin);
         }
 
@@ -114,4 +128,5 @@ public class CreatePublishForManagerUseCase {
                 savedPublish.getFinalDate(),
                 savedPublish.getPublishedDate()
         );
-    }}
+    }
+}

@@ -46,36 +46,13 @@ public class OpportunityController {
         this.imageService = imageService;
     }
 
-
-
-    @PostMapping("/create")
+    @PostMapping(value = "/create", consumes = {"multipart/form-data"})
     public ResponseEntity<OpportunityResponseDTO> createOpportunity(
-            @RequestParam("title") String title,
-            @RequestParam("description") String description,
-            @RequestParam("urlPhoto") MultipartFile file,
-            @RequestParam("pdfLink") String pdfLink,
-            @RequestParam("siteLink") String siteLink,
-            @RequestParam("typeBO") String typeBO,
-            @RequestParam("authorEmail") String authorEmail,
-            @RequestParam("status") String status,
-            @RequestParam("flagActive") boolean flagActive,
-            @RequestParam("partnerCompanyId") long partnerCompanyId,
-            HttpServletRequest request
-    ) {
-        String imagePath;
-        try {
-            imagePath = imageService.saveImage(file, request);
-        } catch (IOException e) {
-            return ResponseEntity.status(500).body(null);
-        }
+            @RequestPart("dto") OpportunityCreateDTO opportunityCreateDTO,
+            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile,
+            HttpServletRequest request) {
 
-        OpportunityCreateDTO opportunity = new OpportunityCreateDTO(
-                title, description, imagePath, pdfLink, siteLink,
-                TypeBO.valueOf(typeBO), authorEmail, StatusSolicitation.valueOf(status), flagActive, partnerCompanyId
-        );
-
-        OpportunityResponseDTO createdOpportunity = createOpportunityUseCase.execute(opportunity);
-
+        OpportunityResponseDTO createdOpportunity = createOpportunityUseCase.execute(opportunityCreateDTO, imageFile, request);
         return ResponseEntity.ok(createdOpportunity);
     }
 

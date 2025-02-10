@@ -14,6 +14,7 @@ public enum ErrorCodeEnum {
     PARTNER_COMPANY_NOT_FOUND("Partner company not found", "ERR-024", 404),
     EMAIL_DOES_NOT_MATCH("Email does not match", "ERR-025", 409),
     FILE_UPLOAD_FAILED("Failed to upload", "ERR-030", 400),
+    IMAGE_SIZE_EXCEEDED("The image size exceeds the maximum limit of 5MB.", "ERR-046", 400),
 
     // Login
     LOGIN_FAILED("Incorrect Email or Password", "ERR-010", 401),
@@ -35,9 +36,22 @@ public enum ErrorCodeEnum {
     OPPORTUNITY_NOT_FOUND("Opportunity not found", "ERR-030", 404),
     OPPORTUNITY_CREATION_FAILED("Failed to create opportunity", "ERR-031", 500),
     OPPORTUNITY_UPDATE_FAILED("Failed to update opportunity", "ERR-032", 500),
+    INVALID_OPPORTUNITY_DATA("The opportunity data is missing or incomplete", "ERR-060", 400),
+    INVALID_OPPORTUNITY_TITLE("The opportunity title is required", "ERR-061", 400),
+    INVALID_OPPORTUNITY_DESCRIPTION("The opportunity description is required", "ERR-062", 400),
+    INVALID_PARTNER_COMPANY("A valid partner company is required for this opportunity", "ERR-063", 400),
     // CNPJ e CPF
     INVALID_CNPJ("Invalid CNPJ format or missing", "ERR-009", 400),
     INVALID_CPF("Invalid CPF format or missing", "ERR-011", 400),
+    // Errors related to Publish
+// Errors related to Publish
+    INVALID_PUBLISH_DATA("The publish data is missing.", "ERR-039", 400),
+    INVALID_PUBLISH_TITLE("The publish title is required.", "ERR-040", 400),
+    INVALID_PUBLISH_DESCRIPTION("The publish description is required.", "ERR-041", 400),
+    INVALID_PUBLISH_ACCESS_LINK("The publish access link is required.", "ERR-042", 400),
+    INVALID_PUBLISH_INITIAL_DATE("The publish start date is required.", "ERR-043", 400),
+    INVALID_PUBLISH_FINAL_DATE("The publish end date is required.", "ERR-044", 400),
+    INVALID_PUBLISH_DATE_RANGE("The publish end date cannot be earlier than the start date.", "ERR-045", 400),
 
     // Role inválida
     INVALID_ROLE("Invalid user role", "ERR-012", 400),
