@@ -7,6 +7,7 @@ import br.com.apihubinovacao.domain.usecases.publish.CreatePublishForManagerUseC
 import br.com.apihubinovacao.domain.usecases.publish.ListAllPublishUseCase;
 import br.com.apihubinovacao.domain.usecases.publish.UpdatePublishDetailsUseCase;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -42,8 +43,10 @@ public class PublishController {
         return ResponseEntity.ok(createdPublish);
     }
     @GetMapping("/all")
-    public ResponseEntity<List<PublishResponseDTO>> getAllPublish() {
-        List<PublishResponseDTO> publishs = listAllPublishUseCase.execute();
+    public ResponseEntity<Page<PublishResponseDTO>> getAllPublish(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<PublishResponseDTO> publishs = listAllPublishUseCase.execute(page, size);
         return ResponseEntity.ok(publishs);
     }
 

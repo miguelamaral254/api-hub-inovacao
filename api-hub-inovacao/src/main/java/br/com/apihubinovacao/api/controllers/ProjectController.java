@@ -11,6 +11,7 @@ import br.com.apihubinovacao.domain.usecases.projects.update.UpdateAcademicProje
 import br.com.apihubinovacao.domain.usecases.projects.update.UpdateAcademicProjectStatusUseCase;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -69,8 +70,10 @@ public class ProjectController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<?>> getAllProjects() {
-        List<?> projects = listAllAcademicProjectsUseCase.execute();
+    public ResponseEntity<Page<?>> getAllProjects(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<?> projects = listAllAcademicProjectsUseCase.execute(page, size);
         return ResponseEntity.ok(projects);
     }
 

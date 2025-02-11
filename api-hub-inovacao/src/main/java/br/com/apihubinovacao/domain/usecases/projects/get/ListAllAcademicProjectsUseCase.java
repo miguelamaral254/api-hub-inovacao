@@ -13,6 +13,9 @@ import br.com.apihubinovacao.domain.repositories.AcademicProjectRepository;
 import br.com.apihubinovacao.domain.repositories.ProfessorRepository;
 import br.com.apihubinovacao.domain.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,60 +35,58 @@ public class ListAllAcademicProjectsUseCase {
     @Autowired
     private StudentRepository studentRepository;
 
-    public List<?> execute() {
-        List<AcademicProject> approvedProjects = academicProjectRepository.findAll().stream()
-                .filter(project -> StatusSolicitation.APROVADA.name().equalsIgnoreCase(project.getStatus().name()))
-                .collect(Collectors.toList());
+    public Page<?> execute(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
 
-        return approvedProjects.stream()
-                .map(project -> {
-                    Optional<Professor> professor = professorRepository.findByEmail(project.getAuthorEmail());
-                    Optional<Student> student = studentRepository.findByEmail(project.getAuthorEmail());
+        Page<AcademicProject> approvedProjectsPage = academicProjectRepository
+                .findAllByStatus(StatusSolicitation.APROVADA, pageable);
 
-                    if (professor.isPresent()) {
-                        return new AcademicProjectResponseProfessorApprovedDTO(
-                                project.getId(),
-                                project.getTitle(),
-                                project.getDescription(),
-                                project.getUrlPhoto(),
-                                project.getPdfLink(),
-                                project.getSiteLink(),
-                                project.getTypeAP(),
-                                project.getAuthorEmail(),
-                                project.getCreationDate().toString(),
-                                professor.get().getId(),
-                                professor.get().getName(),
-                                project.getCoauthors() != null && !project.getCoauthors().isEmpty() ? project.getCoauthors().stream()
-                                        .map(coauthor -> new CoauthorDTO(coauthor.getName(), coauthor.getEmail(), coauthor.getPhone()))
-                                        .collect(Collectors.toList()) : new ArrayList<>()
-                        );
-                    }
-                    // Se for estudante
-                    else if (student.isPresent()) {
-                        return new AcademicProjectResponseStudentApprovedDTO(
-                                project.getId(),
-                                project.getTitle(),
-                                project.getDescription(),
-                                project.getUrlPhoto(),
-                                project.getPdfLink(),
-                                project.getSiteLink(),
-                                project.getTypeAP(),
-                                project.getAuthorEmail(),
-                                project.getCreationDate().toString(),
-                                student.get().getId(),
-                                student.get().getName(),
-                                project.getCoauthors() != null && !project.getCoauthors().isEmpty() ? project.getCoauthors().stream()
-                                        .map(coauthor -> new CoauthorDTO(
-                                                coauthor.getName(),
-                                                coauthor.getEmail(),
-                                                coauthor.getPhone()
-                                        ))
-                                        .collect(Collectors.toList()) : new ArrayList<>()
-                        );
-                    } else {
-                        throw new BusinessException(ErrorCodeEnum.AUTHOR_NOT_FOUND);
-                    }
-                })
-                .collect(Collectors.toList());
+        return approvedProjectsPage.map(project -> {
+            Optional<Professor> professor = professorRepository.findByEmail(project.getAuthorEmail());
+            Optional<Student> student = studentRepository.findByEmail(project.getAuthorEmail());
+
+            if (professor.isPresent()) {
+                return new AcademicProjectResponseProfessorApprovedDTO(
+                        project.getId(),
+                        project.getTitle(),
+                        project.getDescription(),
+                        project.getUrlPhoto(),
+                        project.getPdfLink(),
+                        project.getSiteLink(),
+                        project.getTypeAP(),
+                        project.getAuthorEmail(),
+                        project.getCreationDate().toString(),
+                        professor.get().getId(),
+                        professor.get().getName(),
+                        project.getCoauthors() != null && !project.getCoauthors().isEmpty() ? project.getCoauthors().stream()
+                                .map(coauthor -> new CoauthorDTO(coauthor.getName(), coauthor.getEmail(), coauthor.getPhone()))
+                                .collect(Collectors.toList()) : new ArrayList<>()
+                );
+            }
+            else if (student.isPresent()) {
+                return new AcademicProjectResponseStudentApprovedDTO(
+                        project.getId(),
+                        project.getTitle(),
+                        project.getDescription(),
+                        project.getUrlPhoto(),
+                        project.getPdfLink(),
+                        project.getSiteLink(),
+                        project.getTypeAP(),
+                        project.getAuthorEmail(),
+                        project.getCreationDate().toString(),
+                        student.get().getId(),
+                        student.get().getName(),
+                        project.getCoauthors() != null && !project.getCoauthors().isEmpty() ? project.getCoauthors().stream()
+                                .map(coauthor -> new CoauthorDTO(
+                                        coauthor.getName(),
+                                        coauthor.getEmail(),
+                                        coauthor.getPhone()
+                                ))
+                                .collect(Collectors.toList()) : new ArrayList<>()
+                );
+            } else {
+                throw new BusinessException(ErrorCodeEnum.AUTHOR_NOT_FOUND);
+            }
+        });
     }
 }

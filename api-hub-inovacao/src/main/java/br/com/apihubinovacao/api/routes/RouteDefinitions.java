@@ -16,7 +16,7 @@ public class RouteDefinitions {
             "/users/all-platform-users",
             "/startup/all",
             "publish/{publishId}/update",
-
+            "/opportunities/company/{companyName}",
 
 
 
@@ -40,7 +40,6 @@ public class RouteDefinitions {
     };
     public static final String[] COMPANY_ROUTES = {
             "/opportunities/create",
-            "/opportunities/company/{companyName}",
             "/{opportunityId}/details",
             "/opportunities/{opportunityId}/details",
 
