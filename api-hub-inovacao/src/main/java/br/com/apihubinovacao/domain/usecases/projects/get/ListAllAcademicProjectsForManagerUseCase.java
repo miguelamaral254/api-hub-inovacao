@@ -32,7 +32,6 @@ public class ListAllAcademicProjectsForManagerUseCase {
     private StudentRepository studentRepository;
 
     public List<?> execute() {
-        // Pegando todos os projetos sem filtro de status
         List<AcademicProject> allProjects = academicProjectRepository.findAll();
 
         return allProjects.stream()
@@ -40,7 +39,6 @@ public class ListAllAcademicProjectsForManagerUseCase {
                     Optional<Professor> professor = professorRepository.findByEmail(project.getAuthorEmail());
                     Optional<Student> student = studentRepository.findByEmail(project.getAuthorEmail());
 
-                    // Se for professor
                     if (professor.isPresent()) {
                         return new AcademicProjectResponseProfessorDTO(
                                 project.getId(),
@@ -52,11 +50,11 @@ public class ListAllAcademicProjectsForManagerUseCase {
                                 project.getTypeAP(),
                                 project.getAuthorEmail(),
                                 project.getCreationDate().toString(),
-                                project.getStatus(), // Agora com o status real do projeto
+                                project.getStatus(),
                                 professor.get().getId(),
                                 professor.get().getName(),
-                                project.getFeedback(), // Incluindo o feedback se necessário
-                                project.getJustification(), // Incluindo a justificativa se necessário
+                                project.getFeedback(),
+                                project.getJustification(),
                                 project.getIdManager(),
                                 project.getCoauthors() != null && !project.getCoauthors().isEmpty() ? project.getCoauthors().stream()
                                         .map(coauthor -> new CoauthorDTO(
@@ -67,7 +65,6 @@ public class ListAllAcademicProjectsForManagerUseCase {
                                         .collect(Collectors.toList()) : new ArrayList<>()
                         );
                     }
-                    // Se for estudante
                     else if (student.isPresent()) {
                         return new AcademicProjectResponseStudentDTO(
                                 project.getId(),
@@ -79,11 +76,11 @@ public class ListAllAcademicProjectsForManagerUseCase {
                                 project.getTypeAP(),
                                 project.getAuthorEmail(),
                                 project.getCreationDate().toString(),
-                                project.getStatus(), // Agora com o status real do projeto
+                                project.getStatus(),
                                 student.get().getId(),
                                 student.get().getName(),
-                                project.getFeedback(), // Incluindo o feedback se necessário
-                                project.getJustification(), // Incluindo a justificativa se necessário
+                                project.getFeedback(),
+                                project.getJustification(),
                                 project.getIdManager(),
                                 project.getCoauthors() != null && !project.getCoauthors().isEmpty() ? project.getCoauthors().stream()
                                         .map(coauthor -> new CoauthorDTO(

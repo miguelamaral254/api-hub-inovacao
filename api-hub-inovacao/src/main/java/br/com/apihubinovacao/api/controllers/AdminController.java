@@ -7,9 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * Controller exclusivo para a criação de Manager (Admin)
- */
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
@@ -21,9 +18,7 @@ public class AdminController {
         this.createManagerUserUseCase = createManagerUserUseCase;
     }
 
-    /**
-     * Criar um novo Manager
-     */
+
     @PostMapping("/create-manager")
     public ResponseEntity<UserResponseCpfDTO> createManager(@RequestBody UserCreateCpfDTO dto) {
         UserResponseCpfDTO createdManager = createManagerUserUseCase.execute(dto);
