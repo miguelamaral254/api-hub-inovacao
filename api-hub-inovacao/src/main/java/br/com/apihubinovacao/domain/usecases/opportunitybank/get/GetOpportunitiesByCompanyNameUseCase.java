@@ -4,10 +4,10 @@ import br.com.apihubinovacao.domain.dtos.OpportunityBank.OpportunityResponseDTO;
 import br.com.apihubinovacao.domain.models.projects.OpportunitiesBank;
 import br.com.apihubinovacao.domain.repositories.OpportunitiesBankRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class GetOpportunitiesByCompanyNameUseCase {
@@ -15,27 +15,24 @@ public class GetOpportunitiesByCompanyNameUseCase {
     @Autowired
     private OpportunitiesBankRepository opportunitiesBankRepository;
 
-    public List<OpportunityResponseDTO> execute(String companyName) {
-        List<OpportunitiesBank> opportunitiesList = opportunitiesBankRepository.findByPartnerCompanyName(companyName);
+    public Page<OpportunityResponseDTO> execute(String companyName, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<OpportunitiesBank> opportunitiesPage = opportunitiesBankRepository.findByPartnerCompanyName(companyName, pageable);
 
-        return opportunitiesList.stream()
-                .map(opportunity -> new OpportunityResponseDTO(
-                        opportunity.getId(),
-                        opportunity.getTitle(),
-                        opportunity.getDescription(),
-                        opportunity.getUrlPhoto(),
-                        opportunity.getPdfLink(),
-                        opportunity.getSiteLink(),
-                        opportunity.getTypeBO(),
-                        opportunity.getAuthorEmail(),
-                        opportunity.getStatus(),
-                        opportunity.getCreationDate(),
-                        opportunity.isFlagActive(),
-                        opportunity.getPartnerCompany().getId(),
-                        opportunity.getPartnerCompany().getInstitutionOrganization() // Pegando o institutionOrganization
-
-
-                ))
-                .collect(Collectors.toList());
+        return opportunitiesPage.map(opportunity -> new OpportunityResponseDTO(
+                opportunity.getId(),
+                opportunity.getTitle(),
+                opportunity.getDescription(),
+                opportunity.getUrlPhoto(),
+                opportunity.getPdfLink(),
+                opportunity.getSiteLink(),
+                opportunity.getTypeBO(),
+                opportunity.getAuthorEmail(),
+                opportunity.getStatus(),
+                opportunity.getCreationDate(),
+                opportunity.isFlagActive(),
+                opportunity.getPartnerCompany().getId(),
+                opportunity.getPartnerCompany().getInstitutionOrganization()
+        ));
     }
 }

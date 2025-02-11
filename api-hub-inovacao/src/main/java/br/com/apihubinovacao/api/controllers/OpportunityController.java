@@ -12,6 +12,7 @@ import br.com.apihubinovacao.domain.usecases.opportunitybank.update.UpdateOpport
 import br.com.apihubinovacao.domain.usecases.opportunitybank.update.UpdateOpportunityStatusUseCase;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,20 +55,27 @@ public class OpportunityController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<OpportunityResponseDTO>> getAllOpportunities() {
-        List<OpportunityResponseDTO> opportunities = getAllOpportunitiesUseCase.execute();
+    public ResponseEntity<Page<OpportunityResponseDTO>> getAllOpportunities(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<OpportunityResponseDTO> opportunities = getAllOpportunitiesUseCase.execute(page, size);
         return ResponseEntity.ok(opportunities);
     }
 
     @GetMapping("/approved/active")
-    public ResponseEntity<List<OpportunityResponseDTO>> getApprovedActiveOpportunities() {
-        List<OpportunityResponseDTO> opportunities = getApprovedActiveOpportunitiesUseCase.execute();
+    public ResponseEntity<Page<OpportunityResponseDTO>> getApprovedActiveOpportunities(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<OpportunityResponseDTO> opportunities = getApprovedActiveOpportunitiesUseCase.execute(page, size);
         return ResponseEntity.ok(opportunities);
     }
 
     @GetMapping("/company/{companyName}")
-    public ResponseEntity<List<OpportunityResponseDTO>> getOpportunitiesByCompanyName(@PathVariable String companyName) {
-        List<OpportunityResponseDTO> opportunities = getOpportunitiesByCompanyNameUseCase.execute(companyName);
+    public ResponseEntity<Page<OpportunityResponseDTO>> getOpportunitiesByCompanyName(
+            @PathVariable String companyName,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<OpportunityResponseDTO> opportunities = getOpportunitiesByCompanyNameUseCase.execute(companyName, page, size);
         return ResponseEntity.ok(opportunities);
     }
 
