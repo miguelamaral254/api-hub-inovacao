@@ -42,6 +42,7 @@ public class PublishController {
         PublishResponseDTO createdPublish = createPublishForManagerUseCase.execute(publishCreateDTO, imageFile, request);
         return ResponseEntity.ok(createdPublish);
     }
+
     @GetMapping("/all")
     public ResponseEntity<Page<PublishResponseDTO>> getAllPublish(
             @RequestParam(defaultValue = "0") int page,

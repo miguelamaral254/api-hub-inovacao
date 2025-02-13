@@ -12,6 +12,8 @@ import br.com.apihubinovacao.domain.usecases.projects.update.UpdateAcademicProje
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -32,13 +34,14 @@ public class ProjectController {
     private final UpdateAcademicProjectDetailsUseCase updateAcademicProjectDetailsUseCase;
     private final ListAllAcademicProjectsForManagerUseCase listAllAcademicProjectsForManagerUseCase;
     private final ImageService imageService;
+    private final ListAcademicProjectsByUserEmailUseCase listAcademicProjectsByUserEmailUseCase;
 
     @Autowired
     public ProjectController(
             CreateAcademicProjectForProfessorUseCase createAcademicProjectForProfessorUseCase,
             CreateAcademicProjectForStudentUseCase createAcademicProjectForStudentUseCase,
             ListAcademicProjectsForStudentUseCase listAcademicProjectsForStudentUseCase,
-            ListAllAcademicProjectsUseCase listAllAcademicProjectsUseCase, UpdateAcademicProjectStatusUseCase updateAcademicProjectStatusUseCase, UpdateAcademicProjectDetailsUseCase updateAcademicProjectDetailsUseCase, ListAllAcademicProjectsForManagerUseCase listAllAcademicProjectsForManagerUseCase, ImageService imageService) { // Novo UseCase
+            ListAllAcademicProjectsUseCase listAllAcademicProjectsUseCase, UpdateAcademicProjectStatusUseCase updateAcademicProjectStatusUseCase, UpdateAcademicProjectDetailsUseCase updateAcademicProjectDetailsUseCase, ListAllAcademicProjectsForManagerUseCase listAllAcademicProjectsForManagerUseCase, ImageService imageService, ListAcademicProjectsByUserEmailUseCase listAcademicProjectsByUserEmailUseCase) { // Novo UseCase
         this.createAcademicProjectForProfessorUseCase = createAcademicProjectForProfessorUseCase;
         this.createAcademicProjectForStudentUseCase = createAcademicProjectForStudentUseCase;
         this.listAcademicProjectsForStudentUseCase = listAcademicProjectsForStudentUseCase;
@@ -47,6 +50,7 @@ public class ProjectController {
         this.updateAcademicProjectDetailsUseCase = updateAcademicProjectDetailsUseCase;
         this.listAllAcademicProjectsForManagerUseCase = listAllAcademicProjectsForManagerUseCase;
         this.imageService = imageService;
+        this.listAcademicProjectsByUserEmailUseCase = listAcademicProjectsByUserEmailUseCase;
     }
 
     @PostMapping(value = "/professor/create", consumes = {"multipart/form-data"})
@@ -75,6 +79,30 @@ public class ProjectController {
             @RequestParam(defaultValue = "10") int size) {
         Page<?> projects = listAllAcademicProjectsUseCase.execute(page, size);
         return ResponseEntity.ok(projects);
+    }
+    
+    @GetMapping("manager/all")
+    public ResponseEntity<Page<?>> getAllProjectsForManager(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<?> projects = listAllAcademicProjectsForManagerUseCase.execute(pageable);
+
+        return ResponseEntity.ok(projects);
+    }
+
+    @GetMapping("/by-email")
+    public ResponseEntity<Page<?>> getProjectsByUserEmail(
+            @RequestParam String email,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+
+        Page<?> projectsPage = listAcademicProjectsByUserEmailUseCase.execute(email, page, size);
+
+
+        return ResponseEntity.ok(projectsPage);
     }
 
     @PutMapping("/{projectId}/status")

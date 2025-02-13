@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface AcademicProjectRepository extends JpaRepository<AcademicProject, Long> {
 
     Page<AcademicProject> findAllByStatus(StatusSolicitation status, Pageable pageable);
+    Page<AcademicProject> findByAuthorEmail(String authorEmail, Pageable pageable);
 
     boolean existsByTitle(String title);
 }
