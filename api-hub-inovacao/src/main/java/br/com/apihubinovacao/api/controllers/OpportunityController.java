@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -86,15 +87,17 @@ public class OpportunityController {
 
     @GetMapping("manager/all")
     public ResponseEntity<Page<OpportunityResponseDTO>> getAllOpportunitiesForManager(
-            @RequestParam Long idManager, // Recebendo idManager diretamente na URL
+            @RequestParam Long idManager,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-
         Pageable pageable = PageRequest.of(page, size);
-        // Passando o idManager para o UseCase
-        Page<OpportunityResponseDTO> opportunities = listAllOpportunitiesForManagerUseCase.execute(idManager, pageable);
-
-        return ResponseEntity.ok(opportunities);
+        try {
+            Page<OpportunityResponseDTO> opportunities = listAllOpportunitiesForManagerUseCase.execute(idManager, pageable);
+            return ResponseEntity.ok(opportunities);
+        } catch (Exception e) {
+            e.printStackTrace();  // Isso vai exibir a pilha de erros no log
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     @PutMapping("/{opportunityId}/status")
