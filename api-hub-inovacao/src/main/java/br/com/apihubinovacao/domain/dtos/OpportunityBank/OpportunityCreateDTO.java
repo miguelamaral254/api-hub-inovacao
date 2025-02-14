@@ -15,5 +15,8 @@ public record OpportunityCreateDTO(
         String authorEmail,
         StatusSolicitation status,
         boolean flagActive,
-        Long partnerCompanyId
+        Long partnerCompanyId,
+        String feedback,
+        String justification,   
+        Long idManager
 ) {}

@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public interface OpportunitiesBankRepository extends JpaRepository<OpportunitiesBank, Long> {
     Page<OpportunitiesBank> findByStatusAndFlagActive(StatusSolicitation status, boolean flagActive, Pageable pageable);
+    Page<OpportunitiesBank> findByIdManager(Long idManager, Pageable pageable);
 
     Page<OpportunitiesBank> findByPartnerCompanyName(String companyName, Pageable pageable);
     List<OpportunitiesBank> findByStatusAndFlagActive(StatusSolicitation status, boolean flagActive);

@@ -17,6 +17,8 @@ public class RouteDefinitions {
             "/startup/all",
             "publish/{publishId}/update",
             "/opportunities/company/{companyName}",
+            "/opportunities/manager/all"
+
 
 
 

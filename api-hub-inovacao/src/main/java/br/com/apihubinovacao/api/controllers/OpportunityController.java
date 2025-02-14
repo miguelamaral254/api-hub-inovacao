@@ -8,11 +8,14 @@ import br.com.apihubinovacao.domain.usecases.opportunitybank.create.CreateOpport
 import br.com.apihubinovacao.domain.usecases.opportunitybank.get.GetAllOpportunitiesUseCase;
 import br.com.apihubinovacao.domain.usecases.opportunitybank.get.GetApprovedActiveOpportunitiesUseCase;
 import br.com.apihubinovacao.domain.usecases.opportunitybank.get.GetOpportunitiesByCompanyNameUseCase;
+import br.com.apihubinovacao.domain.usecases.opportunitybank.get.ListAllOpportunitiesForManagerUseCase;
 import br.com.apihubinovacao.domain.usecases.opportunitybank.update.UpdateOpportunityDetailsUseCase;
 import br.com.apihubinovacao.domain.usecases.opportunitybank.update.UpdateOpportunityStatusUseCase;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,12 +32,13 @@ public class OpportunityController {
     private final GetApprovedActiveOpportunitiesUseCase getApprovedActiveOpportunitiesUseCase;
     private final UpdateOpportunityDetailsUseCase updateOpportunityDetailsUseCase;
     private final ImageService imageService;
+    private final ListAllOpportunitiesForManagerUseCase listAllOpportunitiesForManagerUseCase;
 
     @Autowired
     public OpportunityController(CreateOpportunityUseCase createOpportunityUseCase,
                                  GetAllOpportunitiesUseCase getAllOpportunitiesUseCase,
                                  GetOpportunitiesByCompanyNameUseCase getOpportunitiesByCompanyNameUseCase,
-                                 UpdateOpportunityStatusUseCase updateOpportunityStatusUseCase, GetApprovedActiveOpportunitiesUseCase getApprovedActiveOpportunitiesUseCase, UpdateOpportunityDetailsUseCase updateOpportunityDetailsUseCase, ImageService imageService) {
+                                 UpdateOpportunityStatusUseCase updateOpportunityStatusUseCase, GetApprovedActiveOpportunitiesUseCase getApprovedActiveOpportunitiesUseCase, UpdateOpportunityDetailsUseCase updateOpportunityDetailsUseCase, ImageService imageService, ListAllOpportunitiesForManagerUseCase listAllOpportunitiesForManagerUseCase) {
         this.createOpportunityUseCase = createOpportunityUseCase;
         this.getAllOpportunitiesUseCase = getAllOpportunitiesUseCase;
         this.getOpportunitiesByCompanyNameUseCase = getOpportunitiesByCompanyNameUseCase;
@@ -42,6 +46,7 @@ public class OpportunityController {
         this.getApprovedActiveOpportunitiesUseCase = getApprovedActiveOpportunitiesUseCase;
         this.updateOpportunityDetailsUseCase = updateOpportunityDetailsUseCase;
         this.imageService = imageService;
+        this.listAllOpportunitiesForManagerUseCase = listAllOpportunitiesForManagerUseCase;
     }
 
     @PostMapping(value = "/create", consumes = {"multipart/form-data"})
@@ -76,6 +81,19 @@ public class OpportunityController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Page<OpportunityResponseDTO> opportunities = getOpportunitiesByCompanyNameUseCase.execute(companyName, page, size);
+        return ResponseEntity.ok(opportunities);
+    }
+
+    @GetMapping("manager/all")
+    public ResponseEntity<Page<OpportunityResponseDTO>> getAllOpportunitiesForManager(
+            @RequestParam Long idManager, // Recebendo idManager diretamente na URL
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        // Passando o idManager para o UseCase
+        Page<OpportunityResponseDTO> opportunities = listAllOpportunitiesForManagerUseCase.execute(idManager, pageable);
+
         return ResponseEntity.ok(opportunities);
     }
 

@@ -15,6 +15,7 @@ public enum ErrorCodeEnum {
     EMAIL_DOES_NOT_MATCH("Email does not match", "ERR-025", 409),
     FILE_UPLOAD_FAILED("Failed to upload", "ERR-030", 400),
     IMAGE_SIZE_EXCEEDED("The image size exceeds the maximum limit of 5MB.", "ERR-046", 400),
+    MANAGER_NOT_FOUND("Manager not found", "ERR-100", 404),
 
     // Login
     LOGIN_FAILED("Incorrect Email or Password", "ERR-010", 401),

@@ -32,7 +32,10 @@ public class GetOpportunitiesByCompanyNameUseCase {
                 opportunity.getCreationDate(),
                 opportunity.isFlagActive(),
                 opportunity.getPartnerCompany().getId(),
-                opportunity.getPartnerCompany().getInstitutionOrganization()
+                opportunity.getPartnerCompany().getInstitutionOrganization(),
+                opportunity.getFeedback(),
+                opportunity.getJustification(),
+                opportunity.getIdManager()
         ));
     }
 }

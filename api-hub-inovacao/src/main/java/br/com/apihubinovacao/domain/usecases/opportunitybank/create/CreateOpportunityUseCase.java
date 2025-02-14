@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
 
+
 @Service
 public class CreateOpportunityUseCase {
 
@@ -67,6 +68,11 @@ public class CreateOpportunityUseCase {
         opportunity.setCreationDate(LocalDate.now());
         opportunity.setPartnerCompany(partnerCompany);
 
+        // Atribuindo valores para os campos adicionais (exemplo)
+        opportunity.setFeedback(opportunityCreateDTO.feedback()); // Se disponível no DTO
+        opportunity.setJustification(opportunityCreateDTO.justification()); // Se disponível no DTO
+        opportunity.setIdManager(opportunityCreateDTO.idManager()); // Se disponível no DTO
+
         OpportunitiesBank savedOpportunity = opportunitiesBankRepository.save(opportunity);
         return mapToOpportunityDTO(savedOpportunity);
     }
@@ -100,7 +106,10 @@ public class CreateOpportunityUseCase {
                 savedOpportunity.getCreationDate(),
                 savedOpportunity.isFlagActive(),
                 savedOpportunity.getPartnerCompany().getId(),
-                savedOpportunity.getPartnerCompany().getInstitutionOrganization()
+                savedOpportunity.getPartnerCompany().getInstitutionOrganization(),
+                savedOpportunity.getFeedback(), // Feedback
+                savedOpportunity.getJustification(), // Justification
+                savedOpportunity.getIdManager() // idManager
         );
     }
 }

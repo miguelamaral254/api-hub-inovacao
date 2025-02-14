@@ -17,10 +17,14 @@ public class GetApprovedActiveOpportunitiesUseCase {
     private OpportunitiesBankRepository opportunitiesBankRepository;
 
     public Page<OpportunityResponseDTO> execute(int page, int size) {
+        // Define a páginação com os parâmetros recebidos
         Pageable pageable = PageRequest.of(page, size);
+
+        // Recupera oportunidades com status "APROVADA" e "flagActive" como verdadeiro
         Page<OpportunitiesBank> opportunitiesPage = opportunitiesBankRepository
                 .findByStatusAndFlagActive(StatusSolicitation.APROVADA, true, pageable);
 
+        // Mapeia as oportunidades para o DTO, incluindo feedback, justification e idManager
         return opportunitiesPage.map(opportunity -> new OpportunityResponseDTO(
                 opportunity.getId(),
                 opportunity.getTitle(),
@@ -34,7 +38,10 @@ public class GetApprovedActiveOpportunitiesUseCase {
                 opportunity.getCreationDate(),
                 opportunity.isFlagActive(),
                 opportunity.getPartnerCompany().getId(),
-                opportunity.getPartnerCompany().getInstitutionOrganization()
+                opportunity.getPartnerCompany().getInstitutionOrganization(),
+                opportunity.getFeedback(),  // Inclui feedback
+                opportunity.getJustification(),  // Inclui justificativa
+                opportunity.getIdManager()  // Inclui idManager
         ));
     }
 }

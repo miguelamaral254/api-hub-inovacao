@@ -32,7 +32,10 @@ public class GetAllOpportunitiesUseCase {
                 opportunity.getCreationDate(),
                 opportunity.isFlagActive(),
                 opportunity.getPartnerCompany().getId(),
-                opportunity.getPartnerCompany().getInstitutionOrganization()
+                opportunity.getPartnerCompany().getInstitutionOrganization(),
+                opportunity.getFeedback(),               // Corrigido: agora está preenchendo o feedback
+                opportunity.getJustification(),          // Corrigido: agora está preenchendo o justification
+                opportunity.getIdManager()               // Corrigido: agora está preenchendo o idManager
         ));
     }
 }

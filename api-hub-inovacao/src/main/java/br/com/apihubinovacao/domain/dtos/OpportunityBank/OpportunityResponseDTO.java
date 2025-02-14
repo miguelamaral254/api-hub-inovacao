@@ -18,6 +18,9 @@ public record OpportunityResponseDTO(
         LocalDate creationDate,
         boolean flagActive,
         Long partnerCompanyId,
-        String institutionOrganization
+        String institutionOrganization,
+        String feedback,
+        String justification,
+        Long idManager
 
 ) {}
