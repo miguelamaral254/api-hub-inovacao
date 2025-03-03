@@ -1,8 +1,8 @@
 package br.com.apihubinovacao.infrastructure.security;
 
-import br.com.apihubinovacao.domain.models.users.UserBase;
-import br.com.apihubinovacao.domain.repositories.*;
-import br.com.apihubinovacao.domain.services.JwtService;
+import br.com.apihubinovacao.domain.users.User;
+import br.com.apihubinovacao.domain.authentication.AuthService;
+import br.com.apihubinovacao.domain.users.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,48 +16,25 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 
     @Autowired
-    private JwtService jwtService;
+    private AuthService authService;
 
     @Autowired
-    private AdminRepository adminRepository;
-
-    @Autowired
-    private ManagerRepository managerRepository;
-
-    @Autowired
-    private StudentRepository studentRepository;
-
-    @Autowired
-    private ProfessorRepository professorRepository;
-
-    @Autowired
-    private PartnerCompanyRepository partnerCompanyRepository;
+    private UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         String token = extractToken(request);
 
-        if (token != null && jwtService.validateToken(token)) {
-            String email = jwtService.extractEmail(token);
+        if (token != null && authService.validateToken(token)) {
+            String email = authService.extractEmail(token);
 
-            // Busca o usuário nos repositórios específicos
-            UserBase user = Stream.of(
-                            adminRepository.findByEmail(email),
-                            managerRepository.findByEmail(email),
-                            studentRepository.findByEmail(email),
-                            professorRepository.findByEmail(email),
-                            partnerCompanyRepository.findByEmail(email)
-                    )
-                    .flatMap(Optional::stream)
-                    .findFirst()
+            User user = userRepository.findByEmail(email)
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
             var authorities = Collections.singletonList(
