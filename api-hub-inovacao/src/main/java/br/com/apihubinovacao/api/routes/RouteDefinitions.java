@@ -7,6 +7,7 @@ public class RouteDefinitions {
     public static final String[] PUBLIC_ROUTES = {
             "swagger-ui/index.html",
             "/auth/**",
+            "/projects",
             "/users/create-user-cpf",
             "/users/all-users",
             "/users",

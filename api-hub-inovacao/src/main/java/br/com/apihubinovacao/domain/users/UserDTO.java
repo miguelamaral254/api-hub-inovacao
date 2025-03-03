@@ -27,7 +27,7 @@ public record UserDTO(
         @Enumerated(EnumType.STRING)
         Role role,
 
-        List<Phone> phones,  // Ajuste para lista de Phones
+        List<Phone> phones,
 
         @NotBlank(groups = CreateValidation.class)
         @Email(message = "Email com formato inválido")

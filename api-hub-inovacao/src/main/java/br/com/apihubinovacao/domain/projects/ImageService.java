@@ -1,4 +1,4 @@
-package br.com.apihubinovacao.domain.services;
+package br.com.apihubinovacao.domain.projects;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

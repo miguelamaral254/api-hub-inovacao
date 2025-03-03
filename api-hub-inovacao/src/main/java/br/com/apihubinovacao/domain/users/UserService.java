@@ -1,9 +1,7 @@
 package br.com.apihubinovacao.domain.users;
 
-import br.com.apihubinovacao.domain.authentication.AuthService;
 import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
 import br.com.apihubinovacao.domain.exceptions.BusinessException;
-import br.com.apihubinovacao.domain.phone.PhoneRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,19 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final PhoneRepository phoneRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AuthService authService;
 
     @Transactional
     public User createUser(User user) {
-        // Valida as regras de negócio antes de criar o usuário
         validateBusinessRules(user);
-
-        // Codifica a senha do usuário
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        // Salva o usuário no banco de dados
         return userRepository.save(user);
     }
 
