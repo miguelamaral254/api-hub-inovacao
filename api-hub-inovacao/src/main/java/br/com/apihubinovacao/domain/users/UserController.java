@@ -22,7 +22,7 @@ import java.util.List;
 
 @Tag(name = "User")
 @RestController
-@RequestMapping("/tests")
+@RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;

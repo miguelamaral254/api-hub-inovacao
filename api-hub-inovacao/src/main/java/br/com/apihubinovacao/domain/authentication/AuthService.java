@@ -1,4 +1,4 @@
-package br.com.apihubinovacao.domain.services;
+package br.com.apihubinovacao.domain.authentication;
 
 import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
 import br.com.apihubinovacao.domain.exceptions.BusinessException;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 @Service
-public class JwtService {
+public class AuthService {
 
     @Value("${api.security.token.secret}")
     private String secretKey;

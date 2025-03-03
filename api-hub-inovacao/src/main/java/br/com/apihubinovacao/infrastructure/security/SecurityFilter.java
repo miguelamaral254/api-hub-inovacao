@@ -1,7 +1,7 @@
 package br.com.apihubinovacao.infrastructure.security;
 
 import br.com.apihubinovacao.domain.users.User;
-import br.com.apihubinovacao.domain.services.JwtService;
+import br.com.apihubinovacao.domain.authentication.AuthService;
 import br.com.apihubinovacao.domain.users.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,7 +21,7 @@ import java.util.Collections;
 public class SecurityFilter extends OncePerRequestFilter {
 
     @Autowired
-    private JwtService jwtService;
+    private AuthService authService;
 
     @Autowired
     private UserRepository userRepository;
@@ -31,8 +31,8 @@ public class SecurityFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         String token = extractToken(request);
 
-        if (token != null && jwtService.validateToken(token)) {
-            String email = jwtService.extractEmail(token);
+        if (token != null && authService.validateToken(token)) {
+            String email = authService.extractEmail(token);
 
             User user = userRepository.findByEmail(email)
                     .orElseThrow(() -> new RuntimeException("User not found"));

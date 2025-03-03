@@ -9,7 +9,7 @@ public class RouteDefinitions {
             "/auth/**",
             "/users/create-user-cpf",
             "/users/all-users",
-            "/tests",
+            "/users",
             "/users/create-user-cnpj",
             "/projects/all",
             "/opportunities/approved/active",
