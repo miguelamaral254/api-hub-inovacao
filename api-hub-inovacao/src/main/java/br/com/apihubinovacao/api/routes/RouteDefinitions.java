@@ -5,9 +5,11 @@ import org.springframework.http.HttpMethod;
 public class RouteDefinitions {
 
     public static final String[] PUBLIC_ROUTES = {
+            "swagger-ui/index.html",
             "/auth/**",
             "/users/create-user-cpf",
             "/users/all-users",
+            "/tests",
             "/users/create-user-cnpj",
             "/projects/all",
             "/opportunities/approved/active",
