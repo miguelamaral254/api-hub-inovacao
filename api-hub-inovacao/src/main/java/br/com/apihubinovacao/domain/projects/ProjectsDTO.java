@@ -1,15 +1,18 @@
 package br.com.apihubinovacao.domain.projects;
 
 import br.com.apihubinovacao.core.BaseDTO;
+import br.com.apihubinovacao.domain.coauthor.Coauthor;
 import br.com.apihubinovacao.domain.enums.ProjectType;
 import br.com.apihubinovacao.domain.enums.StatusSolicitation;
-import br.com.apihubinovacao.domain.users.User;
 import br.com.apihubinovacao.validations.CreateValidation;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record ProjectsDTO (
         Long id,
@@ -48,9 +51,16 @@ public record ProjectsDTO (
 
         @NotBlank(groups = CreateValidation.class)
         String justification,
+
         Boolean enabled ,
 
         LocalDateTime createdDate,
-        LocalDateTime lastModifiedDate
+
+        LocalDateTime lastModifiedDate,
+
+        @Nullable
+        @Valid
+        List<Coauthor> coauthors
+
 ) implements BaseDTO {
 }

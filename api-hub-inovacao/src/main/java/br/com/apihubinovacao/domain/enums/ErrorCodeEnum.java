@@ -42,10 +42,12 @@ public enum ErrorCodeEnum {
     INVALID_OPPORTUNITY_DESCRIPTION("The opportunity description is required", "ERR-062", 400),
     INVALID_PARTNER_COMPANY("A valid partner company is required for this opportunity", "ERR-063", 400),
     // CNPJ e CPF
+
     INVALID_CNPJ("Invalid CNPJ format or missing", "ERR-009", 400),
     INVALID_CPF("Invalid CPF format or missing", "ERR-011", 400),
-    // Errors related to Publish
-// Errors related to Publish
+    // Editais
+
+
     INVALID_PUBLISH_DATA("The publish data is missing.", "ERR-039", 400),
     INVALID_PUBLISH_TITLE("The publish title is required.", "ERR-040", 400),
     INVALID_PUBLISH_DESCRIPTION("The publish description is required.", "ERR-041", 400),
@@ -56,9 +58,12 @@ public enum ErrorCodeEnum {
 
     // Role inválida
     INVALID_ROLE("Invalid user role", "ERR-012", 400),
+
     // Projeto
     PROJECT_NOT_FOUND("Project not found", "ERR-019", 404),
+    PROJECT_ALREADY_EXISTS("Project already exists", "ERR-050", 409),
     AUTHOR_NOT_FOUND("Author not found", "ERR-023", 404),
+
     // Edital
     PUBLISH_NOT_FOUND("Publish not found", "ERR-024", 404),
     //STARTUP

@@ -8,11 +8,11 @@ import org.mapstruct.Mapping;
 public interface ProjectMapper extends BaseMapper<Projects, ProjectsDTO> {
 
     @Mapping(source = "user.id", target = "idUser")
-    @Mapping(source = "idManager.id", target = "idManager")  // Mapeando o idManager de idManager.id
+    @Mapping(source = "idManager.id", target = "idManager")
     ProjectsDTO toDto(Projects entity);
 
     @Mapping(source = "idUser", target = "user.id")
-    @Mapping(source = "idManager", target = "idManager.id")  // Mapeando o idManager do DTO para idManager.id
+    @Mapping(source = "idManager", target = "idManager.id")
     Projects toEntity(ProjectsDTO dto);
 
     // Método auxiliar para mapear User para Long (para idUser e idManager)

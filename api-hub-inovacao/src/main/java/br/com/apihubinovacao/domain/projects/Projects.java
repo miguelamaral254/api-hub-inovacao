@@ -1,6 +1,7 @@
 package br.com.apihubinovacao.domain.projects;
 
 import br.com.apihubinovacao.core.BaseEntity;
+import br.com.apihubinovacao.domain.coauthor.Coauthor;
 import br.com.apihubinovacao.domain.enums.ProjectType;
 import br.com.apihubinovacao.domain.enums.StatusSolicitation;
 import br.com.apihubinovacao.domain.enums.TypeAP;
@@ -10,6 +11,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -45,4 +48,8 @@ public class Projects extends BaseEntity {
 
     @Column(name = "justification", nullable = true)
     private String justification;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Coauthor> coauthors;
+
 }
