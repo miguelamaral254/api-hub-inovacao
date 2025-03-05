@@ -9,8 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface ProjectRepository extends JpaRepository<Projects, Long>, JpaSpecificationExecutor<Projects> {
     boolean existsByTitleAndIdNot(String title, Long id);
-    @Override
 
+    @Override
     @Query("SELECT DISTINCT p FROM Projects p LEFT JOIN FETCH p.coauthors")
     Page<Projects> findAll(Specification<Projects> spec, Pageable pageable);
 }

@@ -64,7 +64,7 @@ public class ProjectsController {
     public ResponseEntity<ApplicationResponse<Page<ProjectsDTO>>> searchProjects(
             @RequestParam(value = "projectType", required = false) ProjectType projectType,
             @RequestParam(value = "status", required = false) StatusSolicitation status,
-            @RequestParam(value = "String", required = false) String title,
+            @RequestParam(value = "title", required = false) String title,
             Pageable pageable) {
 
         Specification<Projects> specification = Specification.where(null);
@@ -73,11 +73,13 @@ public class ProjectsController {
             specification = specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("projectType"), projectType));
         }
+
         if (status != null) {
             specification = specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("status"), status));
         }
-        if (title != null) {
+
+        if (title != null && !title.isEmpty()) {
             specification = specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.like(root.get("title"), "%" + title + "%"));
         }

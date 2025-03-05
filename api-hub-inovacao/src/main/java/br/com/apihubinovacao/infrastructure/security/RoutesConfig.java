@@ -1,13 +1,14 @@
-package br.com.apihubinovacao.api.routes;
+package br.com.apihubinovacao.infrastructure.security;
 
 import org.springframework.http.HttpMethod;
 
-public class RouteDefinitions {
+public class RoutesConfig {
 
     public static final String[] PUBLIC_ROUTES = {
             "swagger-ui/index.html",
             "/auth/**",
             "/projects/**",
+            "/users/**"
     };
     public static final String[] USER_ROUTES = {
 

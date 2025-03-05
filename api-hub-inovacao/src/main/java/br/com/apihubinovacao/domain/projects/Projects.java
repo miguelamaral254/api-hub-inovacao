@@ -49,6 +49,7 @@ public class Projects extends BaseEntity {
     @Column(name = "justification", nullable = true)
     private String justification;
 
+    @Column(nullable= true)
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Coauthor> coauthors;
 

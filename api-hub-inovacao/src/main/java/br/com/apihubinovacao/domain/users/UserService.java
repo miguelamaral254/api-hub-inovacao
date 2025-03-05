@@ -25,7 +25,10 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Page<User> searchUsers(Specification<User> specification, Pageable pageable) {
+    public Page<User> searchUsers(
+            Specification<User> specification,
+            Pageable pageable
+    ) {
         return userRepository.findAll(specification, pageable);
     }
 
