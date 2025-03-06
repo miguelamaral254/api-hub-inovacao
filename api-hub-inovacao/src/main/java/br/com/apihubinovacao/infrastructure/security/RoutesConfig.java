@@ -3,7 +3,7 @@ package br.com.apihubinovacao.infrastructure.security;
 import org.springframework.http.HttpMethod;
 
 public class RoutesConfig {
-
+// TODO: AJUSTAR ROTAS A DEPENDER DAS ROLES!
     public static final String[] PUBLIC_ROUTES = {
             "swagger-ui/index.html",
             "/auth/**",
