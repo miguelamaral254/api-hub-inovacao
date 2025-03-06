@@ -2,8 +2,7 @@ package br.com.apihubinovacao.domain.projects;
 
 import br.com.apihubinovacao.core.BaseDTO;
 import br.com.apihubinovacao.domain.coauthor.CoauthorDTO;
-import br.com.apihubinovacao.domain.enums.ProjectType;
-import br.com.apihubinovacao.domain.enums.StatusSolicitation;
+import br.com.apihubinovacao.core.StatusSolicitation;
 import br.com.apihubinovacao.validations.CreateValidation;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

@@ -1,7 +1,7 @@
 package br.com.apihubinovacao.domain.users;
 
-import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
-import br.com.apihubinovacao.domain.exceptions.BusinessException;
+import br.com.apihubinovacao.domain.errors.exceptions.BusinessException;
+import br.com.apihubinovacao.domain.errors.exceptions.UserExceptionCodeEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,32 +35,32 @@ public class UserService {
     @Transactional()
     public User authenticateUser(String email, String password) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new BusinessException(ErrorCodeEnum.EMAIL_DOES_NOT_MATCH));
+                .orElseThrow(() -> new BusinessException(UserExceptionCodeEnum.EMAIL_DOES_NOT_MATCH));
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new BusinessException(ErrorCodeEnum.INVALID_PASSWORD);
+            throw new BusinessException(UserExceptionCodeEnum.INVALID_PASSWORD);
         }
         return user;
     }
 
     private void validateBusinessRules(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new BusinessException(ErrorCodeEnum.DUPLICATE_EMAIL);
+            throw new BusinessException(UserExceptionCodeEnum.DUPLICATE_EMAIL);
         }
 
         if (user.getCpf() != null && userRepository.existsByCpf(user.getCpf())) {
-            throw new BusinessException(ErrorCodeEnum.DUPLICATE_CPF);
+            throw new BusinessException(UserExceptionCodeEnum.DUPLICATE_CPF);
         }
 
         if (user.getCnpj() != null && userRepository.existsByCnpj(user.getCnpj())) {
-            throw new BusinessException(ErrorCodeEnum.DUPLICATE_CNPJ);
+            throw new BusinessException(UserExceptionCodeEnum.DUPLICATE_CNPJ);
         }
 
         if (userRepository.existsByRegistration(user.getRegistration())) {
-            throw new BusinessException(ErrorCodeEnum.DUPLICATE_REGISTRATION);
+            throw new BusinessException(UserExceptionCodeEnum.DUPLICATE_REGISTRATION);
         }
 
         if (user.getEmail() == null || !user.getEmail().matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}")) {
-            throw new BusinessException(ErrorCodeEnum.INVALID_EMAIL);
+            throw new BusinessException(UserExceptionCodeEnum.INVALID_EMAIL);
         }
 
     }

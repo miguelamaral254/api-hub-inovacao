@@ -1,8 +1,7 @@
 package br.com.apihubinovacao.domain.projects;
 
 import br.com.apihubinovacao.core.ApplicationResponse;
-import br.com.apihubinovacao.domain.enums.ProjectType;
-import br.com.apihubinovacao.domain.enums.StatusSolicitation;
+import br.com.apihubinovacao.core.StatusSolicitation;
 
 import br.com.apihubinovacao.validations.CreateValidation;
 import io.swagger.v3.oas.annotations.Operation;

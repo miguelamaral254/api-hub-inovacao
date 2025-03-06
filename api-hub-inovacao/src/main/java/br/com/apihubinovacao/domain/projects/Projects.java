@@ -2,9 +2,7 @@ package br.com.apihubinovacao.domain.projects;
 
 import br.com.apihubinovacao.core.BaseEntity;
 import br.com.apihubinovacao.domain.coauthor.Coauthor;
-import br.com.apihubinovacao.domain.enums.ProjectType;
-import br.com.apihubinovacao.domain.enums.StatusSolicitation;
-import br.com.apihubinovacao.domain.enums.TypeAP;
+import br.com.apihubinovacao.core.StatusSolicitation;
 import br.com.apihubinovacao.domain.users.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

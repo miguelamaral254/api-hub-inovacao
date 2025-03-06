@@ -1,11 +1,9 @@
 package br.com.apihubinovacao.domain.users;
 
 import br.com.apihubinovacao.core.BaseDTO;
-import br.com.apihubinovacao.domain.enums.Role;
 import br.com.apihubinovacao.domain.phone.Phone;
 import br.com.apihubinovacao.validations.CreateValidation;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -1,4 +1,4 @@
-package br.com.apihubinovacao.domain.enums;
+package br.com.apihubinovacao.domain.projects;
 
 public enum ProjectType {
 

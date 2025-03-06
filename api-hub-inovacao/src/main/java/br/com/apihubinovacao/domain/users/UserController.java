@@ -2,7 +2,6 @@ package br.com.apihubinovacao.domain.users;
 
 
 import br.com.apihubinovacao.core.ApplicationResponse;
-import br.com.apihubinovacao.domain.enums.Role;
 import br.com.apihubinovacao.validations.CreateValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,7 +17,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 
 import java.net.URI;
-import java.util.List;
 
 @Tag(name = "User")
 @RestController

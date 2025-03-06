@@ -1,8 +1,10 @@
 package br.com.apihubinovacao.domain.projects;
 
 import br.com.apihubinovacao.domain.coauthor.Coauthor;
-import br.com.apihubinovacao.domain.enums.ErrorCodeEnum;
-import br.com.apihubinovacao.domain.exceptions.BusinessException;
+import br.com.apihubinovacao.domain.errors.exceptions.BusinessException;
+import br.com.apihubinovacao.domain.errors.exceptions.GeneralExceptionCodeEnum;
+import br.com.apihubinovacao.domain.errors.exceptions.ProjectExceptionCodeEnum;
+import br.com.apihubinovacao.domain.errors.exceptions.UserExceptionCodeEnum;
 import br.com.apihubinovacao.domain.users.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -11,7 +13,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 @Service
@@ -42,7 +43,7 @@ public class ProjectService {
     @Transactional(readOnly = true)
     public Projects findById(Long id) {
         return projectRepository.findById(id)
-                .orElseThrow(()-> new BusinessException(ErrorCodeEnum.PROJECT_NOT_FOUND));
+                .orElseThrow(()-> new BusinessException(ProjectExceptionCodeEnum.PROJECT_NOT_FOUND));
     }
 
     @Transactional()
@@ -58,15 +59,15 @@ public class ProjectService {
 
     private void validateBusinessRules(Projects project) {
         if (project.getTitle() == null || project.getTitle().isEmpty()) {
-            throw new BusinessException(ErrorCodeEnum.INVALID_REQUEST);
+            throw new BusinessException(GeneralExceptionCodeEnum.INVALID_REQUEST);
         }
 
         if (project.getUser() == null || project.getUser().getId() == null) {
-            throw new BusinessException(ErrorCodeEnum.USER_NOT_FOUND);
+            throw new BusinessException(UserExceptionCodeEnum.USER_NOT_FOUND);
         }
 
         if (!userRepository.existsById(project.getUser().getId())) {
-            throw new BusinessException(ErrorCodeEnum.USER_NOT_FOUND);
+            throw new BusinessException(UserExceptionCodeEnum.USER_NOT_FOUND);
         }
     }
 
@@ -78,7 +79,7 @@ public class ProjectService {
                         updatedProject.getTitle(),
                         updatedProject.getId()
                 )) {
-            throw new BusinessException(ErrorCodeEnum.PROJECT_NOT_FOUND);
+            throw new BusinessException(ProjectExceptionCodeEnum.PROJECT_NOT_FOUND);
         }
     }
 }
