@@ -6,16 +6,18 @@ import br.com.apihubinovacao.core.StatusSolicitation;
 import br.com.apihubinovacao.validations.CreateValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
 import java.net.URI;
 
 @RestController
@@ -24,16 +26,18 @@ import java.net.URI;
 @AllArgsConstructor
 public class ProjectsController {
     private final ProjectService projectService;
-    private final ProjectMapper projectMapper;
 
-    @Tag(name="Create Project")
-    @PostMapping
+    @Tag(name = "Create Project")
     @Operation(summary = "Create a new project")
+    @PostMapping( consumes = {"multipart/form-data"})
     public ResponseEntity<Void> createProject(
-            @Validated(CreateValidation.class)
-            @RequestBody ProjectsDTO projectDto) {
+            @RequestPart("dto") ProjectsDTO projectDto,
+            @RequestPart(value = "file", required = false) MultipartFile file,
+            HttpServletRequest request) throws IOException {
+
         Projects project = projectMapper.toEntity(projectDto);
-        Projects savedEntity = projectService.createProject(project);
+        Projects savedEntity = projectService.createProject(project, file, request);
+
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
@@ -45,6 +49,8 @@ public class ProjectsController {
                 .location(location)
                 .build();
     }
+
+    private final ProjectMapper projectMapper;
 
     @GetMapping("/{id}")
     @Operation(summary = "Search race by ID")

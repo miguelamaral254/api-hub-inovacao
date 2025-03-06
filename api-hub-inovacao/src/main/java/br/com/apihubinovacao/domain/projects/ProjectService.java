@@ -6,13 +6,16 @@ import br.com.apihubinovacao.domain.errors.exceptions.GeneralExceptionCodeEnum;
 import br.com.apihubinovacao.domain.errors.exceptions.ProjectExceptionCodeEnum;
 import br.com.apihubinovacao.domain.errors.exceptions.UserExceptionCodeEnum;
 import br.com.apihubinovacao.domain.users.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.function.Consumer;
 
 @Service
@@ -20,10 +23,24 @@ import java.util.function.Consumer;
 public class ProjectService {
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
+    private final ImageService imageService;
 
     @Transactional
-    public Projects createProject(Projects project) {
+    public Projects createProject(Projects project, MultipartFile file, HttpServletRequest request) throws IOException {
         validateBusinessRules(project);
+
+        if (project.getUser() != null && project.getUser().getId() == null) {
+            project.setUser(null);
+        }
+
+        if (project.getIdManager() != null && project.getIdManager().getId() == null) {
+            project.setIdManager(null);
+        }
+        if (file != null && !file.isEmpty()) {
+            String imageUrl = imageService.saveImage(file, request);
+            project.setUrlPhoto(imageUrl);
+        }
+
         if (project.getCoauthors() != null) {
             for (Coauthor coauthor : project.getCoauthors()) {
                 coauthor.setProject(project);

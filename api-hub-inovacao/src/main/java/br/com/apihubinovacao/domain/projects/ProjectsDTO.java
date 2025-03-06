@@ -8,12 +8,14 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Null;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public record ProjectsDTO (
+        @Null
         Long id,
 
         @NotBlank(groups = CreateValidation.class)
@@ -42,13 +44,13 @@ public record ProjectsDTO (
         @NotBlank(groups = CreateValidation.class)
         Long idUser,
 
-        @NotBlank(groups = CreateValidation.class)
+        @Nullable
         Long idManager,
 
-        @NotBlank(groups = CreateValidation.class)
+        @Nullable
         String feedback,
 
-        @NotBlank(groups = CreateValidation.class)
+        @Nullable
         String justification,
 
         Boolean enabled ,
