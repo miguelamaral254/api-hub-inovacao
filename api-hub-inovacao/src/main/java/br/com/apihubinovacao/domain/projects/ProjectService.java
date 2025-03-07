@@ -1,5 +1,6 @@
 package br.com.apihubinovacao.domain.projects;
 
+import br.com.apihubinovacao.core.StatusSolicitation;
 import br.com.apihubinovacao.domain.coauthor.Coauthor;
 import br.com.apihubinovacao.domain.errors.exceptions.BusinessException;
 import br.com.apihubinovacao.domain.errors.exceptions.GeneralExceptionCodeEnum;
@@ -72,7 +73,18 @@ public class ProjectService {
         return project;
     }
 
+    @Transactional
+    public void deleteProject(Long id) {
+        Projects project = findById(id);
+        projectRepository.delete(project);
+    }
 
+    @Transactional
+    public Projects updateStatus(Long id, StatusSolicitation newStatus) {
+        Projects project = findById(id);
+        project.setStatus(newStatus);
+        return projectRepository.save(project);
+    }
 
     private void validateBusinessRules(Projects project) {
         if (project.getTitle() == null || project.getTitle().isEmpty()) {

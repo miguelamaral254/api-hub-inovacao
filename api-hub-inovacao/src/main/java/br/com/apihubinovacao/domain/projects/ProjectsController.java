@@ -66,28 +66,9 @@ public class ProjectsController {
     @Tag(name="Search Projects with filter")
     @GetMapping
     @Operation(summary = "Search Projects with filters or all Projects")
-    public ResponseEntity<ApplicationResponse<Page<ProjectsDTO>>> searchProjects(
-            @RequestParam(value = "projectType", required = false) ProjectType projectType,
-            @RequestParam(value = "status", required = false) StatusSolicitation status,
-            @RequestParam(value = "title", required = false) String title,
-            Pageable pageable) {
+    public ResponseEntity<ApplicationResponse<Page<ProjectsDTO>>> searchProjects(Pageable pageable) {
 
         Specification<Projects> specification = Specification.where(null);
-
-        if (projectType != null) {
-            specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.equal(root.get("projectType"), projectType));
-        }
-
-        if (status != null) {
-            specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.equal(root.get("status"), status));
-        }
-
-        if (title != null && !title.isEmpty()) {
-            specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.like(root.get("title"), "%" + title + "%"));
-        }
 
         Page<Projects> projectsPage = projectService.searchProjects(specification, pageable);
         Page<ProjectsDTO> projectsDTOPage = projectMapper.toDto(projectsPage);
@@ -97,4 +78,52 @@ public class ProjectsController {
                 .body(ApplicationResponse.ofSuccess(projectsDTOPage));
     }
 
+    @Tag(name = "Update Project")
+    @Operation(summary = "Update a project by ID")
+    @PutMapping("/{id}")
+    public ResponseEntity<ApplicationResponse<ProjectsDTO>> updateProject(
+            @PathVariable Long id,
+            @RequestBody ProjectsDTO projectDto) {
+
+        Projects project = projectMapper.toEntity(projectDto);
+        Projects updatedProject = projectService.updateProject(id, p -> {
+            p.setTitle(project.getTitle());
+            p.setDescription(project.getDescription());
+            p.setCoauthors(project.getCoauthors());
+            p.setStatus(project.getStatus());
+            // TODO: ADCIONAR O RESTANTE DOS CAMPOS
+        });
+
+        ProjectsDTO updatedProjectDto = projectMapper.toDto(updatedProject);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApplicationResponse.ofSuccess(updatedProjectDto));
+    }
+
+    @Tag(name = "Update Project Status")
+    @Operation(summary = "Update the status of a project")
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<ApplicationResponse<String>> updateProjectStatus(
+            @PathVariable Long id,
+            @RequestParam String status) {
+
+        StatusSolicitation statusEnum = StatusSolicitation.valueOf(status.toUpperCase());
+
+        Projects updatedProject = projectService.updateStatus(id, statusEnum);
+
+        return ResponseEntity
+                .status(HttpStatus.PARTIAL_CONTENT)
+                .body(ApplicationResponse.ofSuccess(updatedProject.getStatus().name()));
+    }
+
+
+    @Tag(name = "Delete Project")
+    @Operation(summary = "Delete a project by ID")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
+        projectService.deleteProject(id);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
 }
