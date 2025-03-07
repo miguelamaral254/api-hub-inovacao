@@ -31,7 +31,8 @@ public class UserController {
         @PostMapping
         @Operation(summary = "Create a new user")
         public ResponseEntity<Void> createUser(
-                @Validated(CreateValidation.class) @RequestBody UserDTO userDto) {
+                @Validated(CreateValidation.class)
+                @RequestBody UserDTO userDto) {
             User user = userMapper.toEntity(userDto);
             User savedEntity = userService.createUser(user);
             URI location = ServletUriComponentsBuilder

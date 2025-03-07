@@ -22,7 +22,6 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/projects")
-
 @AllArgsConstructor
 public class ProjectsController {
     private final ProjectService projectService;

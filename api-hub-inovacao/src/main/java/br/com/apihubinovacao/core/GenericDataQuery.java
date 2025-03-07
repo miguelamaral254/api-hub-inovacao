@@ -1,6 +1,6 @@
 package br.com.apihubinovacao.core;
 
-public interface CharacterDataQuery {
+public interface GenericDataQuery {
 
     boolean existsByName(String name);
 
