@@ -45,6 +45,7 @@ public class EditalService {
         return editalRepository.findById(id)
                 .orElseThrow(()-> new BusinessException(ProjectExceptionCodeEnum.PROJECT_NOT_FOUND));
     }
+
     private void validateBusinessRules(Edital edital) {
         if (edital.getTitle() == null || edital.getTitle().isEmpty()) {
             throw new BusinessException(GeneralExceptionCodeEnum.INVALID_REQUEST);

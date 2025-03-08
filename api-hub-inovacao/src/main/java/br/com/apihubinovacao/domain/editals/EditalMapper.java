@@ -14,7 +14,6 @@ public interface EditalMapper extends BaseMapper<Edital, EditalDTO> {
     @Mapping(source = "idUser", target = "idUser.id")
     Edital toEntity(EditalDTO dto);
 
-    // Mapeamento adicional para converter o ID do usuário para o objeto User
     default User map(Long id) {
         if (id == null) {
             return null;
@@ -24,7 +23,6 @@ public interface EditalMapper extends BaseMapper<Edital, EditalDTO> {
         return user;
     }
 
-    // Mapeamento adicional para converter o objeto User para o ID
     default Long map(User user) {
         if (user == null) {
             return null;

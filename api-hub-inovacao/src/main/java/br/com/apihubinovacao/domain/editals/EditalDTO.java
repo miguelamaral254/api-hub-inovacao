@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Null;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+
 public record EditalDTO (
 
         @Null
@@ -25,7 +26,7 @@ public record EditalDTO (
 
          LocalDate finalDate,
 
-         User idUser,
+         Long idUser,
 
          Boolean enabled ,
 
