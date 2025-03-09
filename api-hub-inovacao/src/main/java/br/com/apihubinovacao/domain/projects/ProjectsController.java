@@ -61,20 +61,42 @@ public class ProjectsController {
     }
 
 
-    @Tag(name="Search Users with filter")
+    @Tag(name="Search Projects with filter")
     @GetMapping
     @Operation(summary = "Search projects with filters or all projects")
     public ResponseEntity<ApplicationResponse<Page<ProjectsDTO>>> searchProjects(
             @RequestParam(value = "title", required = false) String title,
+            @RequestParam(value = "projecttype", required = false) String projectType,
+            @RequestParam(value = "status", required = false) String status,
+            @RequestParam(value = "idmanager", required = false) Long idmanager,
+            @RequestParam(value = "iduser", required = false) Long iduser,
             Pageable pageable) {
 
         Specification<Projects> specification = Specification.where(null);
 
         if (title != null) {
             specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.like(root.get("title"), "%" + title + "%"));
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get("title")), "%" + title.toLowerCase() + "%"));
         }
 
+        if (projectType != null) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(criteriaBuilder.lower(root.get("projectType")), projectType.toLowerCase()));
+        }
+
+        if (status != null) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(criteriaBuilder.lower(root.get("status")), status.toLowerCase()));
+        }
+
+        if (idmanager != null) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("idManager").get("id"), idmanager));
+        }
+        if (iduser != null) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("user").get("id"), iduser));
+        }
 
         Page<Projects> projectPage = projectService.searchProjects(specification, pageable);
         Page<ProjectsDTO> projectDTOPage = projectMapper.toDto(projectPage);
@@ -82,31 +104,6 @@ public class ProjectsController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(ApplicationResponse.ofSuccess(projectDTOPage));
-    }
-
-
-
-
-    @Tag(name = "Update Project")
-    @Operation(summary = "Update a project by ID")
-    @PutMapping("/{id}")
-    public ResponseEntity<ApplicationResponse<ProjectsDTO>> updateProject(
-            @PathVariable Long id,
-            @RequestBody ProjectsDTO projectDto) {
-
-        Projects project = projectMapper.toEntity(projectDto);
-        Projects updatedProject = projectService.updateProject(id, p -> {
-            p.setTitle(project.getTitle());
-            p.setDescription(project.getDescription());
-            p.setCoauthors(project.getCoauthors());
-            p.setStatus(project.getStatus());
-            // TODO: ADCIONAR O RESTANTE DOS CAMPOS
-        });
-
-        ProjectsDTO updatedProjectDto = projectMapper.toDto(updatedProject);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(ApplicationResponse.ofSuccess(updatedProjectDto));
     }
 
     @Tag(name = "Update Project Status")

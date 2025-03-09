@@ -41,7 +41,6 @@ public interface ProjectMapper extends BaseMapper<Projects, ProjectsDTO> {
     }
 
     default List<Coauthor> mapCoauthors(List<Coauthor> coauthors) {
-
         return coauthors;
     }
 }
