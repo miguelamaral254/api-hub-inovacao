@@ -2,8 +2,6 @@ package br.com.apihubinovacao.domain.projects;
 
 import br.com.apihubinovacao.core.ApplicationResponse;
 import br.com.apihubinovacao.core.StatusSolicitation;
-
-import br.com.apihubinovacao.validations.CreateValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import java.io.IOException;
 import java.net.URI;
 
@@ -49,6 +46,7 @@ public class ProjectsController {
                 .build();
     }
 
+
     private final ProjectMapper projectMapper;
 
     @GetMapping("/{id}")
@@ -62,20 +60,32 @@ public class ProjectsController {
                 .body(ApplicationResponse.ofSuccess(projectsDto));
     }
 
-    @Tag(name="Search Projects with filter")
+
+    @Tag(name="Search Users with filter")
     @GetMapping
-    @Operation(summary = "Search Projects with filters or all Projects")
-    public ResponseEntity<ApplicationResponse<Page<ProjectsDTO>>> searchProjects(Pageable pageable) {
+    @Operation(summary = "Search projects with filters or all projects")
+    public ResponseEntity<ApplicationResponse<Page<ProjectsDTO>>> searchProjects(
+            @RequestParam(value = "title", required = false) String title,
+            Pageable pageable) {
 
         Specification<Projects> specification = Specification.where(null);
 
-        Page<Projects> projectsPage = projectService.searchProjects(specification, pageable);
-        Page<ProjectsDTO> projectsDTOPage = projectMapper.toDto(projectsPage);
+        if (title != null) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.like(root.get("title"), "%" + title + "%"));
+        }
+
+
+        Page<Projects> projectPage = projectService.searchProjects(specification, pageable);
+        Page<ProjectsDTO> projectDTOPage = projectMapper.toDto(projectPage);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(ApplicationResponse.ofSuccess(projectsDTOPage));
+                .body(ApplicationResponse.ofSuccess(projectDTOPage));
     }
+
+
+
 
     @Tag(name = "Update Project")
     @Operation(summary = "Update a project by ID")

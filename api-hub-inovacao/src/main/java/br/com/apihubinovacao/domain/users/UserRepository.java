@@ -11,9 +11,7 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long>  , JpaSpecificationExecutor<User> , GenericDataQuery {
 
-    public Optional<User> findByCpf(String cpf);
-    public Optional<User> findByCnpj(String cnpj);
-    public Optional<User> findByRegistration(String registration);
+
     public Optional<User> findByEmail(String email);
 
     boolean existsByRegistration(@NotBlank String registration);
