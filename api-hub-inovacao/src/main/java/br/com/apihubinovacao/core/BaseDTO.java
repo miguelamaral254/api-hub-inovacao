@@ -6,8 +6,6 @@ public interface BaseDTO {
 
     Long id();
 
-    String name();
-
     LocalDateTime createdDate();
 
     LocalDateTime lastModifiedDate();

@@ -1,7 +1,6 @@
 package br.com.apihubinovacao.domain.users;
 
 import br.com.apihubinovacao.core.BaseEntity;
-import br.com.apihubinovacao.domain.enums.Role;
 import br.com.apihubinovacao.domain.phone.Phone;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
