@@ -52,14 +52,14 @@ public class ProjectsController {
     @GetMapping("/{id}")
     @Operation(summary = "Search race by ID")
     public ResponseEntity<ApplicationResponse<ProjectsDTO>> findRaceById(
-            @PathVariable Long id) {
+            @PathVariable Long id
+    ) {
         Projects projects = projectService.findById(id);
         ProjectsDTO projectsDto = projectMapper.toDto(projects);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(ApplicationResponse.ofSuccess(projectsDto));
     }
-
 
     @Tag(name="Search Projects with filter")
     @GetMapping
@@ -70,6 +70,7 @@ public class ProjectsController {
             @RequestParam(value = "status", required = false) String status,
             @RequestParam(value = "idmanager", required = false) Long idmanager,
             @RequestParam(value = "iduser", required = false) Long iduser,
+            @RequestParam(value = "enabled", required = false) Boolean enabled,
             Pageable pageable) {
 
         Specification<Projects> specification = Specification.where(null);
@@ -96,6 +97,10 @@ public class ProjectsController {
         if (iduser != null) {
             specification = specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("user").get("id"), iduser));
+        }
+        if (enabled != null) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("enabled"), enabled));
         }
 
         Page<Projects> projectPage = projectService.searchProjects(specification, pageable);
@@ -132,4 +137,5 @@ public class ProjectsController {
                 .status(HttpStatus.NO_CONTENT)
                 .build();
     }
+
 }

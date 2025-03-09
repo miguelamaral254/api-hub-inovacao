@@ -46,6 +46,18 @@ public class EditalController {
                 .build();
     }
 
+    @GetMapping("/{id}")
+    @Operation(summary = "Search Edital by ID")
+    public ResponseEntity<ApplicationResponse<EditalDTO>> findRaceById(
+            @PathVariable Long id
+    ) {
+        Edital edital = editalService.findById(id);
+        EditalDTO editalDto = editalMapper.toDto(edital);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApplicationResponse.ofSuccess(editalDto));
+    }
+
     @Tag(name="Search Editals with filter")
     @GetMapping
     @Operation(summary = "Search editals with filters or all editals")
@@ -73,6 +85,29 @@ public class EditalController {
                 .body(ApplicationResponse.ofSuccess(editalDTOPage));
     }
 
+    @Tag(name = "Update Edital Status")
+    @Operation(summary = "Update the status of a Edital")
+    @PatchMapping("/{id}/enabled")
+    public ResponseEntity<ApplicationResponse<String>> updateEnabled(
+            @PathVariable Long id,
+            @RequestParam String enabled
+    ) {
+        Boolean status = Boolean.valueOf(enabled);
+        Edital updatedEdital = editalService.disableEdital(id, status);
 
+        return ResponseEntity
+                .status(HttpStatus.PARTIAL_CONTENT)
+                .body(ApplicationResponse.ofSuccess(updatedEdital.getEnabled().toString()));
+    }
+
+    @Tag(name = "Delete User")
+    @Operation(summary = "Delete a User by ID")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteEdital(@PathVariable Long id) {
+        editalService.deleteEdital(id);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
 
 }

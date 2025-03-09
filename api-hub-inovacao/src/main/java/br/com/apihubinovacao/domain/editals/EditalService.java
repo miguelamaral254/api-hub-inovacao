@@ -4,7 +4,6 @@ import br.com.apihubinovacao.domain.errors.exceptions.BusinessException;
 import br.com.apihubinovacao.domain.errors.exceptions.GeneralExceptionCodeEnum;
 import br.com.apihubinovacao.domain.errors.exceptions.ProjectExceptionCodeEnum;
 import br.com.apihubinovacao.domain.errors.exceptions.UserExceptionCodeEnum;
-import br.com.apihubinovacao.domain.projects.Projects;
 import br.com.apihubinovacao.domain.users.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -44,6 +43,18 @@ public class EditalService {
     public Edital findById(Long id) {
         return editalRepository.findById(id)
                 .orElseThrow(()-> new BusinessException(ProjectExceptionCodeEnum.PROJECT_NOT_FOUND));
+    }
+    @Transactional
+    public void deleteEdital(Long id) {
+        Edital edital = findById(id);
+        editalRepository.delete(edital);
+    }
+
+    @Transactional
+    public Edital disableEdital(Long id, Boolean disable) {
+        Edital edital = findById(id);
+        edital.setEnabled(disable);
+        return editalRepository.save(edital);
     }
 
     private void validateBusinessRules(Edital edital) {

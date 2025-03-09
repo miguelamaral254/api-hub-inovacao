@@ -6,7 +6,6 @@ import br.com.apihubinovacao.domain.errors.exceptions.BusinessException;
 import br.com.apihubinovacao.domain.errors.exceptions.GeneralExceptionCodeEnum;
 import br.com.apihubinovacao.domain.errors.exceptions.ProjectExceptionCodeEnum;
 import br.com.apihubinovacao.domain.errors.exceptions.UserExceptionCodeEnum;
-import br.com.apihubinovacao.domain.users.User;
 import br.com.apihubinovacao.domain.users.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
-import java.util.function.Consumer;
+
 @Service
 @RequiredArgsConstructor
 public class ProjectService {
@@ -41,15 +40,6 @@ public class ProjectService {
     public Projects findById(Long id) {
         return projectRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ProjectExceptionCodeEnum.PROJECT_NOT_FOUND));
-    }
-
-    @Transactional
-    public Projects updateProject(Long id, Consumer<Projects> cc) {
-        Projects project = findById(id);
-        final String oldTitle = project.getTitle();
-        cc.accept(project);
-        validateUpdateRules(oldTitle, project);
-        return project;
     }
 
     @Transactional
