@@ -23,6 +23,7 @@ public class EditalController {
 
     private final EditalService editalService;
     private final EditalMapper editalMapper;
+    private final EditalRepository editalRepository;
 
     @Tag(name = "Create Edital")
     @Operation(summary = "Create a new Edital")
@@ -45,15 +46,26 @@ public class EditalController {
                 .build();
     }
 
-    @Tag(name="Search Edital with filter")
+    @Tag(name="Search Editals with filter")
     @GetMapping
-    @Operation(summary = "Search Editals with filters or all Editals")
-    public ResponseEntity<ApplicationResponse<Page<EditalDTO>>> searchEditals(Pageable pageable) {
+    @Operation(summary = "Search editals with filters or all editals")
+    public ResponseEntity<ApplicationResponse<Page<EditalDTO>>> searchEditals(
+            @RequestParam(value = "title", required = false) String title,
+            @RequestParam(value = "enabled", required = false) Boolean enabled,
+            Pageable pageable) {
 
         Specification<Edital> specification = Specification.where(null);
 
+        if (title != null) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get("title")), "%" + title.toLowerCase() + "%"));
+        }
 
-        Page<Edital> editalPage = editalService.searchEditals(specification, pageable);
+        if (enabled != null) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("enabled"), enabled));
+        }
+        Page<Edital> editalPage = editalRepository.findAll(specification, pageable);
         Page<EditalDTO> editalDTOPage = editalMapper.toDto(editalPage);
 
         return ResponseEntity
