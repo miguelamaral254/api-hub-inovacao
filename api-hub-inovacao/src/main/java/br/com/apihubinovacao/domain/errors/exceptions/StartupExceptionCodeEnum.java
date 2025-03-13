@@ -5,6 +5,7 @@ import lombok.Getter;
 @Getter
 public enum StartupExceptionCodeEnum {
 
+    DUPLICATE_CNPJ("Duplicate CNPJ", "STAREXCEP-001", 409),
     STARTUP_NOT_FOUND("Startup not found", "STAREXCEP-001", 404),
     STARTUP_CREATION_FAILED("Failed to create Startup", "STAREXCEP-004", 500),
     STARTUP_UPDATE_FAILED("Failed to update Startup", "STAREXCEP-005", 500),

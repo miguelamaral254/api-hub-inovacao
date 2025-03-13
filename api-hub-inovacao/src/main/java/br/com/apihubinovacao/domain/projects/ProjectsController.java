@@ -22,6 +22,7 @@ import java.net.URI;
 @AllArgsConstructor
 public class ProjectsController {
     private final ProjectService projectService;
+    private final ProjectMapper projectMapper;
 
     @Tag(name = "Create Project")
     @Operation(summary = "Create a new project")
@@ -47,7 +48,6 @@ public class ProjectsController {
     }
 
 
-    private final ProjectMapper projectMapper;
 
     @GetMapping("/{id}")
     @Operation(summary = "Search race by ID")

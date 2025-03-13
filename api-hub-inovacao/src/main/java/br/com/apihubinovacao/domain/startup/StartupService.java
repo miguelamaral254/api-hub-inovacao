@@ -2,9 +2,11 @@ package br.com.apihubinovacao.domain.startup;
 
 
 import br.com.apihubinovacao.domain.errors.exceptions.StartupExceptionCodeEnum;
+import br.com.apihubinovacao.domain.users.User;
 import br.com.apihubinovacao.domain.users.UserRepository;
 import br.com.apihubinovacao.domain.errors.exceptions.BusinessException;
 import br.com.apihubinovacao.domain.errors.exceptions.UserExceptionCodeEnum;
+import br.com.apihubinovacao.domain.users.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,14 +18,35 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class StartupService {
     private final StartupRepository startupRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Transactional
     public Startup createStartup(Startup startup) {
-        startup.setUser(user);
-        validateUniqueFields(startup);
+        validate(startup);
         return startupRepository.save(startup);
     }
+
+    private void validate(Startup startup) {
+        User user = userService.findById(startup.getUser().getId());
+        User manager = null;
+        if (startup.getUserMenager() != null && startup.getUserMenager().getId() != null) {
+            manager = userService.findById(startup.getUserMenager().getId());
+        }
+
+        startup.setUser(user);
+        startup.setUserMenager(manager);
+
+        validadeBusinessRules(startup);
+    }
+
+    private void validadeBusinessRules(Startup startup) {
+        if (startup.getUser() == null || startup.getUser().getId() == null) {
+            throw new BusinessException(UserExceptionCodeEnum.USER_NOT_FOUND);
+        }
+
+        userService.findById(startup.getUser().getId());
+    }
+
 
     private void validateUniqueFields(Startup startup) {
         if (startup.getTitle() == null || startupRepository.existsByTitle(startup.getTitle())) {

@@ -3,15 +3,20 @@ package br.com.apihubinovacao.domain.startup;
 import br.com.apihubinovacao.core.ApplicationResponse;
 import br.com.apihubinovacao.domain.projects.Projects;
 import br.com.apihubinovacao.domain.projects.ProjectsDTO;
+import br.com.apihubinovacao.domain.users.User;
+import br.com.apihubinovacao.domain.users.UserDTO;
+import br.com.apihubinovacao.validations.CreateValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
+import org.hibernate.sql.ast.tree.expression.Star;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -27,13 +32,15 @@ public class StartupController {
     private final StartupService startupService;
     private final StartupMapper startupMapper;
 
-    @Tag(name = "Create Startup")
-    @Operation(summary = "Create a new startup")
-    @PostMapping(consumes = {"application/json"})
+    @Tag(name="Create Startup")
+    @PostMapping
+    @Operation(summary = "Create a new Startup")
     public ResponseEntity<Void> createStartup(
-            @RequestBody StartupDTO startupDto) {
+            @Validated(CreateValidation.class)
+            @RequestBody StartupDTO userDto) {
 
-        Startup startup = startupMapper.toEntity(startupDto);
+        Startup startup = startupMapper.toEntity(userDto);
+
         Startup savedEntity = startupService.createStartup(startup);
 
         URI location = ServletUriComponentsBuilder
@@ -92,13 +99,17 @@ public class StartupController {
                     criteriaBuilder.equal(root.get("enabled"), enabled));
         }
 
+        // Busca a página de Startups com as especificações e paginação
         Page<Startup> startupPage = startupService.searchStartup(specification, pageable);
-        Page<StartupDTO> startupDTOPage = startupMapper.toDto(startupPage);
+
+        // Mapeia a Page<Startup> para Page<StartupDTO>
+        Page<StartupDTO> startupDTOPage = startupPage.map(startup -> startupMapper.toDto(startup));
 
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(ApplicationResponse.ofSuccess(startupDTOPage));
     }
+
 
     @Tag(name = "Delete Startup")
     @Operation(summary = "Delete a Startup by ID")

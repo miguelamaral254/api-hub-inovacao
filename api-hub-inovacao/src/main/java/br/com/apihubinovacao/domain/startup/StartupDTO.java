@@ -17,7 +17,7 @@ public record StartupDTO(
         @NotBlank(groups = CreateValidation.class)
         String description,
 
-        @Null
+
         Boolean enabled,
 
         @NotBlank(groups = CreateValidation.class)
