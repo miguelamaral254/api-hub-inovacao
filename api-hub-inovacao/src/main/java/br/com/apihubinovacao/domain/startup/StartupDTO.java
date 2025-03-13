@@ -1,7 +1,9 @@
 package br.com.apihubinovacao.domain.startup;
 import br.com.apihubinovacao.core.BaseDTO;
+import br.com.apihubinovacao.core.StatusSolicitation;
 import br.com.apihubinovacao.validations.CreateValidation;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import org.springframework.lang.Nullable;
 
@@ -17,8 +19,11 @@ public record StartupDTO(
         @NotBlank(groups = CreateValidation.class)
         String description,
 
-
+        @NotNull
         Boolean enabled,
+
+        @NotBlank(groups = CreateValidation.class)
+        StatusSolicitation status,
 
         @NotBlank(groups = CreateValidation.class)
         Long userId,

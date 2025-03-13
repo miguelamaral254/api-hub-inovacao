@@ -1,6 +1,7 @@
 package br.com.apihubinovacao.domain.startup;
 
 import br.com.apihubinovacao.core.ApplicationResponse;
+import br.com.apihubinovacao.core.StatusSolicitation;
 import br.com.apihubinovacao.domain.projects.Projects;
 import br.com.apihubinovacao.domain.projects.ProjectsDTO;
 import br.com.apihubinovacao.domain.users.User;
