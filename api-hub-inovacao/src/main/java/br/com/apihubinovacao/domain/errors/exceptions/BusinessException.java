@@ -33,4 +33,12 @@ public class BusinessException extends RuntimeException {
         this.message = generalError.getMessage();
         this.httpStatus = generalError.getHttpStatus();
     }
+
+    // Construtor para StartupExceptionCodeEnum
+    public BusinessException(StartupExceptionCodeEnum generalError) {
+        super(generalError.getMessage());
+        this.code = generalError.getCode();
+        this.message = generalError.getMessage();
+        this.httpStatus = generalError.getHttpStatus();
+    }
 }

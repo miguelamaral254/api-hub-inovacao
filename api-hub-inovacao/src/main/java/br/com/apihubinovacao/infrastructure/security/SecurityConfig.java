@@ -23,23 +23,36 @@ public class SecurityConfig {
         this.corsConfigurationSource = corsConfigurationSource;
     }
 
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .csrf(csrf -> csrf.disable())
+//                .cors(cors -> cors.configurationSource(corsConfigurationSource))
+//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .authorizeHttpRequests(authorize -> authorize
+//                        .requestMatchers("/uploads/**").permitAll()
+//                        .requestMatchers(RoutesConfig.PUBLIC_ROUTES).permitAll()
+//                        .requestMatchers(RoutesConfig.USER_ROUTES).hasAnyRole("PROFESSOR", "STUDENT","PARTNER_COMPANY", "ADMIN", "MANAGER")
+//                        .requestMatchers(RoutesConfig.COMPANY_ROUTES).hasAnyRole("PARTNER_COMPANY" ,"MANAGER","ADMIN")
+//                        .requestMatchers(RoutesConfig.MANAGERS_ROUTES).hasAnyRole("MANAGER","ADMIN")
+//                        .requestMatchers(RoutesConfig.ADMIN_ROUTES).hasRole("ADMIN")
+//
+//                        .anyRequest().authenticated()
+//                )
+//
+//                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
+//        return http.build();
+//    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/uploads/**").permitAll()
-                        .requestMatchers(RoutesConfig.PUBLIC_ROUTES).permitAll()
-                        .requestMatchers(RoutesConfig.USER_ROUTES).hasAnyRole("PROFESSOR", "STUDENT","PARTNER_COMPANY", "ADMIN", "MANAGER")
-                        .requestMatchers(RoutesConfig.COMPANY_ROUTES).hasAnyRole("PARTNER_COMPANY" ,"MANAGER","ADMIN")
-                        .requestMatchers(RoutesConfig.MANAGERS_ROUTES).hasAnyRole("MANAGER","ADMIN")
-                        .requestMatchers(RoutesConfig.ADMIN_ROUTES).hasRole("ADMIN")
-
-                        .anyRequest().authenticated()
+                .csrf(csrf -> csrf.disable()) // Desativa CSRF
+                .cors(cors -> cors.configurationSource(corsConfigurationSource)) // Mantém CORS configurado
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Mantém stateless
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().permitAll() // Permite todas as requisições sem autenticação
                 )
-
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

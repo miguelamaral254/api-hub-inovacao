@@ -22,7 +22,7 @@ public abstract class BaseEntity {
     private Boolean enabled;
 
     @Column(nullable = false, updatable = false)
-        private LocalDateTime createdDate;
+    private LocalDateTime createdDate;
 
     @Column(nullable = false)
     private LocalDateTime lastModifiedDate;
