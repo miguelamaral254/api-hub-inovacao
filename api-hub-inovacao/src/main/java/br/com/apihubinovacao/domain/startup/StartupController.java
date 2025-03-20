@@ -6,10 +6,12 @@ import br.com.apihubinovacao.domain.projects.Projects;
 import br.com.apihubinovacao.domain.projects.ProjectsDTO;
 import br.com.apihubinovacao.domain.users.User;
 import br.com.apihubinovacao.domain.users.UserDTO;
+import br.com.apihubinovacao.domain.users.UserService;
 import br.com.apihubinovacao.validations.CreateValidation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.hibernate.sql.ast.tree.expression.Star;
 import org.springframework.data.domain.Page;
@@ -17,10 +19,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 
 import java.io.IOException;
 import java.net.URI;
@@ -32,8 +36,9 @@ import java.net.URI;
 public class StartupController {
     private final StartupService startupService;
     private final StartupMapper startupMapper;
+    private final UserService userService;
 
-    @Tag(name="Create Startup")
+    @Tag(name = "Create Startup")
     @PostMapping
     @Operation(summary = "Create a new Startup")
     public ResponseEntity<Void> createStartup(
@@ -41,7 +46,6 @@ public class StartupController {
             @RequestBody StartupDTO userDto) {
 
         Startup startup = startupMapper.toEntity(userDto);
-
         Startup savedEntity = startupService.createStartup(startup);
 
         URI location = ServletUriComponentsBuilder
@@ -55,7 +59,6 @@ public class StartupController {
                 .location(location)
                 .build();
     }
-
 
 
     @GetMapping("/{id}")
@@ -99,6 +102,7 @@ public class StartupController {
             specification = specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("enabled"), enabled));
         }
+
 
         // Busca a página de Startups com as especificações e paginação
         Page<Startup> startupPage = startupService.searchStartup(specification, pageable);

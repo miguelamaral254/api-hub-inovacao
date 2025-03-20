@@ -26,7 +26,7 @@ public class ProjectsController {
 
     @Tag(name = "Create Project")
     @Operation(summary = "Create a new project")
-    @PostMapping( consumes = {"multipart/form-data"})
+    @PostMapping(consumes = {"multipart/form-data"})
     public ResponseEntity<Void> createProject(
             @RequestPart("dto") ProjectsDTO projectDto,
             @RequestPart(value = "file", required = false) MultipartFile file,
@@ -48,7 +48,6 @@ public class ProjectsController {
     }
 
 
-
     @GetMapping("/{id}")
     @Operation(summary = "Search race by ID")
     public ResponseEntity<ApplicationResponse<ProjectsDTO>> findRaceById(
@@ -61,7 +60,7 @@ public class ProjectsController {
                 .body(ApplicationResponse.ofSuccess(projectsDto));
     }
 
-    @Tag(name="Search Projects with filter")
+    @Tag(name = "Search Projects with filter")
     @GetMapping
     @Operation(summary = "Search projects with filters or all projects")
     public ResponseEntity<ApplicationResponse<Page<ProjectsDTO>>> searchProjects(

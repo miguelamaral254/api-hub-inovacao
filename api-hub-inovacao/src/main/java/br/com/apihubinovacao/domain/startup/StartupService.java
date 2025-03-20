@@ -9,6 +9,8 @@ import br.com.apihubinovacao.domain.users.UserRepository;
 import br.com.apihubinovacao.domain.errors.exceptions.BusinessException;
 import br.com.apihubinovacao.domain.errors.exceptions.UserExceptionCodeEnum;
 import br.com.apihubinovacao.domain.users.UserService;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.sql.ast.tree.expression.Star;
 import org.springframework.data.domain.Page;
@@ -16,6 +18,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +46,8 @@ public class StartupService {
         startup.setUserMenager(manager);
 
         validadeBusinessRules(startup);
+        validateUniqueFields(startup);
+
     }
 
     private void validadeBusinessRules(Startup startup) {
