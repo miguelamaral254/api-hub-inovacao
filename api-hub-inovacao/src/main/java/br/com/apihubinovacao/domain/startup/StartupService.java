@@ -1,33 +1,27 @@
 package br.com.apihubinovacao.domain.startup;
 
 
-import br.com.apihubinovacao.core.StatusSolicitation;
 import br.com.apihubinovacao.domain.errors.exceptions.StartupExceptionCodeEnum;
-import br.com.apihubinovacao.domain.projects.Projects;
 import br.com.apihubinovacao.domain.users.User;
 import br.com.apihubinovacao.domain.users.UserRepository;
 import br.com.apihubinovacao.domain.errors.exceptions.BusinessException;
 import br.com.apihubinovacao.domain.errors.exceptions.UserExceptionCodeEnum;
 import br.com.apihubinovacao.domain.users.UserService;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.sql.ast.tree.expression.Star;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.Optional;
+import java.util.function.Consumer;
 
 @Service
 @RequiredArgsConstructor
 public class StartupService {
     private final StartupRepository startupRepository;
     private final UserService userService;
+    private final UserRepository userRepository;
 
     @Transactional
     public Startup createStartup(Startup startup) {
@@ -77,6 +71,21 @@ public class StartupService {
         return startupRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(StartupExceptionCodeEnum.STARTUP_NOT_FOUND));
     }
+
+    @Transactional
+    public Startup updateStartup(Long id, Startup startup) {
+        Startup existingStartup = startupRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(StartupExceptionCodeEnum.STARTUP_NOT_FOUND));
+
+        existingStartup.setTitle(startup.getTitle());
+        existingStartup.setDescription(startup.getDescription());
+        existingStartup.setEnabled(startup.getEnabled());
+        existingStartup.setStatus(startup.getStatus());
+        existingStartup.setUser(startup.getUser());
+
+        return startupRepository.save(existingStartup);
+    }
+
 
     @Transactional
     public void deleteStartup(Long id) {

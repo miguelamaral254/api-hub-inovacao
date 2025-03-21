@@ -39,7 +39,7 @@ public class Startup extends BaseEntity {
     @Column(name = "feedback", columnDefinition = "TEXT")
     private String feedback;
 
-    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private StatusSolicitation status;
 
     @Column(name = "justification", columnDefinition = "TEXT")

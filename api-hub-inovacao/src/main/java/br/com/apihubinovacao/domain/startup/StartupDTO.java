@@ -1,4 +1,5 @@
 package br.com.apihubinovacao.domain.startup;
+
 import br.com.apihubinovacao.core.BaseDTO;
 import br.com.apihubinovacao.core.StatusSolicitation;
 import br.com.apihubinovacao.validations.CreateValidation;
@@ -13,19 +14,16 @@ public record StartupDTO(
         @Null
         Long id,
 
-        @NotBlank(groups = CreateValidation.class)
         String title,
 
-        @NotBlank(groups = CreateValidation.class)
         String description,
 
         @NotNull
         Boolean enabled,
 
-        @NotBlank(groups = CreateValidation.class)
         StatusSolicitation status,
 
-        @NotBlank(groups = CreateValidation.class)
+        @NotNull
         Long userId,
 
         @Nullable

@@ -1,8 +1,8 @@
 package br.com.apihubinovacao.domain.startup;
 
 import br.com.apihubinovacao.domain.users.User;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
+import org.springframework.stereotype.Component;
 
 @Mapper(componentModel = "spring")
 public interface StartupMapper {
@@ -14,6 +14,11 @@ public interface StartupMapper {
     @Mapping(source = "userId", target = "user.id")
     @Mapping(source = "managerId", target = "userMenager.id")
     Startup toEntity(StartupDTO dto);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(source = "userId", target = "user.id")
+    @Mapping(source = "managerId", target = "userMenager.id")
+    void mergeNonNull(StartupDTO dto, @MappingTarget Startup entity);
 
     default Long map(User user) {
         if (user == null) {
