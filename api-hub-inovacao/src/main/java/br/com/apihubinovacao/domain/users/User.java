@@ -30,6 +30,7 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String registration;
 
+
     @NotBlank
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -65,7 +66,7 @@ public class User extends BaseEntity {
                     }
                     cnpj = null;
                 }
-                case PARTNER_COMPANY, ADMIN -> {
+                case  ADMIN -> {
                     if (cnpj == null || !cnpj.matches("\\d{14}")) {
                         throw new IllegalArgumentException("Usuários com essa role devem ter CNPJ válido.");
                     }

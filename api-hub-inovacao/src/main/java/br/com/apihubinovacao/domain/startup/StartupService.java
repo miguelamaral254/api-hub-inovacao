@@ -2,11 +2,10 @@ package br.com.apihubinovacao.domain.startup;
 
 
 import br.com.apihubinovacao.core.StatusSolicitation;
-import br.com.apihubinovacao.domain.errors.exceptions.StartupExceptionCodeEnum;
 import br.com.apihubinovacao.domain.users.User;
 import br.com.apihubinovacao.domain.users.UserRepository;
-import br.com.apihubinovacao.domain.errors.exceptions.BusinessException;
-import br.com.apihubinovacao.domain.errors.exceptions.UserExceptionCodeEnum;
+import br.com.apihubinovacao.core.BusinessException;
+import br.com.apihubinovacao.domain.users.UserExceptionCodeEnum;
 import br.com.apihubinovacao.domain.users.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

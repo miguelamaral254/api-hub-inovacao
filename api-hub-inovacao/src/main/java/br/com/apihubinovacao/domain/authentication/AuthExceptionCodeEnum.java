@@ -1,9 +1,10 @@
-package br.com.apihubinovacao.domain.errors.exceptions;
+package br.com.apihubinovacao.domain.authentication;
 
+import br.com.apihubinovacao.core.ExceptionCode;
 import lombok.Getter;
 
 @Getter
-public enum GeneralExceptionCodeEnum {
+public enum AuthExceptionCodeEnum implements ExceptionCode {
 
     SERVER_ERROR("Internal server error", "ERR-500", 500),
     INVALID_TOKEN("Invalid token", "ERR-401", 401),
@@ -13,7 +14,7 @@ public enum GeneralExceptionCodeEnum {
     private final String code;
     private final int httpStatus;
 
-    GeneralExceptionCodeEnum(String message, String code, int httpStatus) {
+    AuthExceptionCodeEnum(String message, String code, int httpStatus) {
         this.message = message;
         this.code = code;
         this.httpStatus = httpStatus;

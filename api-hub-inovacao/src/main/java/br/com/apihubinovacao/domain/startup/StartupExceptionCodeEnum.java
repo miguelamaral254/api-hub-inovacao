@@ -1,9 +1,10 @@
-package br.com.apihubinovacao.domain.errors.exceptions;
+package br.com.apihubinovacao.domain.startup;
 
+import br.com.apihubinovacao.core.ExceptionCode;
 import lombok.Getter;
 
 @Getter
-public enum StartupExceptionCodeEnum {
+public enum StartupExceptionCodeEnum implements ExceptionCode {
 
     DUPLICATE_CNPJ("Duplicate CNPJ", "STAREXCEP-001", 409),
     STARTUP_NOT_FOUND("Startup not found", "STAREXCEP-002", 404),
