@@ -1,6 +1,5 @@
 package br.com.apihubinovacao.infrastructure.security;
 
-import br.com.apihubinovacao.api.routes.RouteDefinitions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,12 +30,12 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/uploads/**").permitAll() // 🔥 LIBERA O ACESSO PÚBLICO ÀS IMAGENS
-                        .requestMatchers(RouteDefinitions.PUBLIC_ROUTES).permitAll()
-                        .requestMatchers(RouteDefinitions.USER_ROUTES).hasAnyRole("PROFESSOR", "STUDENT","PARTNER_COMPANY", "ADMIN", "MANAGER")
-                        .requestMatchers(RouteDefinitions.COMPANY_ROUTES).hasAnyRole("PARTNER_COMPANY" ,"MANAGER","ADMIN")
-                        .requestMatchers(RouteDefinitions.MANAGERS_ROUTES).hasAnyRole("MANAGER","ADMIN")
-                        .requestMatchers(RouteDefinitions.ADMIN_ROUTES).hasRole("ADMIN")
+                        .requestMatchers("/uploads/**").permitAll()
+                        .requestMatchers(RoutesConfig.PUBLIC_ROUTES).permitAll()
+                        .requestMatchers(RoutesConfig.USER_ROUTES).hasAnyRole("PROFESSOR", "STUDENT","PARTNER_COMPANY", "ADMIN", "MANAGER")
+                        .requestMatchers(RoutesConfig.COMPANY_ROUTES).hasAnyRole("PARTNER_COMPANY" ,"MANAGER","ADMIN")
+                        .requestMatchers(RoutesConfig.MANAGERS_ROUTES).hasAnyRole("MANAGER","ADMIN")
+                        .requestMatchers(RoutesConfig.ADMIN_ROUTES).hasRole("ADMIN")
 
                         .anyRequest().authenticated()
                 )
@@ -44,6 +43,8 @@ public class SecurityConfig {
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

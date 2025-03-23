@@ -1,0 +1,48 @@
+package br.com.apihubinovacao.domain.startup;
+
+import br.com.apihubinovacao.core.BaseDTO;
+import br.com.apihubinovacao.core.StatusSolicitation;
+import br.com.apihubinovacao.validations.CreateValidation;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
+import org.springframework.lang.Nullable;
+
+import java.time.LocalDateTime;
+
+public record StartupDTO(
+        @Null
+        Long id,
+
+        String title,
+
+        String description,
+
+        @NotNull
+        Boolean enabled,
+
+        StatusSolicitation status,
+
+        @NotNull
+        Long userId,
+
+        @Nullable
+        String cnpj,
+
+        @Nullable
+        Long managerId,
+
+        @Nullable
+        String feedback,
+
+        @Nullable
+        String justification,
+
+        @Null
+        LocalDateTime createdDate,
+
+        @Null
+        LocalDateTime lastModifiedDate
+
+) implements BaseDTO {
+}
