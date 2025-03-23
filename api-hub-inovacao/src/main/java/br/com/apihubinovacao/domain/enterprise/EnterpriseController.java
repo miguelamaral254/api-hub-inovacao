@@ -92,21 +92,62 @@ public class EnterpriseController {
                 .status(HttpStatus.OK)
                 .body(ApplicationResponse.ofSuccess(enterpriseDTO));
     }
-/*
+
     @Tag(name = "Update Enterprise")
-    @Operation(summary = "Update an existing enterprise")
     @PutMapping("/{id}")
+    @Operation(summary = "Update an existing enterprise")
     public ResponseEntity<ApplicationResponse<EnterpriseDTO>> updateEnterprise(
             @PathVariable Long id,
             @RequestBody EnterpriseDTO enterpriseDto) {
 
         Enterprise enterprise = enterpriseMapper.toEntity(enterpriseDto);
-        Enterprise updatedEnterprise = enterpriseService.updateEnterprise(id, enterprise);
-        EnterpriseDTO updatedEnterpriseDto = enterpriseMapper.toDto(updatedEnterprise);
+
+        enterpriseService.updateEnterprise(id, enterpriseToUpdate -> {
+            if (enterprise.getNomeEmpresa() != null) {
+                enterpriseToUpdate.setNomeEmpresa(enterprise.getNomeEmpresa());
+            }
+            if (enterprise.getCnpj() != null) {
+                enterpriseToUpdate.setCnpj(enterprise.getCnpj());
+            }
+            if (enterprise.getSetorAtuacao() != null) {
+                enterpriseToUpdate.setSetorAtuacao(enterprise.getSetorAtuacao());
+            }
+            if (enterprise.getReprentantName() != null) {
+                enterpriseToUpdate.setReprentantName(enterprise.getReprentantName());
+            }
+            if (enterprise.getReprentantEmail() != null) {
+                enterpriseToUpdate.setReprentantEmail(enterprise.getReprentantEmail());
+            }
+            if (enterprise.getReprentantPhone() != null) {
+                enterpriseToUpdate.setReprentantPhone(enterprise.getReprentantPhone());
+            }
+            if (enterprise.getReprentantPosition() != null) {
+                enterpriseToUpdate.setReprentantPosition(enterprise.getReprentantPosition());
+            }
+            if (enterprise.getPhone() != null) {
+                enterpriseToUpdate.setPhone(enterprise.getPhone());
+            }
+        });
+
+        Enterprise updatedEnterprise = enterpriseService.findById(id);
+        EnterpriseDTO updatedEnterpriseDTO = enterpriseMapper.toDto(updatedEnterprise);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(ApplicationResponse.ofSuccess(updatedEnterpriseDto));
+                .body(ApplicationResponse.ofSuccess(updatedEnterpriseDTO));
+    }
+
+    @Tag(name = "Disable Enterprise")
+    @PatchMapping("/{id}/enabled")
+    @Operation(summary = "Enable or disable an enterprise by ID")
+    public ResponseEntity<ApplicationResponse<String>> disableEnterprise(
+            @PathVariable Long id,
+            @RequestParam Boolean disable) {
+
+        Enterprise updatedEnterprise = enterpriseService.disableEnterprise(id, disable);
+        return ResponseEntity
+                .status(HttpStatus.PARTIAL_CONTENT)
+                .body(ApplicationResponse.ofSuccess(updatedEnterprise.getEnabled().toString()));
     }
 
     @Tag(name = "Delete Enterprise")
@@ -119,5 +160,5 @@ public class EnterpriseController {
                 .build();
     }
 
- */
+
 }

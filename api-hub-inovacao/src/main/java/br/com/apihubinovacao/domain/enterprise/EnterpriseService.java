@@ -8,6 +8,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.function.Consumer;
+
 @Service
 @RequiredArgsConstructor
 public class EnterpriseService {
@@ -47,5 +49,46 @@ public class EnterpriseService {
         if (enterprise.getNomeEmpresa() == null || enterprise.getNomeEmpresa().isEmpty()) {
             throw new BusinessException(EnterpriseExceptionCodeEnum.INVALID_COMPANY_NAME);
         }
+    }
+
+    @Transactional
+    public Enterprise updateEnterprise(Long id, Consumer<Enterprise> updateConsumer) {
+        Enterprise existingEnterprise = findById(id);
+
+        validateUpdateBusiness(id, existingEnterprise);
+
+        updateConsumer.accept(existingEnterprise);
+
+        return enterpriseRepository.save(existingEnterprise);
+    }
+
+    private void validateUpdateBusiness(Long id, Enterprise existingEnterprise) {
+        if (existingEnterprise.getCnpj() != null) {
+            Enterprise existingCnpjEnterprise = enterpriseRepository.findByCnpj(existingEnterprise.getCnpj());
+
+            if (existingCnpjEnterprise != null && !existingCnpjEnterprise.getId().equals(id)) {
+                throw new BusinessException(EnterpriseExceptionCodeEnum.ENTERPRISE_CNPJ_ALREADY_EXISTS);
+            }
+        }
+
+        if (existingEnterprise.getNomeEmpresa() == null || existingEnterprise.getNomeEmpresa().isEmpty()) {
+            throw new BusinessException(EnterpriseExceptionCodeEnum.INVALID_COMPANY_NAME);
+        }
+    }
+
+    @Transactional
+    public Enterprise disableEnterprise(Long id, Boolean disable) {
+        Enterprise enterprise = enterpriseRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(EnterpriseExceptionCodeEnum.ENTERPRISE_NOT_FOUND));
+
+        enterprise.setEnabled(disable);
+        return enterpriseRepository.save(enterprise);
+    }
+
+
+    @Transactional
+    public void deleteEnterprise(Long id) {
+        Enterprise enterprise = findById(id);
+        enterpriseRepository.delete(enterprise);
     }
 }
