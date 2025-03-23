@@ -10,6 +10,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.function.Consumer;
+
 
 @Service
 @RequiredArgsConstructor
@@ -38,34 +40,35 @@ public class UserService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(UserExceptionCodeEnum.USER_NOT_FOUND));
     }
-    public User updateUser(Long id, User updatedUser) {
+    @Transactional
+    public User updateUser(Long id, Consumer<User> updateConsumer) {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(UserExceptionCodeEnum.USER_NOT_FOUND));
 
-        if (updatedUser.getName() != null) {
-            existingUser.setName(updatedUser.getName());
-        }
-        if (updatedUser.getEmail() != null) {
-            existingUser.setEmail(updatedUser.getEmail());
-        }
-        if (updatedUser.getPassword() != null) {
-            existingUser.setPassword(updatedUser.getPassword());
-        }
-        if (updatedUser.getEnabled() != null) {
-            existingUser.setEnabled(updatedUser.getEnabled());
-        }
-        if (updatedUser.getCpf() != null) {
-            existingUser.setCpf(updatedUser.getCpf());
-        }
-        if (updatedUser.getCnpj() != null) {
-            existingUser.setCnpj(updatedUser.getCnpj());
-        }
+        updateConsumer.accept(existingUser);
 
-        managePhones(existingUser, updatedUser);
+        validateUpdateRules(existingUser);
 
         return userRepository.save(existingUser);
     }
 
+    private void validateUpdateRules(User updatedUser) {
+        if (updatedUser.getEmail() != null && userRepository.existsByEmailAndIdNot(updatedUser.getEmail(), updatedUser.getId())) {
+            throw new BusinessException(UserExceptionCodeEnum.DUPLICATE_EMAIL);
+        }
+
+        if (updatedUser.getCpf() != null && userRepository.existsByCpfAndIdNot(updatedUser.getCpf(), updatedUser.getId())) {
+            throw new BusinessException(UserExceptionCodeEnum.DUPLICATE_CPF);
+        }
+
+        if (updatedUser.getCnpj() != null && userRepository.existsByCnpjAndIdNot(updatedUser.getCnpj(), updatedUser.getId())) {
+            throw new BusinessException(UserExceptionCodeEnum.DUPLICATE_CNPJ);
+        }
+
+        if (updatedUser.getRegistration() != null && userRepository.existsByRegistrationAndIdNot(updatedUser.getRegistration(), updatedUser.getId())) {
+            throw new BusinessException(UserExceptionCodeEnum.DUPLICATE_REGISTRATION);
+        }
+    }
     @Transactional
     public void deleteUser(Long id) {
         User user = findById(id);
@@ -110,32 +113,9 @@ public class UserService {
             throw new BusinessException(UserExceptionCodeEnum.INVALID_EMAIL);
         }
 
-    }private void validateUpdateRules(String oldUserName, User updatedUser) {
-        validateBusinessRules(updatedUser);
-
-        if (!oldUserName.equals(updatedUser.getName()) &&
-                userRepository.existsByNameAndIdNot(updatedUser.getName(), updatedUser.getId())) {
-            throw new BusinessException(UserExceptionCodeEnum.DUPLICATE_USER);
-        }
-
-        if (!updatedUser.getEmail().equals(updatedUser.getEmail()) &&
-                userRepository.existsByEmail(updatedUser.getEmail())) {
-            throw new BusinessException(UserExceptionCodeEnum.DUPLICATE_EMAIL);
-        }
-
-        if (updatedUser.getCpf() != null && !updatedUser.getCpf().equals(updatedUser.getCpf()) &&
-                userRepository.existsByCpf(updatedUser.getCpf())) {
-            throw new BusinessException(UserExceptionCodeEnum.DUPLICATE_CPF);
-        }
-
-        if (updatedUser.getCnpj() != null && !updatedUser.getCnpj().equals(updatedUser.getCnpj()) &&
-                userRepository.existsByCnpj(updatedUser.getCnpj())) {
-            throw new BusinessException(UserExceptionCodeEnum.DUPLICATE_CNPJ);
-        }
     }
 
-
-    private void managePhones(User existingUser, User updatedUser) {
+    public void managePhones(User existingUser, User updatedUser) {
         if (updatedUser.getPhones() != null) {
             for (Phone phone : updatedUser.getPhones()) {
                 if (phone.getId() == null) {

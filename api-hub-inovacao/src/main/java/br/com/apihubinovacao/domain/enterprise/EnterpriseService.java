@@ -55,18 +55,18 @@ public class EnterpriseService {
     public Enterprise updateEnterprise(Long id, Consumer<Enterprise> updateConsumer) {
         Enterprise existingEnterprise = findById(id);
 
-        validateUpdateBusiness(id, existingEnterprise);
-
         updateConsumer.accept(existingEnterprise);
+
+        validateUpdateBusiness(id, existingEnterprise);
 
         return enterpriseRepository.save(existingEnterprise);
     }
 
     private void validateUpdateBusiness(Long id, Enterprise existingEnterprise) {
         if (existingEnterprise.getCnpj() != null) {
-            Enterprise existingCnpjEnterprise = enterpriseRepository.findByCnpj(existingEnterprise.getCnpj());
+            Enterprise existingCnpjEnterprise = enterpriseRepository.findByCnpjAndIdNot(existingEnterprise.getCnpj(), id);
 
-            if (existingCnpjEnterprise != null && !existingCnpjEnterprise.getId().equals(id)) {
+            if (existingCnpjEnterprise != null) {
                 throw new BusinessException(EnterpriseExceptionCodeEnum.ENTERPRISE_CNPJ_ALREADY_EXISTS);
             }
         }
