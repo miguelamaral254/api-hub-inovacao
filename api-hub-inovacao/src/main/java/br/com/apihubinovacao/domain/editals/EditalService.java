@@ -1,9 +1,9 @@
 package br.com.apihubinovacao.domain.editals;
 
-import br.com.apihubinovacao.domain.errors.exceptions.BusinessException;
-import br.com.apihubinovacao.domain.errors.exceptions.GeneralExceptionCodeEnum;
-import br.com.apihubinovacao.domain.errors.exceptions.ProjectExceptionCodeEnum;
-import br.com.apihubinovacao.domain.errors.exceptions.UserExceptionCodeEnum;
+import br.com.apihubinovacao.domain.authentication.AuthExceptionCodeEnum;
+import br.com.apihubinovacao.core.BusinessException;
+import br.com.apihubinovacao.domain.projects.ProjectExceptionCodeEnum;
+import br.com.apihubinovacao.domain.users.UserExceptionCodeEnum;
 import br.com.apihubinovacao.domain.users.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -59,7 +59,7 @@ public class EditalService {
 
     private void validateBusinessRules(Edital edital) {
         if (edital.getTitle() == null || edital.getTitle().isEmpty()) {
-            throw new BusinessException(GeneralExceptionCodeEnum.INVALID_REQUEST);
+            throw new BusinessException(AuthExceptionCodeEnum.INVALID_REQUEST);
         }
 
         if (edital.getIdUser() == null || edital.getIdUser().getId() == null) {

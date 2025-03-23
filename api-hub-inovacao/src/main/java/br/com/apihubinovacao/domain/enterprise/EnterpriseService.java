@@ -1,7 +1,6 @@
 package br.com.apihubinovacao.domain.enterprise;
 
-import br.com.apihubinovacao.domain.errors.exceptions.BusinessException;
-import br.com.apihubinovacao.domain.errors.exceptions.EnterpriseExceptionCodeEnum;
+import br.com.apihubinovacao.core.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

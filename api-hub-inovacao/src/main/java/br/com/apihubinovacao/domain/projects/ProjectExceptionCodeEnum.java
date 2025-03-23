@@ -1,9 +1,10 @@
-package br.com.apihubinovacao.domain.errors.exceptions;
+package br.com.apihubinovacao.domain.projects;
 
+import br.com.apihubinovacao.core.ExceptionCode;
 import lombok.Getter;
 
 @Getter
-public enum ProjectExceptionCodeEnum {
+public enum ProjectExceptionCodeEnum implements ExceptionCode {
 
     PROJECT_NOT_FOUND("Project not found", "PROJEXCEP-001", 404),
     PROJECT_ALREADY_EXISTS("Project already exists", "PROJEXCEP-002", 409),

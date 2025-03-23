@@ -1,7 +1,6 @@
 package br.com.apihubinovacao.domain.users;
 
-import br.com.apihubinovacao.domain.errors.exceptions.BusinessException;
-import br.com.apihubinovacao.domain.errors.exceptions.UserExceptionCodeEnum;
+import br.com.apihubinovacao.core.BusinessException;
 import br.com.apihubinovacao.domain.phone.Phone;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

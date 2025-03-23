@@ -2,10 +2,9 @@ package br.com.apihubinovacao.domain.projects;
 
 import br.com.apihubinovacao.core.StatusSolicitation;
 import br.com.apihubinovacao.domain.coauthor.Coauthor;
-import br.com.apihubinovacao.domain.errors.exceptions.BusinessException;
-import br.com.apihubinovacao.domain.errors.exceptions.GeneralExceptionCodeEnum;
-import br.com.apihubinovacao.domain.errors.exceptions.ProjectExceptionCodeEnum;
-import br.com.apihubinovacao.domain.errors.exceptions.UserExceptionCodeEnum;
+import br.com.apihubinovacao.domain.authentication.AuthExceptionCodeEnum;
+import br.com.apihubinovacao.core.BusinessException;
+import br.com.apihubinovacao.domain.users.UserExceptionCodeEnum;
 import br.com.apihubinovacao.domain.users.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -59,7 +58,7 @@ public class ProjectService {
 
     private void validateBusinessRules(Projects project) {
         if (project.getTitle() == null || project.getTitle().isEmpty()) {
-            throw new BusinessException(GeneralExceptionCodeEnum.INVALID_REQUEST);
+            throw new BusinessException(AuthExceptionCodeEnum.INVALID_REQUEST);
         }
 
         if (project.getUser() == null || project.getUser().getId() == null) {

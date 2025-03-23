@@ -1,7 +1,6 @@
 package br.com.apihubinovacao.domain.authentication;
 
-import br.com.apihubinovacao.domain.errors.exceptions.BusinessException;
-import br.com.apihubinovacao.domain.errors.exceptions.GeneralExceptionCodeEnum;
+import br.com.apihubinovacao.core.BusinessException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +26,7 @@ public class AuthService {
                     .signWith(SignatureAlgorithm.HS512, secretKey)
                     .compact();
         } catch (Exception e) {
-            throw new BusinessException(GeneralExceptionCodeEnum.SERVER_ERROR );
+            throw new BusinessException(AuthExceptionCodeEnum.SERVER_ERROR );
         }
     }
 
@@ -47,7 +46,7 @@ public class AuthService {
                             role.equals("ROLE_PARTNER_COMPANY")
             );
         } catch (Exception e) {
-            throw new BusinessException(GeneralExceptionCodeEnum.INVALID_TOKEN);
+            throw new BusinessException(AuthExceptionCodeEnum.INVALID_TOKEN);
         }
     }
 
@@ -59,7 +58,7 @@ public class AuthService {
                     .getBody()
                     .getSubject();
         } catch (Exception e) {
-            throw new BusinessException(GeneralExceptionCodeEnum.INVALID_TOKEN);
+            throw new BusinessException(AuthExceptionCodeEnum.INVALID_TOKEN);
         }
     }
 }

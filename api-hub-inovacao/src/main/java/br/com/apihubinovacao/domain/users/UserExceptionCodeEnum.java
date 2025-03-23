@@ -1,9 +1,10 @@
-package br.com.apihubinovacao.domain.errors.exceptions;
+package br.com.apihubinovacao.domain.users;
 
+import br.com.apihubinovacao.core.ExceptionCode;
 import lombok.Getter;
 
 @Getter
-public enum UserExceptionCodeEnum {
+public enum UserExceptionCodeEnum implements ExceptionCode {
 
     USER_NOT_FOUND("User not found", "USEREXCEP-001", 404),
     DUPLICATE_USER("Duplicate user found", "USEREXCEP-002", 409),

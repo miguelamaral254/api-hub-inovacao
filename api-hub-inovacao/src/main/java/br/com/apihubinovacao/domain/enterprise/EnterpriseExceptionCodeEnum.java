@@ -1,9 +1,10 @@
-package br.com.apihubinovacao.domain.errors.exceptions;
+package br.com.apihubinovacao.domain.enterprise;
 
+import br.com.apihubinovacao.core.ExceptionCode;
 import lombok.Getter;
 
 @Getter
-public enum EnterpriseExceptionCodeEnum {
+public enum EnterpriseExceptionCodeEnum implements ExceptionCode {
 
     ENTERPRISE_NOT_FOUND("Enterprise not found", "ENTERPRISEEXCEP-001", 404),
     ENTERPRISE_CNPJ_ALREADY_EXISTS("CNPJ already exists", "ENTERPRISEEXCEP-002", 409),
