@@ -6,6 +6,7 @@ import br.com.apihubinovacao.domain.authentication.AuthExceptionCodeEnum;
 import br.com.apihubinovacao.core.BusinessException;
 import br.com.apihubinovacao.domain.users.UserExceptionCodeEnum;
 import br.com.apihubinovacao.domain.users.UserRepository;
+import br.com.apihubinovacao.infrastructure.conf.ImageService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

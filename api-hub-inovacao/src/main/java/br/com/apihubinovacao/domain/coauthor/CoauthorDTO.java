@@ -20,11 +20,16 @@ public record CoauthorDTO(
         @NotBlank
         String phone,
 
+        @NotBlank
+        String position,
+
+        @Null
         Boolean enabled ,
 
+        @Null
         LocalDateTime createdDate,
 
+        @Null
         LocalDateTime lastModifiedDate
-
 
 ) implements BaseDTO {}

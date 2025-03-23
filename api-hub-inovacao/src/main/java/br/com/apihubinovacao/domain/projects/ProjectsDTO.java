@@ -14,7 +14,7 @@ import org.springframework.lang.Nullable;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record ProjectsDTO (
+public record ProjectsDTO(
         @Null
         Long id,
 
@@ -32,6 +32,23 @@ public record ProjectsDTO (
 
         @NotBlank(groups = CreateValidation.class)
         String siteLink,
+
+        @NotBlank(groups = CreateValidation.class)
+        String thematicArea,
+        @NotBlank(groups = CreateValidation.class)
+        String course,
+
+        @NotBlank(groups = CreateValidation.class)
+        String problem,
+
+        @NotBlank(groups = CreateValidation.class)
+        String generalObjective,
+
+        @NotBlank(groups = CreateValidation.class)
+        String specificObjective,
+
+        @NotBlank(groups = CreateValidation.class)
+        String expectedResults,
 
         @NotBlank(groups = CreateValidation.class)
         @Enumerated(EnumType.STRING)
@@ -53,10 +70,13 @@ public record ProjectsDTO (
         @Nullable
         String justification,
 
-        Boolean enabled ,
+        @Null
+        Boolean enabled,
 
+        @Null
         LocalDateTime createdDate,
 
+        @Null
         LocalDateTime lastModifiedDate,
 
         @Nullable
