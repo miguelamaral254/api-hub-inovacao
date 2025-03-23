@@ -1,6 +1,7 @@
 package br.com.apihubinovacao.domain.startup;
 
 import br.com.apihubinovacao.core.ApplicationResponse;
+import br.com.apihubinovacao.domain.users.User;
 import br.com.apihubinovacao.domain.users.UserService;
 import br.com.apihubinovacao.validations.CreateValidation;
 import br.com.apihubinovacao.validations.UpdateValidation;
@@ -107,15 +108,37 @@ public class StartupController {
             @PathVariable Long id,
             @RequestBody StartupDTO startupDtoUpdates) {
 
-        Startup startupToUpdate = startupMapper.toEntity(startupDtoUpdates);
-        Startup updatedStartup = startupService.updateStartup(id, startupToUpdate);
+        Startup updatedStartup = startupService.updateStartup(id, startup -> {
+            if (startupDtoUpdates.title() != null) {
+                startup.setTitle(startupDtoUpdates.title());
+            }
+            if (startupDtoUpdates.description() != null) {
+                startup.setDescription(startupDtoUpdates.description());
+            }
+            if (startupDtoUpdates.enabled() != null) {
+                startup.setEnabled(startupDtoUpdates.enabled());
+            }
+            if (startupDtoUpdates.status() != null) {
+                startup.setStatus(startupDtoUpdates.status());
+            }
+            if (startupDtoUpdates.userId() != null) {
+                User user = new User();
+                user.setId(startupDtoUpdates.userId());
+                startup.setUser(user);
+            }
+            if (startupDtoUpdates.managerId() != null) {
+                User manager = new User();
+                manager.setId(startupDtoUpdates.managerId());
+                startup.setUserMenager(manager);
+            }
+        });
+
         StartupDTO updatedStartupDTO = startupMapper.toDto(updatedStartup);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(ApplicationResponse.ofSuccess(updatedStartupDTO));
     }
-
     @Tag(name = "Delete Startup")
     @Operation(summary = "Delete a Startup by ID")
     @DeleteMapping("/{id}")

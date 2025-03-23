@@ -1,6 +1,7 @@
 package br.com.apihubinovacao.domain.startup;
 
 
+import br.com.apihubinovacao.core.StatusSolicitation;
 import br.com.apihubinovacao.domain.errors.exceptions.StartupExceptionCodeEnum;
 import br.com.apihubinovacao.domain.users.User;
 import br.com.apihubinovacao.domain.users.UserRepository;
@@ -71,21 +72,57 @@ public class StartupService {
         return startupRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(StartupExceptionCodeEnum.STARTUP_NOT_FOUND));
     }
-
     @Transactional
-    public Startup updateStartup(Long id, Startup startup) {
+    public Startup updateStartup(Long id, Consumer<Startup> mergeNonNull) {
         Startup existingStartup = startupRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(StartupExceptionCodeEnum.STARTUP_NOT_FOUND));
 
-        existingStartup.setTitle(startup.getTitle());
-        existingStartup.setDescription(startup.getDescription());
-        existingStartup.setEnabled(startup.getEnabled());
-        existingStartup.setStatus(startup.getStatus());
-        existingStartup.setUser(startup.getUser());
+        // Armazena os valores antigos para validação posterior
+        final String oldTitle = existingStartup.getTitle();
+        final String oldDescription = existingStartup.getDescription();
+        final Boolean oldEnabled = existingStartup.getEnabled();
+        final StatusSolicitation oldStatus = existingStartup.getStatus();  // Alterado para StatusSolicitation
+        final Long oldUserId = existingStartup.getUser() != null ? existingStartup.getUser().getId() : null;
 
+        // Aplica a lógica de atualização usando o Consumer
+        mergeNonNull.accept(existingStartup);
+
+        // Valida as alterações feitas
+        validateUpdate(existingStartup, oldTitle, oldDescription, oldEnabled, oldStatus, oldUserId);
+
+        // Salva a entidade com as mudanças
         return startupRepository.save(existingStartup);
     }
 
+    private void validateUpdate(Startup updatedStartup, String oldTitle, String oldDescription,
+                                Boolean oldEnabled, StatusSolicitation oldStatus, Long oldUserId) {
+        // Verifica se o título foi alterado e, se sim, garante que o novo título não seja vazio
+        if (!updatedStartup.getTitle().equals(oldTitle) && (updatedStartup.getTitle() == null || updatedStartup.getTitle().isEmpty())) {
+            throw new BusinessException(StartupExceptionCodeEnum.INVALID_STARTUP_TITLE);
+        }
+
+        // Verifica se a descrição foi alterada e, se sim, garante que a nova descrição não seja vazia
+        if (!updatedStartup.getDescription().equals(oldDescription) && (updatedStartup.getDescription() == null || updatedStartup.getDescription().isEmpty())) {
+            throw new BusinessException(StartupExceptionCodeEnum.INVALID_STARTUP_DESCRIPTION);
+        }
+
+        // Verifica se o status foi alterado para um valor inválido
+        if (!updatedStartup.getStatus().equals(oldStatus) && !isValidStatus(updatedStartup.getStatus())) {
+            throw new BusinessException(StartupExceptionCodeEnum.INVALID_STARTUP_STATUS);
+        }
+
+        if (!updatedStartup.getUser().getId().equals(oldUserId) && updatedStartup.getUser() == null) {
+            throw new BusinessException(UserExceptionCodeEnum.USER_NOT_FOUND);
+        }
+
+        if (updatedStartup.getEnabled() != null && !updatedStartup.getEnabled().equals(oldEnabled)) {
+        }
+    }
+
+    private boolean isValidStatus(StatusSolicitation status) {
+        // Defina suas regras de validação para o status aqui
+        return StatusSolicitation.APROVADA.equals(status) || StatusSolicitation.REPROVADA.equals(status) || StatusSolicitation.PENDENTE.equals(status);
+    }
 
     @Transactional
     public void deleteStartup(Long id) {

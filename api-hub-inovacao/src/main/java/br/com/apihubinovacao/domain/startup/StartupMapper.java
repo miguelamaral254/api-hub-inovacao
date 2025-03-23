@@ -4,6 +4,8 @@ import br.com.apihubinovacao.domain.users.User;
 import org.mapstruct.*;
 import org.springframework.stereotype.Component;
 
+import java.util.function.Consumer;
+
 @Mapper(componentModel = "spring")
 public interface StartupMapper {
 
@@ -16,9 +18,7 @@ public interface StartupMapper {
     Startup toEntity(StartupDTO dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(source = "userId", target = "user.id")
-    @Mapping(source = "managerId", target = "userMenager.id")
-    void mergeNonNull(StartupDTO dto, @MappingTarget Startup entity);
+    void mergeNonNull(StartupDTO dto, @MappingTarget Startup entity, Consumer<StartupDTO> additionalLogic);
 
     default Long map(User user) {
         if (user == null) {
