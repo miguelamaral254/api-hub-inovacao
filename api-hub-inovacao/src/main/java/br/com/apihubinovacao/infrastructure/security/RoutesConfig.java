@@ -8,6 +8,7 @@ public class RoutesConfig {
             "swagger-ui/index.html",
             "/auth/**",
             "/projects/**",
+            "/startup/**",
             "/editals/**",
             "/users/**"
     };

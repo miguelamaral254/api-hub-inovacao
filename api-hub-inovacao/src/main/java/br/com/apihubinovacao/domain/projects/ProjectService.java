@@ -29,6 +29,8 @@ public class ProjectService {
         validateImageCreateRules(project, file, request);
         return projectRepository.save(project);
     }
+
+
     @Transactional(readOnly = true)
     public Page<Projects> searchProjects(Specification<Projects> specification, Pageable pageable) {
         return projectRepository.findAll(specification, pageable);
