@@ -4,6 +4,6 @@ public enum Role {
     ADMIN,
     STUDENT,
     MANAGER,
-    PARTNER_COMPANY,
+    ENTERPRISE,
     PROFESSOR,
 }
