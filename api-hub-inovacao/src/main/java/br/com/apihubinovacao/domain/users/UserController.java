@@ -107,7 +107,34 @@ public class UserController {
             @RequestBody UserDTO userDto) {
 
         User user = userMapper.toEntity(userDto);
-        User updatedUser = userService.updateUser(id, user);
+
+        userService.updateUser(id, existingUser -> {
+            if (user.getName() != null) {
+                existingUser.setName(user.getName());
+            }
+            if (user.getRegistration() != null) {
+                existingUser.setRegistration(user.getRegistration());
+            }
+            if (user.getEmail() != null) {
+                existingUser.setEmail(user.getEmail());
+            }
+            if (user.getRole() != null) {
+                existingUser.setRole(user.getRole());
+            }
+            if (user.getEnabled() != null) {
+                existingUser.setEnabled(user.getEnabled());
+            }
+            if (user.getCpf() != null) {
+                existingUser.setCpf(user.getCpf());
+            }
+            if (user.getCnpj() != null) {
+                existingUser.setCnpj(user.getCnpj());
+            }
+
+            userService.managePhones(existingUser, user);
+        });
+
+        User updatedUser = userService.findById(id);
         UserDTO updatedUserDto = userMapper.toDto(updatedUser);
 
         return ResponseEntity

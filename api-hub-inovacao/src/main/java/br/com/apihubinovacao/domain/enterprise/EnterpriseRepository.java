@@ -7,4 +7,6 @@ public interface EnterpriseRepository extends JpaRepository<Enterprise, Long> , 
     boolean existsByCnpj(String cnpj);
 
     Enterprise findByCnpj(String cnpj);
+
+    Enterprise findByCnpjAndIdNot(String cnpj, Long id);
 }

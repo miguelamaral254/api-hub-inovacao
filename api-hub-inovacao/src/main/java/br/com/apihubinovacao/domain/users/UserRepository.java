@@ -21,4 +21,12 @@ public interface UserRepository extends JpaRepository<User, Long>  , JpaSpecific
     boolean existsByCnpj(@Pattern(regexp = "\\d{14}", message = "CNPJ deve ter 14 dígitos") String cnpj);
 
     boolean existsByEmail(@NotBlank @Email(message = "Email com formato inválido") String email);
+
+    boolean existsByCpfAndIdNot(@Pattern(regexp = "\\d{11}", message = "CPF deve ter 11 dígitos") String cpf, Long id);
+
+    boolean existsByCnpjAndIdNot(@Pattern(regexp = "\\d{14}", message = "CNPJ deve ter 14 dígitos") String cnpj, Long id);
+
+    boolean existsByRegistrationAndIdNot(@NotBlank String registration, Long id);
+
+    boolean existsByEmailAndIdNot(@NotBlank @Email(message = "Email com formato inválido") String email, Long id);
 }
