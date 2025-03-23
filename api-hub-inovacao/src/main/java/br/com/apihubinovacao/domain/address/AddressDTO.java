@@ -27,6 +27,9 @@ public record AddressDTO(
         String country,
 
         @Null
+        Boolean enabled,
+
+        @Null
         LocalDateTime createdDate,
 
         @Null

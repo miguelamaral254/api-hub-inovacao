@@ -37,4 +37,6 @@ public class Address extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "enterprise_id", nullable = false)
     private Enterprise enterprise;
+
+
 }

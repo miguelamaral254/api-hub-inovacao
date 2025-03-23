@@ -17,6 +17,11 @@ public class EnterpriseService {
     @Transactional
     public Enterprise createEnterprise(Enterprise enterprise) {
         validateBusinessRules(enterprise);
+
+        if (enterprise.getAddress() != null) {
+            enterprise.getAddress().setEnterprise(enterprise);
+        }
+
         return enterpriseRepository.save(enterprise);
     }
 

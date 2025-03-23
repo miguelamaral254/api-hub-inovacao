@@ -32,6 +32,7 @@ public abstract class BaseEntity {
         LocalDateTime now = LocalDateTime.now();
         this.createdDate = now;
         this.lastModifiedDate = now;
+        this.enabled = true;
     }
 
     @PreUpdate

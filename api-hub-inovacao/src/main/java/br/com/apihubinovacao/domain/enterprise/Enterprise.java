@@ -27,6 +27,8 @@ public class Enterprise extends BaseEntity {
     private String cnpj;
     private String setorAtuacao;
 
+    private String phone;
+
     @OneToOne(mappedBy = "enterprise", cascade = CascadeType.ALL, orphanRemoval = true)
     private Address address;
 
@@ -37,5 +39,6 @@ public class Enterprise extends BaseEntity {
     private String reprentantEmail;
 
     private String reprentantPhone;
+
 
 }
