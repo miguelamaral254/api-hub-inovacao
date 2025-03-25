@@ -26,7 +26,7 @@ public class AuthService {
                     .signWith(SignatureAlgorithm.HS512, secretKey)
                     .compact();
         } catch (Exception e) {
-            throw new BusinessException(AuthExceptionCodeEnum.SERVER_ERROR );
+            throw new BusinessException(AuthExceptionCodeEnum.SERVER_ERROR);
         }
     }
 
@@ -43,13 +43,14 @@ public class AuthService {
                             role.equals("ROLE_PROFESSOR") ||
                             role.equals("ROLE_STUDENT") ||
                             role.equals("ROLE_MANAGER") ||
-                            role.equals("ROLE_PARTNER_COMPANY")
+                            role.equals("ROLE_ENTERPRISE")
             );
         } catch (Exception e) {
             throw new BusinessException(AuthExceptionCodeEnum.INVALID_TOKEN);
         }
     }
 
+    // Método para extrair o e-mail do token
     public String extractEmail(String token) {
         try {
             return Jwts.parser()

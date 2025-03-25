@@ -17,8 +17,8 @@ public enum UserExceptionCodeEnum implements ExceptionCode {
     PARTNER_COMPANY_NOT_FOUND("Partner company not found", "USEREXCEP-009", 404),
     EMAIL_DOES_NOT_MATCH("Email does not match", "USEREXCEP-010", 409),
     FILE_UPLOAD_FAILED("Failed to upload", "USEREXCEP-011", 400),
-    IMAGE_SIZE_EXCEEDED("The image size exceeds the maximum limit of 5MB.", "USEREXCEP-012", 400);
-
+    IMAGE_SIZE_EXCEEDED("The image size exceeds the maximum limit of 5MB.", "USEREXCEP-012", 400),
+    INVALID_CREDENTIALS("Invalid credentials.", "USEREXCEP-013", 404);
 
     private final String message;
     private final String code;
