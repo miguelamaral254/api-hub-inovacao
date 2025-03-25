@@ -65,18 +65,18 @@ public class OpportunityController {
     @GetMapping
     @Operation(summary = "Search opportunities with filters or all opportunities")
     public ResponseEntity<ApplicationResponse<Page<OpportunityDTO>>> searchOpportunities(
-            @RequestParam(value = "tituloDesafio", required = false) String tituloDesafio,
+            @RequestParam(value = "titulo", required = false) String titulo,
             @RequestParam(value = "status", required = false) String status,
-            @RequestParam(value = "idManager", required = false) Long idManager,
-            @RequestParam(value = "enterpriseId", required = false) Long enterpriseId,
+            @RequestParam(value = "manager", required = false) Long manager,
+            @RequestParam(value = "enterprise", required = false) Long enterprise,
             @RequestParam(value = "enabled", required = false) Boolean enabled,
             Pageable pageable) {
 
         Specification<Opportunity> specification = Specification.where(null);
 
-        if (tituloDesafio != null) {
+        if (titulo != null) {
             specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.like(criteriaBuilder.lower(root.get("tituloDesafio")), "%" + tituloDesafio.toLowerCase() + "%"));
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get("tituloDesafio")), "%" + titulo.toLowerCase() + "%"));
         }
 
         if (status != null) {
@@ -84,14 +84,14 @@ public class OpportunityController {
                     criteriaBuilder.equal(criteriaBuilder.lower(root.get("status")), status.toLowerCase()));
         }
 
-        if (idManager != null) {
+        if (manager != null) {
             specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.equal(root.get("idManager").get("id"), idManager));
+                    criteriaBuilder.equal(root.get("idManager").get("id"), manager));
         }
 
-        if (enterpriseId != null) {
+        if (enterprise != null) {
             specification = specification.and((root, query, criteriaBuilder) ->
-                    criteriaBuilder.equal(root.get("enterprise").get("id"), enterpriseId));
+                    criteriaBuilder.equal(root.get("enterprise").get("id"), enterprise));
         }
 
         if (enabled != null) {
