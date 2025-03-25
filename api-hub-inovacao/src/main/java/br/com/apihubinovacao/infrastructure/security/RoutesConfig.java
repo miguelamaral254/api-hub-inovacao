@@ -11,7 +11,8 @@ public class RoutesConfig {
             "/startup/**",
             "/editals/**",
             "/users/**",
-            "/enterprises/**"
+            "/enterprises/**",
+            "/opportunities/**"
     };
     public static final String[] USER_ROUTES = {
 
