@@ -12,4 +12,5 @@ public interface ProjectRepository extends JpaRepository<Projects, Long>, JpaSpe
     @Override
     Page<Projects> findAll(Specification<Projects> spec, Pageable pageable);
 
+    Projects findByUrlPhotoAndIdNot(String urlPhoto, Long id);
 }

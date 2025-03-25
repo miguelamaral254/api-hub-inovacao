@@ -1,10 +1,12 @@
 package br.com.apihubinovacao.domain.enterprise;
 
 import br.com.apihubinovacao.core.BusinessException;
+import br.com.apihubinovacao.domain.users.UserExceptionCodeEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +17,7 @@ import java.util.function.Consumer;
 public class EnterpriseService {
 
     private final EnterpriseRepository enterpriseRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public Enterprise createEnterprise(Enterprise enterprise) {
@@ -23,6 +26,7 @@ public class EnterpriseService {
         if (enterprise.getAddress() != null) {
             enterprise.getAddress().setEnterprise(enterprise);
         }
+        enterprise.setPassword(passwordEncoder.encode(enterprise.getPassword()));
 
         return enterpriseRepository.save(enterprise);
     }
@@ -90,5 +94,16 @@ public class EnterpriseService {
     public void deleteEnterprise(Long id) {
         Enterprise enterprise = findById(id);
         enterpriseRepository.delete(enterprise);
+    }
+
+
+    @Transactional()
+    public Enterprise authenticateEnterprise(String email, String password) {
+        Enterprise enterprise = enterpriseRepository.findByEmail((email))
+                .orElseThrow(() -> new BusinessException(UserExceptionCodeEnum.EMAIL_DOES_NOT_MATCH));
+        if (!passwordEncoder.matches(password, enterprise.getPassword())) {
+            throw new BusinessException(UserExceptionCodeEnum.INVALID_PASSWORD);
+        }
+        return enterprise;
     }
 }

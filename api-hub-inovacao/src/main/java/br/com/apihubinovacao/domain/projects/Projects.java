@@ -20,11 +20,38 @@ import java.util.List;
 @Table(name = "tbl_projects")
 public class Projects extends BaseEntity {
 
+    @Column(nullable = false, length = 255)
     private String title;
+
+    @Column(nullable = false, length = 500)
     private String description;
+
+    @Column(nullable = false, length = 255)
     private String urlPhoto;
+
+    @Column(nullable = false, length = 255)
     private String pdfLink;
+
+    @Column(nullable = false, length = 255)
     private String siteLink;
+
+    @Column(nullable = false, length = 255)
+    private String thematicArea;
+
+    @Column(nullable = false, length = 255)
+    private String course;
+
+    @Column(length = 1000)
+    private String problem;
+
+    @Column(length = 2000)
+    private String generalObjective;
+
+    @Column(length = 1000)
+    private String specificObjective;
+
+    @Column(length = 2000)
+    private String expectedResults;
 
     @Enumerated(EnumType.STRING)
     private ProjectType projectType;

@@ -25,6 +25,9 @@ public class Coauthor extends BaseEntity {
     @Column(name = "phone", length = 50)
     private String phone;
 
+    @Column(name= "position", length = 255, nullable = false)
+    private String position;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", nullable = false)
     private Projects project;

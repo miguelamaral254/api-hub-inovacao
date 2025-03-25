@@ -109,7 +109,73 @@ public class ProjectsController {
                 .status(HttpStatus.OK)
                 .body(ApplicationResponse.ofSuccess(projectDTOPage));
     }
+    @Tag(name = "Update Project")
+    @PutMapping("/{id}")
+    @Operation(summary = "Update an existing project")
+    public ResponseEntity<ApplicationResponse<ProjectsDTO>> updateProject(
+            @PathVariable Long id,
+            @RequestBody ProjectsDTO projectDto) {
 
+        Projects project = projectMapper.toEntity(projectDto);
+
+        projectService.updateProject(id, projectToUpdate -> {
+            if (project.getTitle() != null) {
+                projectToUpdate.setTitle(project.getTitle());
+            }
+            if (project.getDescription() != null) {
+                projectToUpdate.setDescription(project.getDescription());
+            }
+            if (project.getUrlPhoto() != null) {
+                projectToUpdate.setUrlPhoto(project.getUrlPhoto());
+            }
+            if (project.getPdfLink() != null) {
+                projectToUpdate.setPdfLink(project.getPdfLink());
+            }
+            if (project.getSiteLink() != null) {
+                projectToUpdate.setSiteLink(project.getSiteLink());
+            }
+            if (project.getThematicArea() != null) {
+                projectToUpdate.setThematicArea(project.getThematicArea());
+            }
+            if (project.getCourse() != null) {
+                projectToUpdate.setCourse(project.getCourse());
+            }
+            if (project.getProblem() != null) {
+                projectToUpdate.setProblem(project.getProblem());
+            }
+            if (project.getGeneralObjective() != null) {
+                projectToUpdate.setGeneralObjective(project.getGeneralObjective());
+            }
+            if (project.getSpecificObjective() != null) {
+                projectToUpdate.setSpecificObjective(project.getSpecificObjective());
+            }
+            if (project.getExpectedResults() != null) {
+                projectToUpdate.setExpectedResults(project.getExpectedResults());
+            }
+            if (project.getProjectType() != null) {
+                projectToUpdate.setProjectType(project.getProjectType());
+            }
+            if (project.getStatus() != null) {
+                projectToUpdate.setStatus(project.getStatus());
+            }
+            if (project.getCoauthors() != null) {
+                projectToUpdate.setCoauthors(project.getCoauthors());
+            }
+            if (project.getFeedback() != null) {
+                projectToUpdate.setFeedback(project.getFeedback());
+            }
+            if (project.getJustification() != null) {
+                projectToUpdate.setJustification(project.getJustification());
+            }
+        });
+
+        Projects updatedProject = projectService.findById(id);
+        ProjectsDTO updatedProjectDTO = projectMapper.toDto(updatedProject);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApplicationResponse.ofSuccess(updatedProjectDTO));
+    }
     @Tag(name = "Update Project Status")
     @Operation(summary = "Update the status of a project")
     @PatchMapping("/{id}/status")
