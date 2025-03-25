@@ -2,8 +2,11 @@ package br.com.apihubinovacao.domain.enterprise;
 
 import br.com.apihubinovacao.core.BaseDTO;
 import br.com.apihubinovacao.domain.address.AddressDTO;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Null;
+import br.com.apihubinovacao.domain.users.Role;
+import br.com.apihubinovacao.validations.CreateValidation;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
 
@@ -12,30 +15,43 @@ public record EnterpriseDTO(
         @Null
         Long id,
 
-        @NotBlank
+        @NotBlank(groups = CreateValidation.class)
         String nomeEmpresa,
 
-        @NotBlank
+        @NotBlank(groups = CreateValidation.class)
+        @Pattern(regexp = "\\d{14}", message = "CNPJ deve ter 14 dígitos")
         String cnpj,
 
-        @NotBlank
+        @NotBlank(groups = CreateValidation.class)
         String setorAtuacao,
 
+        @NotBlank(groups = CreateValidation.class)
+        @Email(message = "Email com formato inválido")
+        String email,
+
+        @NotBlank(groups = CreateValidation.class)
+        String password,
+
+        @NotBlank(groups = CreateValidation.class)
         String phone,
 
-        @NotBlank
+        @NotBlank(groups = CreateValidation.class)
+        @Enumerated(EnumType.STRING)
+        Role role,
+
+        @NotBlank(groups = CreateValidation.class)
         String reprentantName,
 
-        @NotBlank
+        @NotBlank(groups = CreateValidation.class)
         String reprentantPosition,
 
-        @NotBlank
+        @NotBlank(groups = CreateValidation.class)
         String reprentantEmail,
 
         @NotBlank
         String reprentantPhone,
 
-
+        @NotBlank(groups = CreateValidation.class)
         AddressDTO address,
 
         @Null

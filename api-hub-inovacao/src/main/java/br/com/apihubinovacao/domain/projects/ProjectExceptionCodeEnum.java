@@ -15,7 +15,9 @@ public enum ProjectExceptionCodeEnum implements ExceptionCode {
     INVALID_PROJECT_TITLE("The project title is required", "PROJEXCEP-007", 400),
     INVALID_PROJECT_DESCRIPTION("The project description is required", "PROJEXCEP-008", 400),
     INVALID_PARTNER_COMPANY("A valid partner company is required for this project", "PROJEXCEP-009", 400),
-    IMAGE_CREATION_FAILED("Failed to save image", "PROJEXCEP-010", 400);
+    IMAGE_CREATION_FAILED("Failed to save image", "PROJEXCEP-010", 400),
+    PROJECT_URL_ALREADY_EXISTS("Failed to save image, already exists", "PROJEXCEP-011", 409),
+    INVALID_PROJECT_STATUS("Invalid status", "PROJEXCEP-012", 400);
 
     private final String message;
     private final String code;

@@ -1,4 +1,4 @@
-package br.com.apihubinovacao.domain.projects;
+package br.com.apihubinovacao.infrastructure.conf;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
