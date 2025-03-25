@@ -26,7 +26,8 @@ public class OpportunityService {
 
     @Transactional
     public Opportunity createOpportunity(Opportunity opportunity, MultipartFile file, HttpServletRequest request) {
-        validateImageCreateRules(opportunity, file, request);
+        validateImageCreateRules(opportunity,file, request);
+
         return opportunityRepository.save(opportunity);
     }
 
@@ -39,15 +40,14 @@ public class OpportunityService {
             throw new BusinessException(OpportunityExceptionCodeEnum.INVALID_OPPORTUNITY_DATA);
         }
 
-        if (opportunity.getIdManager() == null || !userRepository.existsById(opportunity.getIdManager().getId())) {
-            throw new BusinessException(OpportunityExceptionCodeEnum.MANAGER_NOT_FOUND);
+        if (opportunity.getIdManager() != null && opportunity.getIdManager().getId() == null) {
+            opportunity.setIdManager(null);
         }
 
         if (opportunity.getStatus() == null) {
             throw new BusinessException(OpportunityExceptionCodeEnum.INVALID_OPPORTUNITY_STATUS);
         }
     }
-
     @Transactional(readOnly = true)
     public Page<Opportunity> searchOpportunities(Specification<Opportunity> specification, Pageable pageable) {
         return opportunityRepository.findAll(specification, pageable);

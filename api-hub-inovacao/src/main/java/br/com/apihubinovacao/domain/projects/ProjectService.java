@@ -28,6 +28,7 @@ public class ProjectService {
     @Transactional
     public Projects createProject(Projects project, MultipartFile file, HttpServletRequest request) {
         validateImageCreateRules(project, file, request);
+
         return projectRepository.save(project);
     }
     private void validateBusinessRules(Projects project) {
@@ -86,17 +87,13 @@ public class ProjectService {
     }
     @Transactional
     public Projects updateProject(Long id, Consumer<Projects> updateConsumer) {
-        // Encontrar o projeto existente
         Projects existingProject = projectRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ProjectExceptionCodeEnum.PROJECT_NOT_FOUND));
 
-        // Aplica as mudanças no projeto usando o Consumer
         updateConsumer.accept(existingProject);
 
-        // Validação específica para o projeto
         validateUpdateBusiness(id, existingProject);
 
-        // Salva o projeto atualizado
         return projectRepository.save(existingProject);
     }
 
