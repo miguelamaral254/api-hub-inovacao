@@ -22,6 +22,12 @@ public class Address extends BaseEntity {
     private String street;
 
     @NotBlank
+    private int number;
+
+    @NotBlank
+    private String complement;
+
+    @NotBlank
     private String city;
 
     @NotBlank
