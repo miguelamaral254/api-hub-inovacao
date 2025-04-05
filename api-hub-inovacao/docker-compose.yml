@@ -7,9 +7,14 @@ services:
     ports:
       - "8080:8080"
     env_file:
-      - .env  
+      - .env
     environment:
       - JAVA_OPTS=-Xmx512m
+      - DATABASE_URL=${DATABASE_URL}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - API_SECURITY_TOKEN_SECRET=${API_SECURITY_TOKEN_SECRET}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
     restart: unless-stopped
     volumes:
-      - /home/miguel-amaral/api-hub-inovacao/api-hub-inovacao/uploads:/app/uploads
+      - /Users/miguelamaral/Documents/dev/api-hub-inovacao/api-hub-inovacao/uploads:/app/uploads
