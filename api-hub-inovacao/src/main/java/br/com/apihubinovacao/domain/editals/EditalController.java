@@ -87,7 +87,7 @@ public class EditalController {
 
     @Tag(name = "Update Edital Status")
     @Operation(summary = "Update the status of a Edital")
-    @PatchMapping("/{id}/enabled")
+    @PutMapping("/{id}/enabled")
     public ResponseEntity<ApplicationResponse<String>> updateEnabled(
             @PathVariable Long id,
             @RequestParam String enabled

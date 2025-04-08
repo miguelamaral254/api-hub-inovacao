@@ -28,10 +28,13 @@ public record EditalDTO (
 
          Long idUser,
 
+        @Null
          Boolean enabled ,
 
+        @Null
          LocalDateTime createdDate,
 
+        @Null
          LocalDateTime lastModifiedDate
 )
 implements BaseDTO {

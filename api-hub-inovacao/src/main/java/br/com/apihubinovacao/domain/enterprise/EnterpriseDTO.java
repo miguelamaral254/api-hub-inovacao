@@ -45,6 +45,7 @@ public record EnterpriseDTO(
         @NotBlank(groups = CreateValidation.class)
         String reprentantPosition,
 
+        @Email(message = "Email com formato inválido")
         @NotBlank(groups = CreateValidation.class)
         String reprentantEmail,
 

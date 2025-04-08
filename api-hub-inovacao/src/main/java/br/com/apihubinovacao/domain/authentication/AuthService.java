@@ -16,11 +16,12 @@ public class AuthService {
 
     private static final long EXPIRATION_TIME = 86400000;
 
-    public String generateToken(String email, String role) {
+    public String generateToken(String email, String role, long idUser) {
         try {
             return Jwts.builder()
                     .setSubject(email)
                     .claim("role", "ROLE_" + role)
+                    .claim("idUser", idUser)
                     .setIssuedAt(new Date())
                     .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                     .signWith(SignatureAlgorithm.HS512, secretKey)
