@@ -24,7 +24,7 @@ public class Edital extends BaseEntity {
 
     private String acessLink;
 
-    private LocalDate initialDate;
+    private LocalDate   initialDate;
 
     private LocalDate finalDate;
 
