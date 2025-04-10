@@ -6,10 +6,8 @@ import br.com.apihubinovacao.domain.coauthor.CoauthorMapper;
 import br.com.apihubinovacao.domain.users.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.springframework.lang.Nullable;
 
 import java.util.List;
-
 @Mapper(componentModel = "spring", uses = {CoauthorMapper.class})
 public interface ProjectMapper extends BaseMapper<Projects, ProjectsDTO> {
 
@@ -19,7 +17,6 @@ public interface ProjectMapper extends BaseMapper<Projects, ProjectsDTO> {
     ProjectsDTO toDto(Projects entity);
 
     @Mapping(source = "idUser", target = "user.id")
-    @Nullable
     @Mapping(source = "idManager", target = "idManager.id")
     @Mapping(source = "coauthors", target = "coauthors")
     Projects toEntity(ProjectsDTO dto);
