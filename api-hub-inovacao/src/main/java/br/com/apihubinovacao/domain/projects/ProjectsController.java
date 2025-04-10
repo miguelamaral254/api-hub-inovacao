@@ -120,6 +120,9 @@ public class ProjectsController {
 
         projectService.updateProject(id, projectsToUpdate -> {
 
+            if (projects.getIdManager() != null) {
+                projectsToUpdate.setIdManager(projects.getIdManager());
+            }
             if (projects.getStatus() != null) {
                 projectsToUpdate.setStatus(projects.getStatus());
             }
