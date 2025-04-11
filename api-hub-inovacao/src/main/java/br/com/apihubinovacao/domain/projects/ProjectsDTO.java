@@ -30,9 +30,6 @@ public record ProjectsDTO(
         String urlPhoto,
 
         @Nullable
-        String pdfLink,
-
-        @Nullable
         String siteLink,
 
         @Nullable

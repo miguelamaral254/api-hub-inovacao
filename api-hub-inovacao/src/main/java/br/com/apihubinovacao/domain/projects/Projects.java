@@ -29,10 +29,7 @@ public class Projects extends BaseEntity {
     @Column(nullable = false, length = 255)
     private String urlPhoto;
 
-    @Column(nullable = false, length = 255)
-    private String pdfLink;
-
-    @Column(nullable = false, length = 255)
+    @Column(nullable = true, length = 255)
     private String siteLink;
 
     @Column(nullable = false, length = 255)
