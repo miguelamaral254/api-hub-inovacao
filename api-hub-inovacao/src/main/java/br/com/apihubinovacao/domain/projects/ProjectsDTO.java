@@ -4,11 +4,13 @@ import br.com.apihubinovacao.core.BaseDTO;
 import br.com.apihubinovacao.domain.coauthor.CoauthorDTO;
 import br.com.apihubinovacao.core.StatusSolicitation;
 import br.com.apihubinovacao.validations.CreateValidation;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Null;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
@@ -18,47 +20,43 @@ public record ProjectsDTO(
         @Null
         Long id,
 
-        @NotBlank(groups = CreateValidation.class)
+        @Nullable
         String title,
 
-        @NotBlank(groups = CreateValidation.class)
+        @Nullable
         String description,
 
-        @NotBlank(groups = CreateValidation.class)
+        @Nullable
         String urlPhoto,
 
-        @NotBlank(groups = CreateValidation.class)
-        String pdfLink,
-
-        @NotBlank(groups = CreateValidation.class)
+        @Nullable
         String siteLink,
 
-        @NotBlank(groups = CreateValidation.class)
+        @Nullable
         String thematicArea,
-        @NotBlank(groups = CreateValidation.class)
+
+        @Nullable
         String course,
 
-        @NotBlank(groups = CreateValidation.class)
+        @Nullable
         String problem,
 
-        @NotBlank(groups = CreateValidation.class)
+        @Nullable
         String generalObjective,
 
-        @NotBlank(groups = CreateValidation.class)
+        @Nullable
         String specificObjective,
 
-        @NotBlank(groups = CreateValidation.class)
+        @Nullable
         String expectedResults,
 
-        @NotBlank(groups = CreateValidation.class)
-        @Enumerated(EnumType.STRING)
+        @Nullable
         ProjectType projectType,
 
-        @NotBlank(groups = CreateValidation.class)
-        @Enumerated(EnumType.STRING)
+        @Nullable
         StatusSolicitation status,
 
-        @NotBlank(groups = CreateValidation.class)
+        @Nullable
         Long idUser,
 
         @Nullable
@@ -81,7 +79,10 @@ public record ProjectsDTO(
 
         @Nullable
         @Valid
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        @JsonSetter(nulls = Nulls.AS_EMPTY)
         List<CoauthorDTO> coauthors
+
 
 ) implements BaseDTO {
 }

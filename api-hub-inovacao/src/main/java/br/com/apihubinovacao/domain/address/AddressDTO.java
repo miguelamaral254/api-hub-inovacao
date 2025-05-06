@@ -15,6 +15,12 @@ public record AddressDTO(
         String street,
 
         @NotBlank
+        int number,
+
+        @NotBlank
+        String complement,
+
+        @NotBlank
         String city,
 
         @NotBlank

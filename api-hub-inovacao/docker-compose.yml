@@ -7,9 +7,9 @@ services:
     ports:
       - "8080:8080"
     env_file:
-      - .env  
+      - .env
     environment:
       - JAVA_OPTS=-Xmx512m
     restart: unless-stopped
     volumes:
-      - /home/miguel-amaral/api-hub-inovacao/api-hub-inovacao/uploads:/app/uploads
+      - /Users/miguelamaral/Documents/dev/api-hub-inovacao/api-hub-inovacao/uploads:/app/uploads

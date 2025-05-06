@@ -2,6 +2,7 @@ package br.com.apihubinovacao.domain.enterprise;
 
 import br.com.apihubinovacao.core.BusinessException;
 import br.com.apihubinovacao.domain.users.UserExceptionCodeEnum;
+import br.com.apihubinovacao.domain.users.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ public class EnterpriseService {
 
     private final EnterpriseRepository enterpriseRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
     @Transactional
     public Enterprise createEnterprise(Enterprise enterprise) {
@@ -37,7 +39,7 @@ public class EnterpriseService {
             Pageable pageable
     ) {
         return enterpriseRepository.findAll(specification, pageable);
-    }
+    }   
 
     @Transactional(readOnly = true)
     public Enterprise findById(Long id) {
@@ -48,6 +50,14 @@ public class EnterpriseService {
     private void validateBusinessRules(Enterprise enterprise) {
         if (enterpriseRepository.existsByCnpj((enterprise.getCnpj()))) {
             throw new BusinessException(EnterpriseExceptionCodeEnum.ENTERPRISE_CNPJ_ALREADY_EXISTS);
+        }
+
+        if(enterpriseRepository.existsByEmail((enterprise.getEmail()))) {
+            throw new BusinessException(EnterpriseExceptionCodeEnum.ENTERPRISE_EMAIL_ALREADY_EXISTS);
+        }
+
+        if(userRepository.existsByEmail((enterprise.getEmail()))) {
+            throw new BusinessException(EnterpriseExceptionCodeEnum.ENTERPRISE_EMAIL_ALREADY_EXISTS);
         }
 
         if (enterprise.getNomeEmpresa() == null || enterprise.getNomeEmpresa().isEmpty()) {

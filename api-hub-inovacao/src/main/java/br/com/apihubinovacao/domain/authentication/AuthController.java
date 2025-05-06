@@ -24,7 +24,7 @@ public class AuthController {
     public ResponseEntity<AuthDTO> login(@RequestBody AuthRequest authRequest) {
         try {
             User user = userService.authenticateUser(authRequest.getEmail(), authRequest.getPassword());
-            String token = jwtService.generateToken(user.getEmail(), user.getRole().name());
+            String token = jwtService.generateToken(user.getEmail(), user.getRole().name(), user.getId());
 
             AuthDTO response = authMapper.toAuthDTO(user);
             response = new AuthDTO(response.idUser(), token, response.email(), response.role(), "Login successful");
@@ -32,7 +32,7 @@ public class AuthController {
         } catch (BusinessException e) {
             try {
                 Enterprise enterprise = enterpriseService.authenticateEnterprise(authRequest.getEmail(), authRequest.getPassword());
-                String token = jwtService.generateToken(enterprise.getEmail(), "ENTERPRISE");
+                String token = jwtService.generateToken(enterprise.getEmail(), "ENTERPRISE" ,enterprise.getId());
 
                 AuthDTO response = authMapper.toAuthDTO(enterprise);
                 response = new AuthDTO(response.idUser(), token, response.email(), "ENTERPRISE", "Login successful");

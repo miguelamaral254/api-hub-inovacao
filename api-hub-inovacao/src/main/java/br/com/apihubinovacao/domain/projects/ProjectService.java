@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.function.Consumer;
 
 @Service
@@ -98,13 +99,12 @@ public class ProjectService {
     }
 
     private void validateUpdateBusiness(Long id, Projects existingProject) {
-
         if (existingProject.getTitle() == null || existingProject.getTitle().isEmpty()) {
             throw new BusinessException(ProjectExceptionCodeEnum.INVALID_PROJECT_TITLE);
         }
 
         if (existingProject.getUrlPhoto() != null) {
-            Projects existingUrlProject = projectRepository.findByUrlPhotoAndIdNot((existingProject.getUrlPhoto()), id);
+            Projects existingUrlProject = projectRepository.findByUrlPhotoAndIdNot(existingProject.getUrlPhoto(), id);
 
             if (existingUrlProject != null) {
                 throw new BusinessException(ProjectExceptionCodeEnum.PROJECT_URL_ALREADY_EXISTS);
@@ -113,6 +113,10 @@ public class ProjectService {
 
         if (existingProject.getStatus() == null) {
             throw new BusinessException(ProjectExceptionCodeEnum.INVALID_PROJECT_STATUS);
+        }
+
+        if (existingProject.getCoauthors() == null) {
+            existingProject.setCoauthors(Collections.emptyList());
         }
     }
 
